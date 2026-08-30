@@ -1,0 +1,29 @@
+---
+// Furniture (Step 1) + spines rendered client-side into #shelf-row (Step 2)
+// by src/scripts/shelf.js, so "Add book" can insert a spine with no rebuild.
+import './bookshelf.css';
+---
+
+<section class="reading-room" id="bookshelf" aria-label="Bookshelf">
+  <div class="reading-room__glow" aria-hidden="true"></div>
+
+  <div class="shelf-unit">
+    <div class="shelf-case">
+      <div class="shelf-back wood-surface" aria-hidden="true"></div>
+
+      <div class="shelf-row" id="shelf-row">
+        <div class="bookend" aria-hidden="true"></div>
+      </div>
+
+      <div class="shelf-board" aria-hidden="true">
+        <div class="shelf-board__top"></div>
+        <div class="shelf-board__front wood-surface"></div>
+      </div>
+
+      <div class="shelf-panel shelf-panel--left wood-surface" aria-hidden="true"></div>
+      <div class="shelf-panel shelf-panel--right wood-surface" aria-hidden="true"></div>
+
+      <div class="shelf-case__light" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>

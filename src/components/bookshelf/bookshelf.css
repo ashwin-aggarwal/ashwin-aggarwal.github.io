@@ -1,0 +1,342 @@
+/* Bookshelf feature styles. Colocated here so the shelf can grow (spines,
+   the 3D stage, the add-book modal, wood/paper textures) without touching
+   src/styles/global.css, which stays limited to site-wide tokens/resets. */
+
+.reading-room {
+  --panel-w: 30px;
+  --interior-h: 272px;
+  --board-h: 34px;
+  --board-top-h: 8px;
+  --noise-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  position: relative;
+  isolation: isolate;
+  padding: 6rem 1.5rem 7rem;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, color-mix(in srgb, var(--color-lamp) 10%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--color-room) 0%, var(--color-room-deep) 100%);
+  overflow: clip;
+}
+
+/* Warm pool of lamplight falling from above the shelf. Two stacked radial
+   gradients: a tight bright core and a wider soft falloff. */
+.reading-room__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 22% 40% at 50% 0%, color-mix(in srgb, var(--color-lamp) 55%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 60% at 50% 0%, color-mix(in srgb, var(--color-lamp) 20%, transparent), transparent 75%);
+  mix-blend-mode: screen;
+}
+
+.shelf-unit {
+  position: relative;
+  z-index: 2;
+  max-width: 64rem;
+  margin-inline: auto;
+}
+
+.shelf-case {
+  position: relative;
+  height: calc(var(--interior-h) + var(--board-h));
+  filter: drop-shadow(0 34px 40px rgba(0, 0, 0, 0.55));
+}
+
+/* Shared texture base: every wood surface gets fine noise grain from the
+   same feTurbulence overlay, blended in via ::after so each surface can
+   still define its own base gradient/grain underneath. */
+.wood-surface {
+  position: relative;
+  background-repeat: repeat;
+}
+
+.wood-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise-svg);
+  background-size: 180px 180px;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Back panel: recessed, darker than the board, shaded at the top so the
+   books (added in a later step) read as sitting in shade. */
+.shelf-back {
+  position: absolute;
+  top: 0;
+  left: var(--panel-w);
+  right: var(--panel-w);
+  height: var(--interior-h);
+  z-index: 1;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.16) 0px,
+      transparent 1.5px,
+      transparent 5px,
+      rgba(255, 255, 255, 0.02) 6px,
+      transparent 7px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 94px,
+      rgba(0, 0, 0, 0.45) 95px,
+      rgba(0, 0, 0, 0.6) 96px,
+      transparent 97px
+    ),
+    linear-gradient(180deg, var(--color-walnut-dark) 0%, var(--color-room-deep) 100%);
+  box-shadow:
+    inset 0 46px 50px -24px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* The board: one plank, full width of the interior, catching the lamplight
+   on its top face and carrying its own grain on the visible front edge. */
+.shelf-board {
+  position: absolute;
+  bottom: 0;
+  left: var(--panel-w);
+  right: var(--panel-w);
+  height: var(--board-h);
+  z-index: 2;
+}
+
+.shelf-board__top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--board-top-h);
+  background: linear-gradient(180deg, var(--color-oak-light) 0%, var(--color-oak) 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-lamp) 65%, white);
+}
+
+/* Front edge faces down and slightly away from the overhead lamp, so it
+   reads near-dark with grain running along the board's length (horizontal)
+   rather than the vertical grain used on the upright panels/back. Its only
+   direct light is a hairline catching the top arris — the rest comes from
+   the shared radial wash in .shelf-case__light. */
+.shelf-board__front {
+  position: absolute;
+  top: var(--board-top-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.16) 0px,
+      transparent 1.5px,
+      transparent 4px,
+      rgba(255, 255, 255, 0.025) 5px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, var(--color-walnut) 0%, var(--color-walnut-dark) 45%, var(--color-room-deep) 100%);
+  box-shadow:
+    inset 0 2px 0 color-mix(in srgb, var(--color-lamp) 55%, transparent),
+    0 14px 22px -8px rgba(0, 0, 0, 0.75);
+}
+
+/* Books stand here, directly on the board's top surface, no gap. Inset to
+   match .shelf-back exactly (same left/right/height) so spines never
+   overlap the end panels. Structured as a single flex row now; a second
+   shelf (another .shelf-row + its own .shelf-board) could be added later
+   without restructuring this one. */
+.shelf-row {
+  position: absolute;
+  top: 0;
+  left: var(--panel-w);
+  right: var(--panel-w);
+  height: var(--interior-h);
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.spine {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--spine-w, 34px);
+  height: var(--spine-h, 90%);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 1px 2px 0 0;
+  background: var(--spine-image, none) center / cover no-repeat, var(--spine-color, var(--color-walnut));
+  isolation: isolate;
+  cursor: pointer;
+  transform-origin: bottom center;
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.35), -1px 0 0 rgba(255, 255, 255, 0.03);
+}
+
+.spine:focus-visible {
+  outline: 2px solid var(--color-lamp);
+  outline-offset: 2px;
+}
+
+/* Cylindrical-volume read: dark at both edges, a light band around 44%
+   across, where a round spine would catch the overhead lamp. */
+.spine::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.15) 16%,
+    rgba(255, 255, 255, 0.22) 36%,
+    rgba(255, 255, 255, 0.32) 44%,
+    rgba(255, 255, 255, 0.14) 54%,
+    rgba(0, 0, 0, 0.12) 78%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  mix-blend-mode: overlay;
+}
+
+/* Head/tail cloth-binding bands. */
+.spine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, transparent 100%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 1.5px, transparent 1.5px 3.5px),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0%, transparent 100%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 1.5px, transparent 1.5px 3.5px);
+  background-size: 100% 7%, 100% 7%, 100% 7%, 100% 7%;
+  background-position: top, top, bottom, bottom;
+}
+
+.spine__label {
+  position: absolute;
+  inset: 8% 0 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  pointer-events: none;
+}
+
+.spine__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(0.7rem, 3.2vw, 0.95rem);
+  color: color-mix(in srgb, var(--color-parchment) 88%, transparent);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 60%;
+}
+
+.spine__author {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--color-parchment) 65%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 30%;
+}
+
+/* Entry state for spines added via the modal (Step 6) — shelf.js toggles
+   this class off on the next frame after insertion. */
+.spine--entering {
+  opacity: 0;
+  transform: scaleY(0.85);
+  transition: opacity 0.35s ease-out, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bookend {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  width: 14px;
+  height: 92%;
+  border-radius: 1px 2px 0 0;
+  background: linear-gradient(180deg, var(--color-lamp) 0%, var(--color-oak) 55%, var(--color-oak-light) 100%);
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* End panels: close the case on both sides so it reads as a built object
+   rather than a floating plank. Drawn last so their edges frame the back
+   panel and board corners. */
+/* Vertical stiles, same near-dark treatment as the board front: the lamp
+   is overhead, not in front of them, so only a hairline at the very top
+   (the case's top edge) catches direct light. Grain runs vertically,
+   along the panel's own length. */
+.shelf-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--panel-w);
+  z-index: 3;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.14) 0px,
+      transparent 1.5px,
+      transparent 4px,
+      rgba(255, 255, 255, 0.02) 5px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, var(--color-walnut) 0%, var(--color-walnut-dark) 40%, var(--color-room-deep) 100%);
+}
+
+.shelf-panel--left {
+  left: 0;
+  box-shadow:
+    inset -2px 0 0 rgba(0, 0, 0, 0.5),
+    inset 2px 0 0 rgba(255, 255, 255, 0.03),
+    inset 0 2px 0 color-mix(in srgb, var(--color-lamp) 50%, transparent),
+    0 20px 30px -14px rgba(0, 0, 0, 0.8);
+}
+
+.shelf-panel--right {
+  right: 0;
+  box-shadow:
+    inset 2px 0 0 rgba(0, 0, 0, 0.5),
+    inset -2px 0 0 rgba(255, 255, 255, 0.03),
+    inset 0 2px 0 color-mix(in srgb, var(--color-lamp) 50%, transparent),
+    0 20px 30px -14px rgba(0, 0, 0, 0.8);
+}
+
+/* One light source for the whole case. Drawn last, above the back panel,
+   board and end panels alike, so the same overhead falloff — bright at
+   top-center, dark toward the sides and lower edges — washes every
+   surface instead of each piece looking independently lit. Also the layer
+   that will catch the tops of book spines once Step 2 adds them. */
+.shelf-case__light {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 58% 42% at 50% 0%,
+    color-mix(in srgb, var(--color-lamp) 26%, transparent) 0%,
+    color-mix(in srgb, var(--color-lamp) 7%, transparent) 32%,
+    transparent 60%
+  );
+  mix-blend-mode: soft-light;
+}
+
+@media (max-width: 480px) {
+  .reading-room {
+    --panel-w: 18px;
+    --interior-h: 220px;
+    --board-h: 28px;
+    padding: 4rem 1rem 5rem;
+  }
+}
