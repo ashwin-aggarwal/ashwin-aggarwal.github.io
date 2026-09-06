@@ -224,8 +224,9 @@
 }
 
 /* #about: two columns (prose + headshot) above 900px, single column
-   below. A missing headshot collapses to one column automatically since
-   it's simply not rendered into the grid. */
+   below. The headshot slot always renders as a media-well-style square —
+   a real image if `headshot` is set, otherwise a flat placeholder — the
+   same degrade pattern project media wells use. */
 .about-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -233,7 +234,7 @@
 }
 
 @media (min-width: 900px) {
-  .about-grid--with-headshot {
+  .about-grid {
     grid-template-columns: 1fr 18rem;
     align-items: start;
     gap: 3rem;
