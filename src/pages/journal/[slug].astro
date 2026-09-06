@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={`${entry.data.title} — Ashwin Aggarwal`}>
+  <article class="content-col scroll-mt-24 py-16">
+    <p class="text-xs tracking-wide text-[color:var(--color-ink-muted)] uppercase">
+      {dateFormatter.format(entry.data.date)}
+    </p>
+    <h1 class="font-display mt-2 text-3xl">{entry.data.title}</h1>
+
+    <div class="prose mt-6">
+      <Content />
+    </div>
+
+    <p class="mt-10">
+      <a href="/#journal">Back to journal</a>
+    </p>
+  </article>
+</BaseLayout>

@@ -5,11 +5,14 @@ const bio = defineCollection({
   loader: glob({ pattern: 'bio.md', base: './src/content' }),
   schema: z.object({
     name: z.string(),
+    identityLine: z.string(),
     tagline: z.string(),
     location: z.string(),
     email: z.string(),
     github: z.string().url(),
     linkedin: z.string(),
+    resume: z.string().optional(),
+    headshot: z.string().optional(),
   }),
 });
 
@@ -47,6 +50,7 @@ const projects = defineCollection({
     repo: z.string().url().optional(),
     live: z.string().url().optional(),
     media: z.string().optional(),
+    mediaFrame: z.enum(['browser', 'none']).default('browser'),
     writeups: z
       .array(
         z.object({
@@ -60,4 +64,18 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { bio, now, journal, projects };
+const experience = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/experience' }),
+  schema: z.object({
+    role: z.string(),
+    org: z.string(),
+    orgNote: z.string().optional(),
+    start: z.string(),
+    end: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    order: z.number(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { bio, now, journal, projects, experience };

@@ -63,3 +63,13 @@ export async function getNowItems() {
   return items.sort((a, b) => a.data.order - b.data.order);
 }
 
+export async function getExperience() {
+  const items = await getCollection('experience', ({ data }) => !data.draft);
+  return items.sort((a, b) => a.data.order - b.data.order);
+}
+
+export async function getJournalEntries() {
+  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  return entries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
