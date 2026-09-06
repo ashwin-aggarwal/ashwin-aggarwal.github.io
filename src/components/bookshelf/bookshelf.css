@@ -2,6 +2,22 @@
    the 3D stage, the add-book modal, wood/paper textures) without touching
    src/styles/global.css, which stays limited to site-wide tokens/resets. */
 
+/* The reading room is its own lighting environment — walnut, lamp,
+   parchment — deliberately kept out of the sitewide @theme in
+   global.css so the rest of the site stays a plain, modern, off-white
+   room and this palette can never bleed into it. */
+:root {
+  --bookshelf-room: #14100d;
+  --bookshelf-room-deep: #0c0907;
+  --bookshelf-walnut: #4a2e1d;
+  --bookshelf-walnut-dark: #33200f;
+  --bookshelf-oak: #7a5230;
+  --bookshelf-oak-light: #9a6d43;
+  --bookshelf-lamp: #e8b06a;
+  --bookshelf-parchment: #f2e6d0;
+  --bookshelf-font-hand: "Caveat", cursive;
+}
+
 .reading-room {
   --panel-w: 30px;
   --interior-h: 272px;
@@ -13,8 +29,8 @@
   isolation: isolate;
   padding: 6rem 1.5rem 7rem;
   background:
-    radial-gradient(ellipse 60% 45% at 50% 0%, color-mix(in srgb, var(--color-lamp) 10%, transparent), transparent 70%),
-    linear-gradient(180deg, var(--color-room) 0%, var(--color-room-deep) 100%);
+    radial-gradient(ellipse 60% 45% at 50% 0%, color-mix(in srgb, var(--bookshelf-lamp) 10%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--bookshelf-room) 0%, var(--bookshelf-room-deep) 100%);
   overflow: clip;
 }
 
@@ -26,8 +42,8 @@
   pointer-events: none;
   z-index: 1;
   background:
-    radial-gradient(ellipse 22% 40% at 50% 0%, color-mix(in srgb, var(--color-lamp) 55%, transparent), transparent 70%),
-    radial-gradient(ellipse 50% 60% at 50% 0%, color-mix(in srgb, var(--color-lamp) 20%, transparent), transparent 75%);
+    radial-gradient(ellipse 22% 40% at 50% 0%, color-mix(in srgb, var(--bookshelf-lamp) 55%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 60% at 50% 0%, color-mix(in srgb, var(--bookshelf-lamp) 20%, transparent), transparent 75%);
   mix-blend-mode: screen;
 }
 
@@ -89,7 +105,7 @@
       rgba(0, 0, 0, 0.6) 96px,
       transparent 97px
     ),
-    linear-gradient(180deg, var(--color-walnut-dark) 0%, var(--color-room-deep) 100%);
+    linear-gradient(180deg, var(--bookshelf-walnut-dark) 0%, var(--bookshelf-room-deep) 100%);
   box-shadow:
     inset 0 46px 50px -24px rgba(0, 0, 0, 0.85),
     inset 0 1px 0 rgba(0, 0, 0, 0.6);
@@ -112,8 +128,8 @@
   left: 0;
   right: 0;
   height: var(--board-top-h);
-  background: linear-gradient(180deg, var(--color-oak-light) 0%, var(--color-oak) 100%);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-lamp) 65%, white);
+  background: linear-gradient(180deg, var(--bookshelf-oak-light) 0%, var(--bookshelf-oak) 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--bookshelf-lamp) 65%, white);
 }
 
 /* Front edge faces down and slightly away from the overhead lamp, so it
@@ -136,9 +152,9 @@
       rgba(255, 255, 255, 0.025) 5px,
       transparent 6px
     ),
-    linear-gradient(180deg, var(--color-walnut) 0%, var(--color-walnut-dark) 45%, var(--color-room-deep) 100%);
+    linear-gradient(180deg, var(--bookshelf-walnut) 0%, var(--bookshelf-walnut-dark) 45%, var(--bookshelf-room-deep) 100%);
   box-shadow:
-    inset 0 2px 0 color-mix(in srgb, var(--color-lamp) 55%, transparent),
+    inset 0 2px 0 color-mix(in srgb, var(--bookshelf-lamp) 55%, transparent),
     0 14px 22px -8px rgba(0, 0, 0, 0.75);
 }
 
@@ -168,7 +184,7 @@
   padding: 0;
   border: 0;
   border-radius: 1px 2px 0 0;
-  background: var(--spine-image, none) center / cover no-repeat, var(--spine-color, var(--color-walnut));
+  background: var(--spine-image, none) center / cover no-repeat, var(--spine-color, var(--bookshelf-walnut));
   isolation: isolate;
   cursor: pointer;
   transform-origin: bottom center;
@@ -176,7 +192,7 @@
 }
 
 .spine:focus-visible {
-  outline: 2px solid var(--color-lamp);
+  outline: 2px solid var(--bookshelf-lamp);
   outline-offset: 2px;
 }
 
@@ -233,7 +249,7 @@
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(0.7rem, 3.2vw, 0.95rem);
-  color: color-mix(in srgb, var(--color-parchment) 88%, transparent);
+  color: color-mix(in srgb, var(--bookshelf-parchment) 88%, transparent);
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
   white-space: nowrap;
   overflow: hidden;
@@ -245,7 +261,7 @@
   font-family: var(--font-sans);
   font-size: 0.65rem;
   letter-spacing: 0.02em;
-  color: color-mix(in srgb, var(--color-parchment) 65%, transparent);
+  color: color-mix(in srgb, var(--bookshelf-parchment) 65%, transparent);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -266,7 +282,7 @@
   width: 14px;
   height: 92%;
   border-radius: 1px 2px 0 0;
-  background: linear-gradient(180deg, var(--color-lamp) 0%, var(--color-oak) 55%, var(--color-oak-light) 100%);
+  background: linear-gradient(180deg, var(--bookshelf-lamp) 0%, var(--bookshelf-oak) 55%, var(--bookshelf-oak-light) 100%);
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -292,7 +308,7 @@
       rgba(255, 255, 255, 0.02) 5px,
       transparent 6px
     ),
-    linear-gradient(180deg, var(--color-walnut) 0%, var(--color-walnut-dark) 40%, var(--color-room-deep) 100%);
+    linear-gradient(180deg, var(--bookshelf-walnut) 0%, var(--bookshelf-walnut-dark) 40%, var(--bookshelf-room-deep) 100%);
 }
 
 .shelf-panel--left {
@@ -300,7 +316,7 @@
   box-shadow:
     inset -2px 0 0 rgba(0, 0, 0, 0.5),
     inset 2px 0 0 rgba(255, 255, 255, 0.03),
-    inset 0 2px 0 color-mix(in srgb, var(--color-lamp) 50%, transparent),
+    inset 0 2px 0 color-mix(in srgb, var(--bookshelf-lamp) 50%, transparent),
     0 20px 30px -14px rgba(0, 0, 0, 0.8);
 }
 
@@ -309,7 +325,7 @@
   box-shadow:
     inset 2px 0 0 rgba(0, 0, 0, 0.5),
     inset -2px 0 0 rgba(255, 255, 255, 0.03),
-    inset 0 2px 0 color-mix(in srgb, var(--color-lamp) 50%, transparent),
+    inset 0 2px 0 color-mix(in srgb, var(--bookshelf-lamp) 50%, transparent),
     0 20px 30px -14px rgba(0, 0, 0, 0.8);
 }
 
@@ -325,8 +341,8 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse 58% 42% at 50% 0%,
-    color-mix(in srgb, var(--color-lamp) 26%, transparent) 0%,
-    color-mix(in srgb, var(--color-lamp) 7%, transparent) 32%,
+    color-mix(in srgb, var(--bookshelf-lamp) 26%, transparent) 0%,
+    color-mix(in srgb, var(--bookshelf-lamp) 7%, transparent) 32%,
     transparent 60%
   );
   mix-blend-mode: soft-light;
@@ -339,4 +355,206 @@
     --board-h: 28px;
     padding: 4rem 1rem 5rem;
   }
+}
+
+/* =========================================================================
+   Book stage (Step 3). Reused across every open() call — openBook.js writes
+   book-specific values (colors, --bd, text) into this one set of elements
+   rather than rebuilding per book.
+
+   Geometry contract (do not simplify): model space has the front cover
+   facing +Z, spine on the -X side. .book's own transform (x, y, scale,
+   rotateY) is 100% GSAP-owned for its whole lifetime — it never gets a CSS
+   `transform` rule. .book__spine's rotateY(-90deg) is static CSS because
+   GSAP never touches it directly; only the *container*'s rotateY is
+   animated to swing between "spine faces viewer" (90deg) and "cover faces
+   viewer" (0deg).
+   ========================================================================= */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  perspective: 1500px;
+  perspective-origin: 50% 46%;
+}
+
+.stage.is-open {
+  display: block;
+}
+
+.stage__scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 40%, rgba(5, 3, 2, 0.88), rgba(2, 1, 1, 0.97));
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.book {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--bw, 260px);
+  height: var(--bh, 390px);
+  margin-top: calc(var(--bh, 390px) / -2);
+  margin-left: calc(var(--bw, 260px) / -2);
+  transform-style: preserve-3d;
+  will-change: transform;
+  visibility: hidden;
+  /* No `transform:` rule here, ever. See contract note above. */
+}
+
+.stage.is-open .book {
+  visibility: visible;
+}
+
+.book__back {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px 6px 6px 2px;
+  background: linear-gradient(155deg, var(--bookshelf-walnut) 0%, var(--bookshelf-walnut-dark) 100%);
+  backface-visibility: hidden;
+}
+
+.book__spine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--bd, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--spine-color, var(--bookshelf-walnut-dark));
+  transform-origin: left center;
+  transform: rotateY(-90deg);
+  backface-visibility: hidden;
+}
+
+.book__spine-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--bookshelf-parchment) 85%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 80%;
+}
+
+.book__pages {
+  position: absolute;
+  inset: 0;
+}
+
+.book__sheet {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(calc(var(--bd, 40px) - 2px - var(--i, 0) * 0.6px));
+}
+
+.book__sheet-face {
+  position: absolute;
+  inset: 0;
+  background: var(--bookshelf-parchment);
+  /* Flat paper, not a cover corner — square, unlike .book__cover-art. */
+  border-radius: 0 1px 1px 0;
+  backface-visibility: hidden;
+}
+
+.book__sheet-face--back {
+  transform: rotateY(180deg);
+}
+
+.book__cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--bw, 260px);
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  /* z (translateZ(--bd)) and rotateY are both GSAP-owned, written via
+     gsap.set() at open() time — never a static CSS transform here, since
+     a CSS-authored transform on an element GSAP later animates would need
+     GSAP to parse the computed matrix on first tween, which is fragile. */
+}
+
+.book__cover-art,
+.book__cover-inside {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+
+.book__cover-art {
+  border-radius: 2px 6px 6px 2px;
+  background: var(--spine-color, var(--bookshelf-walnut)) center / cover no-repeat;
+}
+
+.book__cover-inside {
+  /* Flat paper (the inside of the cover), not the outside cover's rounded
+     corner — square, matching .book__sheet-face. */
+  border-radius: 1px 0 0 1px;
+  background: var(--bookshelf-parchment);
+  transform: rotateY(180deg);
+}
+
+.stage__controls {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.stage.is-open .stage__controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.stage__btn {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bookshelf-parchment);
+  background: color-mix(in srgb, var(--bookshelf-walnut) 60%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bookshelf-lamp) 40%, transparent);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.stage__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.stage__btn--putback {
+  margin-left: 1.5rem;
+  border-color: color-mix(in srgb, var(--bookshelf-lamp) 65%, transparent);
+}
+
+.stage__counter {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--bookshelf-parchment) 70%, transparent);
+}
+
+/* Shelf dimming while the stage is open, driven by openBook.js's timeline. */
+#bookshelf.is-dimmed {
+  will-change: filter;
 }
