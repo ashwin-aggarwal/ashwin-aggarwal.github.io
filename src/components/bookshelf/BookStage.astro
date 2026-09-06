@@ -1,0 +1,36 @@
+---
+// The single reusable 3D stage. Mounted once; openBook.js re-mounts each
+// clicked book's data into it rather than rebuilding per book.
+import './bookshelf.css';
+---
+
+<div id="stage" class="stage" aria-hidden="true">
+  <div class="stage__scrim" data-scrim tabindex="-1"></div>
+
+  <div class="book" data-book>
+    <div class="book__back" data-back></div>
+
+    <div class="book__spine" data-spine>
+      <span class="book__spine-title" data-spine-title></span>
+    </div>
+
+    <div class="book__pages" data-pages>
+      <div class="book__sheet" style="--i: 0">
+        <div class="book__sheet-face book__sheet-face--front"></div>
+        <div class="book__sheet-face book__sheet-face--back"></div>
+      </div>
+    </div>
+
+    <div class="book__cover" data-cover>
+      <div class="book__cover-art" data-cover-art></div>
+      <div class="book__cover-inside" data-cover-inside></div>
+    </div>
+  </div>
+
+  <div class="stage__controls" data-controls>
+    <button type="button" class="stage__btn" data-prev>Previous</button>
+    <span class="stage__counter" data-counter>SPREAD 1 / 1</span>
+    <button type="button" class="stage__btn" data-next>Next</button>
+    <button type="button" class="stage__btn stage__btn--putback" data-putback>Put back</button>
+  </div>
+</div>

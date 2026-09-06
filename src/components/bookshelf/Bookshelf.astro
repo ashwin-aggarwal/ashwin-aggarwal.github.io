@@ -2,6 +2,9 @@
 // Furniture (Step 1) + spines rendered client-side into #shelf-row (Step 2)
 // by src/scripts/shelf.js, so "Add book" can insert a spine with no rebuild.
 import './bookshelf.css';
+// Caveat is the bookshelf's handwriting font and must not load or appear
+// anywhere else on the site — self-hosted here, not in BaseLayout.
+import '@fontsource/caveat/latin.css';
 ---
 
 <section class="reading-room" id="bookshelf" aria-label="Bookshelf">

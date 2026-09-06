@@ -1,12 +1,79 @@
 ---
+import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Bookshelf from '../components/bookshelf/Bookshelf.astro';
+import BookStage from '../components/bookshelf/BookStage.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import { getBio, getNowItems, getProjects } from '../lib/content';
+
+const bio = await getBio();
+const { Content: BioContent } = await render(bio);
+
+const nowItems = await getNowItems();
+const nowRendered = await Promise.all(nowItems.map((item) => render(item)));
+
+const projects = await getProjects();
 ---
 
 <BaseLayout>
-  <Bookshelf />
-</BaseLayout>
+  <section id="about" class="content-col scroll-mt-24 py-16">
+    <h1 class="font-display text-3xl">{bio.data.name}</h1>
+    <p class="mt-1 text-[color:var(--color-ink-muted)]">{bio.data.tagline}</p>
 
-<script>
-  import '../scripts/main.js';
-</script>
+    <div class="prose mt-6 max-w-none">
+      <BioContent />
+    </div>
+
+    <p class="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+      <span class="text-[color:var(--color-ink-muted)]">{bio.data.location}</span>
+      <a href={`mailto:${bio.data.email}`}>Email</a>
+      <a href={bio.data.github}>GitHub</a>
+      <a href={bio.data.linkedin}>LinkedIn</a>
+    </p>
+  </section>
+
+  <section id="now" class="scroll-mt-24 py-10">
+    <div class="marginal">
+      <div class="marginal__content">
+        <h2 class="font-display text-lg">Now</h2>
+      </div>
+    </div>
+
+    <div class="mt-6 space-y-6">
+      {
+        nowItems.map((item, i) => {
+          const { Content } = nowRendered[i];
+          return (
+            <div class="marginal">
+              <div class="marginal__meta">{item.data.label}</div>
+              <div class="marginal__content">
+                <Content />
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <section id="projects" class="scroll-mt-24 py-10">
+    <div class="marginal">
+      <div class="marginal__content">
+        <h2 class="font-display text-lg">Projects</h2>
+      </div>
+    </div>
+
+    {projects.map((project) => <ProjectRow project={project} />)}
+  </section>
+
+  <Bookshelf />
+  <BookStage />
+  <script>
+    import '../scripts/main.js';
+    import { initMediaWells } from '../scripts/mediaWell.js';
+    import { initIntroReveal } from '../scripts/introReveal.js';
+
+    initMediaWells();
+    initIntroReveal(document.getElementById('about'));
+  </script>
+</BaseLayout>
