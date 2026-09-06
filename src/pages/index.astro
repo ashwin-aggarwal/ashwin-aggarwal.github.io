@@ -31,7 +31,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
 
 <BaseLayout>
   <section id="about" class="content-col content-col--wide scroll-mt-24 py-16">
-    <div class={`about-grid ${bio.data.headshot ? 'about-grid--with-headshot' : ''}`}>
+    <div class="about-grid">
       <div class="min-w-0">
         <p class="text-sm tracking-wide text-[color:var(--color-accent)] uppercase">{bio.data.identityLine}</p>
         <h1 class="font-display mt-2 text-4xl sm:text-5xl">{bio.data.name}</h1>
@@ -49,13 +49,9 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
         </p>
       </div>
 
-      {
-        bio.data.headshot && (
-          <div class="about-grid__headshot">
-            <img src={bio.data.headshot} alt="" width="320" height="320" />
-          </div>
-        )
-      }
+      <div class="about-grid__headshot" data-media-well>
+        {bio.data.headshot && <img data-media src={bio.data.headshot} alt="" width="320" height="320" />}
+      </div>
     </div>
   </section>
 
