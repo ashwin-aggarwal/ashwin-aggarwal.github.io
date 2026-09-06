@@ -13,6 +13,7 @@
 @theme {
   --color-ground: #f0f1ed;
   --color-ground-sunk: #e7e9e3;
+  --color-ground-raise: #ffffff;
   --color-ink: #1a1f1c;
   --color-ink-muted: #5e655f;
   --color-rule: #d3d7cf;
@@ -21,6 +22,18 @@
   --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
   --font-sans: "IBM Plex Sans", system-ui, sans-serif;
 }
+
+/* Dark variant — uncomment this block to override the above.
+@theme {
+  --color-ground:      #131B2E;
+  --color-ground-sunk: #1B2440;
+  --color-ground-raise:#222D4D;
+  --color-ink:         #E8ECF5;
+  --color-ink-muted:   #8A96B0;
+  --color-rule:        #2A3654;
+  --color-accent:      #6B9BF5;
+}
+*/
 
 @layer base {
   * {
@@ -52,10 +65,10 @@
   }
 
   /* Interaction 1 of 4: drawn underline on inline links, revealed left to
-     right on hover/focus via a clip-path wipe over a static SVG stroke —
-     avoids restretching/distorting the line the way animating background-
-     size would. Baked to --color-accent's hex since links share one color
-     site-wide (per-project accent only drives the project-row rule wipe). */
+     right on hover/focus via a clip-path wipe over a static SVG stroke. The
+     stroke shape is applied as a mask over a solid --color-accent fill
+     (rather than baked into the SVG as a literal color), so it still flips
+     when the dark @theme block above is uncommented. */
   a {
     position: relative;
     display: inline-block;
@@ -70,7 +83,10 @@
     right: 0;
     bottom: -0.15em;
     height: 0.4em;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1,3.4 C20,1.6 40,4.6 60,2.6 C75,1 90,4.2 99,3' fill='none' stroke='%232A6B5E' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
+    background: var(--color-accent);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1,3.4 C20,1.6 40,4.6 60,2.6 C75,1 90,4.2 99,3' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
+      left center / 100% 55% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1,3.4 C20,1.6 40,4.6 60,2.6 C75,1 90,4.2 99,3' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
       left center / 100% 55% no-repeat;
     clip-path: inset(0 100% 0 0);
     transition: clip-path 0.3s ease;
@@ -129,6 +145,145 @@
     width: 9rem;
     margin-bottom: 0;
   }
+}
+
+/* Wide variant of the two primitives above: project rows need room for
+   large alternating media beside text, wider than the 42rem prose column
+   used everywhere else. Actual prose text within a wide row is still
+   capped at 42rem by .prose below. */
+.content-col--wide {
+  max-width: 64rem;
+}
+
+.marginal--wide {
+  grid-template-columns: 1fr min(64rem, 100%) 1fr;
+}
+
+.prose {
+  max-width: 42rem;
+}
+
+/* Project row media/text split: stacked with media full-width on top
+   below 900px; side-by-side, alternating via data-media-side, at/above
+   900px. */
+.project-row__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .project-row__grid {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2.5rem;
+  }
+
+  .project-row__grid[data-media-side='right'] {
+    flex-direction: row-reverse;
+  }
+
+  .project-row__media {
+    flex: 0 0 55%;
+  }
+
+  .project-row__text {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+}
+
+/* Minimal browser chrome for mediaFrame: 'browser' — a flat title bar
+   above the media well, no shadow/gradient/traffic-light colors. */
+.browser-frame {
+  border: 1px solid var(--color-rule);
+}
+
+.browser-frame__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 28px;
+  padding-inline: 0.6rem;
+  background: var(--color-ground-raise);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.browser-frame__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-rule);
+}
+
+.browser-frame__url {
+  flex: 1;
+  height: 12px;
+  margin-inline-start: 0.4rem;
+  background: var(--color-ground-sunk);
+}
+
+/* #about: two columns (prose + headshot) above 900px, single column
+   below. A missing headshot collapses to one column automatically since
+   it's simply not rendered into the grid. */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 900px) {
+  .about-grid--with-headshot {
+    grid-template-columns: 1fr 18rem;
+    align-items: start;
+    gap: 3rem;
+  }
+}
+
+.about-grid__headshot {
+  aspect-ratio: 1 / 1;
+  background: var(--color-ground-sunk);
+  overflow: hidden;
+}
+
+.about-grid__headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* #experience: a 1px rule down the left with a small square marker per
+   entry. Each item's rail spans its own row edge-to-edge with no gap
+   between items, so consecutive rails read as one continuous line. */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.timeline__row {
+  position: relative;
+  padding-block: 1.5rem;
+  padding-left: 1.75rem;
+}
+
+.timeline__rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-rule);
+}
+
+.timeline__marker {
+  position: absolute;
+  left: -3px;
+  top: 1.85rem;
+  width: 7px;
+  height: 7px;
+  background: var(--color-accent);
 }
 
 /* Media well: always rendered, fixed aspect ratio, square corners. Empty

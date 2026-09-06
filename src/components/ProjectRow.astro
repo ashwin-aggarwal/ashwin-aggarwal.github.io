@@ -16,42 +16,68 @@ const { Content } = await render(project);
 
 const index = String(data.order).padStart(2, '0');
 const isVideo = isVideoMedia(data.media);
+const mediaLeft = data.order % 2 === 1;
+const isBrowserFrame = data.mediaFrame === 'browser';
 ---
 
 <article
   id={anchorId(project.id)}
-  class="project-row scroll-mt-24 py-10"
+  class="project-row scroll-mt-24 py-12"
   style={`--project-accent: ${data.accent}`}
 >
-  <div class="marginal">
+  <div class="marginal marginal--wide">
     <div class="marginal__meta">
       <div class="hidden lg:block">
         <p>{index}.</p>
-        <p>{data.year}</p>
+        <p class="text-[color:var(--color-accent)] uppercase tracking-wide">{data.year}</p>
         {data.role && <p>{data.role}</p>}
       </div>
-      <div class="flex flex-wrap gap-x-3 lg:hidden">
-        <span>{index}.</span>
+      <div class="flex flex-wrap gap-x-3 text-sm text-[color:var(--color-accent)] uppercase tracking-wide lg:hidden">
         <span>{data.year}</span>
         {data.role && <span>{data.role}</span>}
       </div>
     </div>
 
     <div class="marginal__content">
-      <div class="flex gap-6">
-        <div class="media-well w-28 shrink-0 sm:w-40" data-media-well>
+      <div class="project-row__grid" data-media-side={mediaLeft ? 'left' : 'right'}>
+        <div class="project-row__media">
           {
-            data.media &&
-              (isVideo ? (
-                <video data-media muted loop playsinline preload="metadata" src={`/media/${data.media}`} />
-              ) : (
-                <img data-media src={`/media/${data.media}`} alt="" loading="lazy" />
-              ))
+            isBrowserFrame ? (
+              <div class="browser-frame">
+                <div class="browser-frame__bar" aria-hidden="true">
+                  <span class="browser-frame__dot" />
+                  <span class="browser-frame__dot" />
+                  <span class="browser-frame__dot" />
+                  <span class="browser-frame__url" />
+                </div>
+                <div class="media-well" data-media-well>
+                  {
+                    data.media &&
+                      (isVideo ? (
+                        <video data-media muted loop playsinline preload="metadata" src={`/media/${data.media}`} />
+                      ) : (
+                        <img data-media src={`/media/${data.media}`} alt="" loading="lazy" />
+                      ))
+                  }
+                </div>
+              </div>
+            ) : (
+              <div class="media-well" data-media-well>
+                {
+                  data.media &&
+                    (isVideo ? (
+                      <video data-media muted loop playsinline preload="metadata" src={`/media/${data.media}`} />
+                    ) : (
+                      <img data-media src={`/media/${data.media}`} alt="" loading="lazy" />
+                    ))
+                }
+              </div>
+            )
           }
         </div>
 
-        <div class="min-w-0 flex-1">
-          <h3 class="font-display text-xl">{data.title}</h3>
+        <div class="project-row__text">
+          <h3 class="font-display text-2xl">{data.title}</h3>
 
           {
             data.affiliation && (
@@ -61,15 +87,15 @@ const isVideo = isVideoMedia(data.media);
             )
           }
 
-          <p class="mt-2">{data.blurb}</p>
+          <p class="prose mt-3">{data.blurb}</p>
 
-          <div class="prose mt-4 max-w-none text-[color:var(--color-ink)]">
+          <div class="prose mt-4 text-[color:var(--color-ink)]">
             <Content />
           </div>
 
           {
             data.stack.length > 0 && (
-              <p class="mt-4 text-sm text-[color:var(--color-ink-muted)]">{data.stack.join(', ')}</p>
+              <p class="prose mt-4 text-sm text-[color:var(--color-ink-muted)]">{data.stack.join(', ')}</p>
             )
           }
 
