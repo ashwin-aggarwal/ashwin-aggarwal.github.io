@@ -1,15 +1,24 @@
 ---
+# The intro paragraph below is the most-read text on this site. Edit it
+# freely. Keep it short — past ~90 words it stops reading as a person
+# talking.
+#
+# identityLine and tagline aren't addressed by CONTENT_FILL_v1 — left as
+# PLACEHOLDER until real values are confirmed.
 name: Ashwin Aggarwal
-identityLine: PLACEHOLDER — SOFTWARE ENGINEER
-tagline: PLACEHOLDER — one line about what you do
-location: PLACEHOLDER — city
-email: PLACEHOLDER
+identityLine: Cornell Student
+tagline: Computer science student at Cornell working on ML, AI, and Robotics.
+location: Richmond, Virginia
+email: aka96@cornell.edu
 github: https://github.com/ashwin-aggarwal
-linkedin: PLACEHOLDER
+linkedin: https://linkedin.com/in/ashwin-aggarwal
+# No resume link yet — omit to leave that link out of the contact row.
+# resume: /resume.pdf
+# No headshot yet — omit to render the flat placeholder well instead.
+# headshot: /media/headshot.jpg
+
 ---
 
-PLACEHOLDER — Two or three sentences. What you're working on, what you studied or are
-studying, one specific thing you're actually interested in. First person, plain
-language, no adjectives about yourself.
-
-PLACEHOLDER — Optional second paragraph. Something that isn't work.
+I'm a computer science student at Cornell, from Richmond, Virginia, passionate about machine learning, AI, and robotics. I am also part of Cornell's Generational AI
+club.
+Outside of school I love to playing Catan, basketball, and FIFA. I also like to run and read philosophy.

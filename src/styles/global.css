@@ -163,6 +163,27 @@
   max-width: 42rem;
 }
 
+/* Tailwind's preflight strips default list styling site-wide; restore a
+   plain marker and spacing for markdown-authored lists (resume bullets,
+   writeup steps) without introducing any new visual language. */
+.prose ul,
+.prose ol {
+  margin: 0.75em 0;
+  padding-left: 1.25em;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li + li {
+  margin-top: 0.5em;
+}
+
 /* Project row media/text split: stacked with media full-width on top
    below 900px; side-by-side, alternating via data-media-side, at/above
    900px. */
@@ -221,6 +242,32 @@
   height: 12px;
   margin-inline-start: 0.4rem;
   background: var(--color-ground-sunk);
+}
+
+/* Project row writeup disclosure. Native <details>/<summary> — no JS, no
+   transition, instant open/close. Deliberately not one of the site's four
+   budgeted interaction effects: nothing animates, it just shows or hides. */
+.project-row__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-accent);
+  font-size: 0.9rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.project-row__summary::-webkit-details-marker {
+  display: none;
+}
+
+.project-row__summary::before {
+  content: '▸';
+  font-size: 0.7em;
+}
+
+.project-row__details[open] > .project-row__summary::before {
+  content: '▾';
 }
 
 /* #about: two columns (prose + headshot) above 900px, single column
@@ -302,6 +349,22 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* Missing-cover fallback: same slot and dimensions as a real cover, flat
+   fill only — no gradient, border, dashed affordance, or icon. It's a
+   finished-looking state, not a broken one. */
+.media-well--fallback {
+  background: color-mix(in srgb, #2a6b5e 6%, var(--color-ground));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-well__fallback-index {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: color-mix(in srgb, var(--color-ink) 25%, transparent);
 }
 
 /* Interaction 2 of 4: accent rule wipe on project rows. The row's own

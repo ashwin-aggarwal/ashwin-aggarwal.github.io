@@ -1,4 +1,4 @@
-import { defineCollection, reference, z } from 'astro:content';
+import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const bio = defineCollection({
@@ -36,32 +36,33 @@ const journal = defineCollection({
 
 const projects = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/projects' }),
-  schema: z.object({
-    title: z.string(),
-    blurb: z.string(),
-    affiliation: z.string().optional(),
-    year: z.number(),
-    role: z.string().optional(),
-    stack: z.array(z.string()),
-    // Intentionally not validated as a strict hex here: an absent or
-    // malformed value should fall back to --color-accent at render time
-    // rather than fail the build. See src/lib/projects.ts.
-    accent: z.string().optional(),
-    repo: z.string().url().optional(),
-    live: z.string().url().optional(),
-    media: z.string().optional(),
-    mediaFrame: z.enum(['browser', 'none']).default('browser'),
-    writeups: z
-      .array(
-        z.object({
-          label: z.string(),
-          slug: reference('journal'),
-        }),
-      )
-      .default([]),
-    order: z.number(),
-    draft: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z
+      .object({
+        title: z.string(),
+        affiliation: z.string(), // the small line under the title
+        year: z.string(), // free-form: "2025", "2024–25", "Spring 2025"
+        blurb: z.string(),
+        stack: z.array(z.string()),
+        // Intentionally not validated as a strict hex here: an absent or
+        // malformed value should fall back to --color-accent at render time
+        // rather than fail the build. See src/lib/content.ts.
+        accent: z.string().optional(),
+        mediaFrame: z.enum(['browser', 'none']).default('browser'),
+        cover: image().optional(), // ./media/<file> — omit for the fallback block
+        coverAlt: z.string().optional(), // required whenever cover is set (see refine below)
+        // Not validated as a strict URL: several links are still literal
+        // "PLACEHOLDER — https://..." strings (real repos aren't public
+        // yet), which would fail .url() validation. Tighten this back to
+        // z.string().url() once every link below is a real URL.
+        links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
+        order: z.number(), // controls sequence AND the displayed index number
+        draft: z.boolean().default(false),
+      })
+      .refine((d) => !d.cover || (d.coverAlt && d.coverAlt.length > 0), {
+        message: 'coverAlt is required when cover is set',
+        path: ['coverAlt'],
+      }),
 });
 
 const experience = defineCollection({

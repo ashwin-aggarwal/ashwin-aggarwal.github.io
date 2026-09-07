@@ -1,9 +1,15 @@
 // Seed data for the bookshelf. Rendered client-side by scripts/shelf.js so
 // "Add book" can insert a spine without a rebuild.
 //
+// coverImage imports are plain Vite asset imports (not astro:assets — this
+// is a .js data file, not a content collection) and resolve to a built,
+// hashed URL string at build time.
+//
 // NOTE: the `pages` copy below for both books is placeholder text written
 // only so the open/turn animation has something to show — replace with
 // real reading notes.
+import siddharthaCover from './siddhartha.webp';
+import atomicHabitsCover from './atomic-habits.webp';
 
 export const books = [
   {
@@ -11,7 +17,7 @@ export const books = [
     title: 'Siddhartha',
     author: 'Hermann Hesse',
     spineColor: '#2F6B5E',
-    coverImage: '',
+    coverImage: siddharthaCover,
     thickness: 34,
     height: 0.92,
     pages: [
@@ -31,7 +37,7 @@ export const books = [
     title: 'Atomic Habits',
     author: 'James Clear',
     spineColor: '#C9A227',
-    coverImage: '',
+    coverImage: atomicHabitsCover,
     thickness: 46,
     height: 0.86,
     pages: [
