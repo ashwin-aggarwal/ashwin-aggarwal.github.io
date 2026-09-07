@@ -1,0 +1,42 @@
+---
+// Deliberately not using BaseLayout — this page gets no nav, no footer,
+// no other sections. Astro outputs this to dist/404.html, which GitHub
+// Pages serves automatically for unmatched routes on a user site.
+import '../styles/global.css';
+import '@fontsource-variable/fraunces/full.css';
+import '@fontsource/ibm-plex-sans/latin.css';
+import Monogram from '../components/Monogram.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="robots" content="noindex" />
+    <title>404 — Ashwin Aggarwal</title>
+  </head>
+  <body>
+    <section class="notfound">
+      <div class="notfound__copy">
+        <p>404 — this page is somewhere else. The logo knows the way.</p>
+        <p class="notfound__hint">Click the logo to go home.</p>
+      </div>
+
+      <a href="/" class="notfound__mark" id="notfound-mark" aria-label="Return to homepage">
+        <Monogram class="notfound__mark-svg" />
+      </a>
+
+      <p class="notfound__egg" id="notfound-egg" aria-hidden="true">huh, a corner.</p>
+    </section>
+
+    <script>
+      import { initBounce } from '../scripts/bounce.js';
+
+      const mark = document.getElementById('notfound-mark');
+      const egg = document.getElementById('notfound-egg');
+      if (mark) initBounce(mark, egg);
+    </script>
+  </body>
+</html>
