@@ -17,7 +17,7 @@ headshot: /media/headshot.webp
 
 ---
 
-I'm a computer science student in Cornell Engineering passionate about Machine Learning, agentic AI, and Physical AI. I have experience with Computer vision, Deep Learning, and Automation Workflows.
+I'm a computer science student in Cornell Engineering passionate about Machine Learning, Agentic AI, and Physical AI. I have experience with Computer Vision, Deep Learning, and Automation Workflows.
 
 I have interned at Virginia Commonwealth University and Next Play. I am also part of Cornell's Generational AI club as an Engineer.
 
