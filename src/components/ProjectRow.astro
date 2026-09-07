@@ -19,6 +19,10 @@ const { Content } = await render(project);
 const displayIndex = String(data.order).padStart(2, '0');
 const mediaLeft = data.order % 2 === 1;
 const isBrowserFrame = data.mediaFrame === 'browser';
+// No fallback block when media is absent — some rows are text-only for now
+// (see the project's own frontmatter) rather than showing a numbered
+// placeholder. Set cover/video/logoMark to bring the media side back.
+const hasMedia = Boolean(data.logoMark || data.video || data.cover);
 ---
 
 <article
@@ -34,33 +38,33 @@ const isBrowserFrame = data.mediaFrame === 'browser';
     </div>
 
     <div class="marginal__content">
-      <div class="project-row__grid" data-media-side={mediaLeft ? 'left' : 'right'}>
-        <div class="project-row__media">
-          {
-            data.logoMark ? (
-              <div class="media-well media-well--logo">
-                <InlineSvg path={`logos/${data.logoMark}`} class="media-well__logo-svg" />
-              </div>
-            ) : data.video ? (
-              isBrowserFrame ? (
-                <div class="browser-frame">
-                  <div class="browser-frame__bar" aria-hidden="true">
-                    <span class="browser-frame__dot" />
-                    <span class="browser-frame__dot" />
-                    <span class="browser-frame__dot" />
-                    <span class="browser-frame__url" />
+      <div class={hasMedia ? 'project-row__grid' : ''} data-media-side={hasMedia ? (mediaLeft ? 'left' : 'right') : undefined}>
+        {
+          hasMedia && (
+            <div class="project-row__media">
+              {data.logoMark ? (
+                <div class="media-well media-well--logo">
+                  <InlineSvg path={`logos/${data.logoMark}`} class="media-well__logo-svg" />
+                </div>
+              ) : data.video ? (
+                isBrowserFrame ? (
+                  <div class="browser-frame">
+                    <div class="browser-frame__bar" aria-hidden="true">
+                      <span class="browser-frame__dot" />
+                      <span class="browser-frame__dot" />
+                      <span class="browser-frame__dot" />
+                      <span class="browser-frame__url" />
+                    </div>
+                    <div class="media-well" data-media-well>
+                      <video data-media muted loop playsinline preload="metadata" src={data.video} />
+                    </div>
                   </div>
+                ) : (
                   <div class="media-well" data-media-well>
                     <video data-media muted loop playsinline preload="metadata" src={data.video} />
                   </div>
-                </div>
-              ) : (
-                <div class="media-well" data-media-well>
-                  <video data-media muted loop playsinline preload="metadata" src={data.video} />
-                </div>
-              )
-            ) : data.cover ? (
-              isBrowserFrame ? (
+                )
+              ) : isBrowserFrame ? (
                 <div class="browser-frame">
                   <div class="browser-frame__bar" aria-hidden="true">
                     <span class="browser-frame__dot" />
@@ -69,21 +73,17 @@ const isBrowserFrame = data.mediaFrame === 'browser';
                     <span class="browser-frame__url" />
                   </div>
                   <div class="media-well">
-                    <Image src={data.cover} alt={data.coverAlt ?? ''} />
+                    <Image src={data.cover!} alt={data.coverAlt ?? ''} />
                   </div>
                 </div>
               ) : (
                 <div class="media-well">
-                  <Image src={data.cover} alt={data.coverAlt ?? ''} />
+                  <Image src={data.cover!} alt={data.coverAlt ?? ''} />
                 </div>
-              )
-            ) : (
-              <div class="media-well media-well--fallback" aria-hidden="true">
-                <span class="media-well__fallback-index">{displayIndex}</span>
-              </div>
-            )
-          }
-        </div>
+              )}
+            </div>
+          )
+        }
 
         <div class="project-row__text">
           <h3 class="title-mono" data-typewriter aria-label={data.title}>
