@@ -10,11 +10,11 @@ stack:
   - BM25
   - Docker
 accent: "#3B4E8C"
-# cover: ./media/leaselooker-cover.jpg
-# coverAlt: PLACEHOLDER — describe the image once added
+# Media removed for now — add back later.
+# logoMark: leaselooker.svg
 links:
   - label: GitHub
-    url: PLACEHOLDER — https://github.com/ashwin-aggarwal/leaselooker
+    url: https://github.com/ashwin-aggarwal/LeaseLooker
 order: 2
 draft: false
 ---

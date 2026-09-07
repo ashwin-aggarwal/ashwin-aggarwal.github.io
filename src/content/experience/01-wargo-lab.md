@@ -1,23 +1,21 @@
 ---
-role: Medical Machine Learning Research Assistant
-org: Virginia Commonwealth University
-orgNote: Wargo Lab, Richmond, VA
+company: Virginia Commonwealth University
+role: Medical Machine Learning Research Assistant, Wargo Lab
 start: May 2026
-tags:
-  - PyTorch
-  - CUDA
-  - SQL Server
-  - Power BI
-  - Monte Carlo Simulation
+end: Present
+location: Richmond, VA
+# No logo yet — falls back to a Fraunces wordmark until one is added.
+# logo: vcu.svg
 order: 1
 draft: false
 ---
 
-- Implemented ETL pipelines for imaging machines, automating Power BI dashboard generation for
-  medical imaging; scheduled workflow for concurrently filling a SQL Server database to replace
-  manual data collection at 5+ hospitals.
-- Engineered a PyTorch computer vision model turning 2D mammography images into 3D tomosynthesis
-  simulations on 500+ breast scans using CUDA parallelization; used Monte Carlo simulation to
-  determine lesion position probabilities.
-- Co-authored a manuscript documenting the system design, automation workflow, and architecture
-  for publication.
+Built automation and ML infrastructure for a medical imaging lab, replacing manual data
+collection with pipelines that feed both a research database and a 3D reconstruction model.
+
+- Implemented ETL pipelines for imaging machines, automating Power BI dashboard generation and
+  filling a SQL Server database that replaced manual collection at 5+ hospitals.
+- Engineered a PyTorch computer vision model turning 2D mammography into 3D tomosynthesis
+  simulations on 500+ scans, using CUDA parallelization and Monte Carlo simulation for lesion
+  position probabilities.
+- Co-authored a manuscript documenting the system design and architecture for publication.

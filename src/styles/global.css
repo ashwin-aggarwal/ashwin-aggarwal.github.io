@@ -21,6 +21,8 @@
 
   --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
   --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  /* Section-title-only. A system stack, not a new font dependency. */
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
 }
 
 /* Dark variant — uncomment this block to override the above.
@@ -244,10 +246,11 @@
   background: var(--color-ground-sunk);
 }
 
-/* Project row writeup disclosure. Native <details>/<summary> — no JS, no
-   transition, instant open/close. Deliberately not one of the site's four
-   budgeted interaction effects: nothing animates, it just shows or hides. */
-.project-row__summary {
+/* Writeup disclosure — shared by project rows and experience entries.
+   Native <details>/<summary> — no JS, no transition, instant open/close.
+   Deliberately not one of the site's four budgeted interaction effects:
+   nothing animates, it just shows or hides. */
+.disclosure__summary {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -257,16 +260,16 @@
   list-style: none;
 }
 
-.project-row__summary::-webkit-details-marker {
+.disclosure__summary::-webkit-details-marker {
   display: none;
 }
 
-.project-row__summary::before {
+.disclosure__summary::before {
   content: '▸';
   font-size: 0.7em;
 }
 
-.project-row__details[open] > .project-row__summary::before {
+.disclosure[open] > .disclosure__summary::before {
   content: '▾';
 }
 
@@ -334,6 +337,85 @@
   background: var(--color-accent);
 }
 
+/* Small footer contact box: a flat inset panel, square corners, no
+   border/shadow — just enough visual separation from the copyright line. */
+.footer-contact {
+  background: var(--color-ground-sunk);
+  padding: 1rem 1.25rem;
+}
+
+/* Header brand mark: bold, bigger, monospace, typewriter reveal on load —
+   same mechanism as .section-title (scripts/typewriter.js). */
+.brand-mark {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  letter-spacing: 0.01em;
+}
+
+/* Section titles (Projects, Experience, Journal, ...): bigger, monospace,
+   with a typewriter reveal on load — see scripts/typewriter.js. Fully
+   visible with no JS or under prefers-reduced-motion; the script only
+   clears and re-types the visible span when animation is safe to run. */
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.section-title__cursor {
+  display: inline-block;
+  margin-left: 0.05em;
+  color: var(--color-accent);
+  animation: section-title-blink 1s step-end infinite;
+}
+
+@keyframes section-title-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Project row index number: big, bold, monospace — replaces the old
+   index+year meta line now that dates are gone from the row. Purely
+   decorative (order is already conveyed by document order/heading
+   structure), so it's hidden from assistive tech. */
+.project-row__index {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+/* Entry title — project rows and experience roles alike: same typewriter
+   identity as the index number and the section titles, instead of the
+   site's Fraunces display face. */
+.title-mono {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.01em;
+  color: var(--color-ink);
+}
+
+/* Eyebrow labels (identity line, project affiliation): sentence case, not
+   tracked-out all-caps. */
+.eyebrow {
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-title__cursor {
+    animation: none;
+    display: none;
+  }
+}
+
 /* Media well: always rendered, fixed aspect ratio, square corners. Empty
    (no `media`, or a broken file) reads as a plain sunken panel rather than
    a broken image or a collapsed row. */
@@ -365,6 +447,21 @@
   font-family: var(--font-display);
   font-size: 1.5rem;
   color: color-mix(in srgb, var(--color-ink) 25%, transparent);
+}
+
+/* Brand-mark media slot: a single-color inline SVG logo (currentColor),
+   centered on a flat well — no browser chrome, since this isn't a
+   screenshot. */
+.media-well--logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink);
+}
+
+.media-well__logo-svg {
+  width: 35%;
+  height: auto;
 }
 
 /* Interaction 2 of 4: accent rule wipe on project rows. The row's own

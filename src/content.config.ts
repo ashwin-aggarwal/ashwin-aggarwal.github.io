@@ -51,6 +51,16 @@ const projects = defineCollection({
         mediaFrame: z.enum(['browser', 'none']).default('browser'),
         cover: image().optional(), // ./media/<file> — omit for the fallback block
         coverAlt: z.string().optional(), // required whenever cover is set (see refine below)
+        // Video can't go through astro:assets' image() (not an image), so
+        // it's a plain path served from public/media/projects/<file> rather
+        // than co-located under src/content/projects/media/. Takes
+        // precedence over `cover` when both are set.
+        video: z.string().optional(),
+        // A single-color brand mark (public/logos/<file>.svg, inlined with
+        // currentColor) rendered in the media slot instead of a screenshot.
+        // Takes precedence over `cover`/`video`; always renders with no
+        // browser chrome regardless of `mediaFrame`.
+        logoMark: z.string().optional(),
         // Not validated as a strict URL: several links are still literal
         // "PLACEHOLDER — https://..." strings (real repos aren't public
         // yet), which would fail .url() validation. Tighten this back to
@@ -66,15 +76,22 @@ const projects = defineCollection({
 });
 
 const experience = defineCollection({
+  // EXPERIENCE_TIMELINE.md specifies `type: 'content'`, the legacy Content
+  // Collections API. This project is Astro 5 on the Content Layer API
+  // (glob() loader, matching every other collection in this file), so this
+  // adapts that instruction to the equivalent here rather than mixing API
+  // styles within one project.
   loader: glob({ pattern: '*.md', base: './src/content/experience' }),
   schema: z.object({
+    company: z.string(),
     role: z.string(),
-    org: z.string(),
-    orgNote: z.string().optional(),
-    start: z.string(),
-    end: z.string().optional(),
-    tags: z.array(z.string()).default([]),
-    order: z.number(),
+    start: z.string(), // "Jun 2024" — display string, not a Date
+    end: z.string(), // "Aug 2024" or "Present" — always required, no omission
+    location: z.string().optional(),
+    logo: z.string().optional(), // filename in /public/logos/, e.g. "acme.svg"
+    logoScale: z.number().default(1),
+    url: z.string().url().optional(),
+    order: z.number(), // ascending = left to right = oldest to newest
     draft: z.boolean().default(false),
   }),
 });

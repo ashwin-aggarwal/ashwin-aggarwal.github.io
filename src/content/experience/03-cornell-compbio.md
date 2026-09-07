@@ -1,20 +1,19 @@
 ---
+company: Cornell Computational Biology Lab
 role: Undergraduate Machine Learning Researcher
-org: Cornell Computational Biology Lab
-orgNote: Ithaca, NY
 start: Jan 2026
 end: May 2026
-tags:
-  - PyTorch
-  - 3D CNN
-  - ResNet
-  - U-Net
+location: Ithaca, NY
+# logo: cornell.svg
 order: 3
 draft: false
 ---
 
-- Constructed and fine-tuned 3D CNNs (ResNet and U-Net architectures) for classifying parity of
-  500+ MRI scans; improved F1 score (0.54 to 0.61) and overall accuracy using data augmentation,
-  dropout, and early stopping in PyTorch.
-- Created data pipelines to normalize structural brain scans, iterating over 10+ model
+Trained 3D CNNs to classify parity from MRI scans, iterating on architecture and preprocessing
+to push accuracy up from a weak baseline.
+
+- Constructed and fine-tuned 3D CNNs (ResNet and U-Net) for classifying parity of 500+ MRI
+  scans, improving F1 score from 0.54 to 0.61 using data augmentation, dropout, and early
+  stopping.
+- Built data pipelines to normalize structural brain scans, iterating over 10+ model
   architectures to probe signal.

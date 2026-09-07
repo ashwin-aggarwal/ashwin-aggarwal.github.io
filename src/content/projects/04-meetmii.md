@@ -1,6 +1,6 @@
 ---
 title: MeetMii
-affiliation: PLACEHOLDER — Personal Project / hackathon / course?
+affiliation: Personal Project
 year: PLACEHOLDER — "2025"
 blurb: A business card you scan instead of hand over — and that tells you something useful about who you've been meeting.
 stack:
@@ -10,8 +10,8 @@ stack:
   - Gemini API
   - Docker
 accent: "#2A6B5E"
-# cover: ./media/meetmii-cover.jpg
-# coverAlt: PLACEHOLDER — describe the image once added
+# Media removed for now — add back later.
+# logoMark: meetmii.svg
 links:
   - label: GitHub
     url: PLACEHOLDER — https://github.com/ashwin-aggarwal/meetmii

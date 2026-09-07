@@ -1,21 +1,19 @@
 ---
-role: Data Engineering Intern
-org: Virginia Commonwealth University
-orgNote: AI Department, Remote
+company: Virginia Commonwealth University
+role: Data Engineering Intern, AI Department
 start: May 2026
 end: Jun 2026
-tags:
-  - Databricks
-  - OCR
-  - RAG
-  - Prompt Engineering
+location: Remote
+# logo: vcu.svg
 order: 2
 draft: false
 ---
 
-- Designed a Databricks pipeline for processing large datasets of unstructured, sensitive
-  clinical text files from an Epic database, sorting by medallion architecture to optimize RAG
-  performance on downstream medical queries.
-- Leveraged OCR models to extract 100+ fields from clinical note documents to ingest into an
-  agent for categorizing demographics and diagnosis; cut LLM API usage by 90% through prompt
-  engineering and structured retrieval.
+Built a data pipeline for sensitive clinical text, optimized to feed downstream retrieval for
+medical queries.
+
+- Designed a Databricks pipeline for unstructured, sensitive clinical text from an Epic
+  database, sorted by medallion architecture to optimize RAG performance downstream.
+- Used OCR models to extract 100+ fields from clinical notes for an agent that categorizes
+  demographics and diagnosis, cutting LLM API usage 90% through prompt engineering and
+  structured retrieval.

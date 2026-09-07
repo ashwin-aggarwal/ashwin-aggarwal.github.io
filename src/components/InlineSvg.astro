@@ -1,0 +1,24 @@
+---
+// Inlines an SVG file from public/ directly into the page HTML (rather
+// than <img src="...">), so `stroke="currentColor"` / `fill="currentColor"`
+// in the source file actually inherit color from CSS instead of resolving
+// inside an isolated external-resource document.
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  // Path relative to public/, e.g. "logos/weaver.svg".
+  path: string;
+  class?: string;
+}
+
+const { path: svgPath, class: className } = Astro.props;
+const filePath = path.join(process.cwd(), 'public', svgPath);
+let markup = fs.readFileSync(filePath, 'utf-8');
+
+if (className) {
+  markup = markup.replace('<svg', `<svg class="${className}"`);
+}
+---
+
+<Fragment set:html={markup} />
