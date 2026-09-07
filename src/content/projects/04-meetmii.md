@@ -14,7 +14,7 @@ accent: "#2A6B5E"
 # logoMark: meetmii.svg
 links:
   - label: GitHub
-    url: PLACEHOLDER — https://github.com/ashwin-aggarwal/meetmii
+    url: https://github.com/ashwin-aggarwal/meetmii
 order: 4
 draft: false
 ---

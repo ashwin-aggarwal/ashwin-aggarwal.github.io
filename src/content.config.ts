@@ -40,6 +40,7 @@ const projects = defineCollection({
     z
       .object({
         title: z.string(),
+        wip: z.boolean().default(false), // shows "(WIP)" next to the title
         affiliation: z.string(), // the small line under the title
         year: z.string(), // free-form: "2025", "2024–25", "Spring 2025"
         blurb: z.string(),
