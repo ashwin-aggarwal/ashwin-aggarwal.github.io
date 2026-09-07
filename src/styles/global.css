@@ -401,6 +401,11 @@
   color: var(--color-ink);
 }
 
+.title-mono__wip {
+  font-weight: 400;
+  color: var(--color-ink-muted);
+}
+
 /* Eyebrow labels (identity line, project affiliation): sentence case, not
    tracked-out all-caps. */
 .eyebrow {

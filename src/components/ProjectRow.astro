@@ -86,8 +86,15 @@ const hasMedia = Boolean(data.logoMark || data.video || data.cover);
         }
 
         <div class="project-row__text">
-          <h3 class="title-mono" data-typewriter aria-label={data.title}>
+          <h3
+            class="title-mono"
+            data-typewriter
+            aria-label={data.wip ? `${data.title} (WIP)` : data.title}
+          >
             <span data-typewriter-text aria-hidden="true">{data.title}</span>
+            {data.wip && (
+              <span class="title-mono__wip" aria-hidden="true"> (WIP)</span>
+            )}
           </h3>
 
           <p class="eyebrow mt-1" data-typewriter aria-label={data.affiliation}>

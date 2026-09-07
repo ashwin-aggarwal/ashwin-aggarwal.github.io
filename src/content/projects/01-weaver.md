@@ -1,5 +1,6 @@
 ---
 title: Weaver
+wip: true
 affiliation: Personal Project
 year: "2025"
 blurb: Four agents that read papers so you don't have to — ingesting, summarizing, and cross-linking a corpus into a graph you can actually walk through.

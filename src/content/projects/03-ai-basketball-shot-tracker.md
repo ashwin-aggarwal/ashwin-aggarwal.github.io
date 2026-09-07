@@ -12,7 +12,7 @@ accent: "#8C3B2E"
 video: /media/projects/ai-basketball-shot-tracker-demo.mp4
 links:
   - label: GitHub
-    url: PLACEHOLDER — https://github.com/ashwin-aggarwal/ai-basketball-shot-tracker
+    url: https://github.com/ashwin-aggarwal/ai-basketball-shot-tracker
 order: 3
 draft: false
 ---
