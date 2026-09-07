@@ -499,3 +499,83 @@
     transition: none;
   }
 }
+
+/* 404 page. Full-viewport, no nav/footer (see src/pages/404.astro). The
+   monogram is position: absolute so scripts/bounce.js can freely place it
+   via a CSS transform; under reduced motion it drops back into the flex
+   flow, static and centered with the copy. */
+.notfound {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: var(--color-ground);
+  color: var(--color-ink);
+  overflow: hidden;
+}
+
+.notfound__copy {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  max-width: 20rem;
+}
+
+.notfound__hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+}
+
+.notfound__mark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 140px;
+  color: var(--color-ink);
+  will-change: transform;
+}
+
+.notfound__mark-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.notfound__egg {
+  position: absolute;
+  bottom: 2rem;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--color-ink-muted);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.notfound__egg.is-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notfound__mark {
+    position: static;
+    width: 160px;
+  }
+
+  .notfound__egg {
+    display: none;
+  }
+}
+
+@media print {
+  .notfound {
+    display: none;
+  }
+}

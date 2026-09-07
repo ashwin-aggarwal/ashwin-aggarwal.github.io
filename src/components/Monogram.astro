@@ -1,0 +1,21 @@
+---
+// Inline "AKA" monogram in Fraunces. Single color via currentColor, no
+// fixed width/height so the parent controls size (see 404.astro / the
+// bounce script, which sizes and repositions this via CSS transform).
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg viewBox="0 0 132 48" fill="none" class={className} aria-hidden="true">
+  <text
+    x="66"
+    y="36"
+    text-anchor="middle"
+    font-family="'Fraunces Variable', ui-serif, Georgia, serif"
+    font-weight="700"
+    font-size="40"
+    fill="currentColor">AKA</text>
+</svg>
