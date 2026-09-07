@@ -33,17 +33,20 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
   <section id="about" class="content-col content-col--wide scroll-mt-24 py-16">
     <div class="about-grid">
       <div class="min-w-0">
-        <p class="text-sm tracking-wide text-[color:var(--color-accent)] uppercase">{bio.data.identityLine}</p>
-        <h1 class="font-display mt-2 text-4xl sm:text-5xl">{bio.data.name}</h1>
+        <p class="eyebrow" data-typewriter aria-label={bio.data.identityLine}>
+          <span data-typewriter-text aria-hidden="true">{bio.data.identityLine}</span>
+        </p>
+        <h1 class="font-display mt-2 text-4xl sm:text-5xl" data-typewriter aria-label={bio.data.name}>
+          <span data-typewriter-text aria-hidden="true">{bio.data.name}</span>
+        </h1>
 
-        <div class="prose mt-6">
+        <div class="prose mt-6 text-[#000]">
           <BioContent />
         </div>
 
         <p class="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <span class="text-[color:var(--color-ink-muted)]">{bio.data.location}</span>
           {bio.data.resume && <a href={bio.data.resume}>Resume</a>}
-          <a href={`mailto:${bio.data.email}`}>Email</a>
           <a href={bio.data.github}>GitHub</a>
           <a href={bio.data.linkedin}>LinkedIn</a>
         </p>
@@ -55,34 +58,43 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
     </div>
   </section>
 
-  <section id="now" class="scroll-mt-24 py-10">
-    <div class="marginal">
-      <div class="marginal__content">
-        <h2 class="font-display text-lg">Now</h2>
-      </div>
-    </div>
+  {
+    // "Recent News" — disabled for now. To bring it back: flip this to
+    // true (the content itself lives in src/content/now/*.md, still
+    // three empty bullets waiting to be filled in).
+    false && (
+      <section id="now" class="scroll-mt-24 py-10">
+        <div class="marginal">
+          <div class="marginal__content">
+            <h2 class="section-title" data-typewriter aria-label="Recent News">
+              <span data-typewriter-text aria-hidden="true">Recent News</span>
+            </h2>
+          </div>
+        </div>
 
-    <div class="mt-6 space-y-6">
-      {
-        nowItems.map((item, i) => {
-          const { Content } = nowRendered[i];
-          return (
-            <div class="marginal">
-              <div class="marginal__meta">{item.data.label}</div>
-              <div class="marginal__content prose">
-                <Content />
+        <div class="mt-6 space-y-6">
+          {nowItems.map((item, i) => {
+            const { Content } = nowRendered[i];
+            return (
+              <div class="marginal">
+                <div class="marginal__meta">{item.data.label}</div>
+                <div class="marginal__content prose">
+                  <Content />
+                </div>
               </div>
-            </div>
-          );
-        })
-      }
-    </div>
-  </section>
+            );
+          })}
+        </div>
+      </section>
+    )
+  }
 
   <section id="projects" class="scroll-mt-24 py-10">
     <div class="marginal marginal--wide">
       <div class="marginal__content">
-        <h2 class="font-display text-lg">Projects</h2>
+        <h2 class="section-title" data-typewriter aria-label="Projects">
+          <span data-typewriter-text aria-hidden="true">Projects</span>
+        </h2>
       </div>
     </div>
 
@@ -92,7 +104,9 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
   <section id="experience" class="scroll-mt-24 py-10">
     <div class="marginal">
       <div class="marginal__content">
-        <h2 class="font-display text-lg">Experience</h2>
+        <h2 class="section-title" data-typewriter aria-label="Experience">
+          <span data-typewriter-text aria-hidden="true">Experience</span>
+        </h2>
       </div>
     </div>
 
@@ -106,29 +120,26 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
                 <span class="timeline__rail" aria-hidden="true" />
                 <span class="timeline__marker" aria-hidden="true" />
                 <div class="timeline__body">
-                  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <h3 class="font-display text-xl">{item.data.role}</h3>
+                  <h3 class="title-mono" data-typewriter aria-label={item.data.role}>
+                    <span data-typewriter-text aria-hidden="true">{item.data.role}</span>
+                  </h3>
+
+                  <div class="mt-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <p class="text-sm text-[color:var(--color-ink-muted)]">
+                      {item.data.company}
+                      {item.data.location && <>{' — '}{item.data.location}</>}
+                    </p>
                     <p class="text-sm text-[color:var(--color-accent)]">
-                      {item.data.start} — {item.data.end ?? 'Present'}
+                      {item.data.start} — {item.data.end}
                     </p>
                   </div>
 
-                  <p class="mt-1 text-sm text-[color:var(--color-ink-muted)]">
-                    {item.data.org}
-                    {item.data.orgNote && <>{' — '}{item.data.orgNote}</>}
-                  </p>
-
-                  <div class="prose mt-3">
-                    <Content />
-                  </div>
-
-                  {
-                    item.data.tags.length > 0 && (
-                      <p class="prose mt-3 text-sm text-[color:var(--color-ink-muted)]">
-                        {item.data.tags.join(', ')}
-                      </p>
-                    )
-                  }
+                  <details class="disclosure mt-3">
+                    <summary class="disclosure__summary">Read more</summary>
+                    <div class="prose mt-3">
+                      <Content />
+                    </div>
+                  </details>
                 </div>
               </div>
             </li>
@@ -138,51 +149,62 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
     </ol>
   </section>
 
-  <section id="journal" class="scroll-mt-24 py-10">
-    <div class="marginal">
-      <div class="marginal__content">
-        <h2 class="font-display text-lg">Journal</h2>
-      </div>
-    </div>
+  {
+    // Journal — hidden for now. To bring it back: flip this to true (and
+    // restore the header nav link in Header.astro).
+    false && (
+      <section id="journal" class="scroll-mt-24 py-10">
+        <div class="marginal">
+          <div class="marginal__content">
+            <h2 class="section-title" data-typewriter aria-label="Journal">
+              <span data-typewriter-text aria-hidden="true">Journal</span>
+            </h2>
+          </div>
+        </div>
 
-    <div class="mt-6 space-y-10">
-      {
-        [...journalByYear.entries()]
-          .sort((a, b) => b[0] - a[0])
-          .map(([year, entries]) => (
-            <div class="marginal">
-              <div class="marginal__meta">{year}</div>
-              <div class="marginal__content space-y-5">
-                {entries.map((entry) => (
-                  <div>
-                    <p class="text-xs tracking-wide text-[color:var(--color-ink-muted)] uppercase">
-                      {dateFormatter.format(entry.data.date)}
-                    </p>
-                    <h3 class="font-display text-lg">
-                      <a href={`/journal/${entry.id}`}>{entry.data.title}</a>
-                    </h3>
-                    {entry.data.blurb && <p class="prose mt-1 text-sm">{entry.data.blurb}</p>}
-                  </div>
-                ))}
+        <div class="mt-6 space-y-10">
+          {[...journalByYear.entries()]
+            .sort((a, b) => b[0] - a[0])
+            .map(([year, entries]) => (
+              <div class="marginal">
+                <div class="marginal__meta">{year}</div>
+                <div class="marginal__content space-y-5">
+                  {entries.map((entry) => (
+                    <div>
+                      <p class="text-xs tracking-wide text-[color:var(--color-ink-muted)] uppercase">
+                        {dateFormatter.format(entry.data.date)}
+                      </p>
+                      <h3 class="font-display text-lg">
+                        <a href={`/journal/${entry.id}`}>{entry.data.title}</a>
+                      </h3>
+                      {entry.data.blurb && <p class="prose mt-1 text-sm">{entry.data.blurb}</p>}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))
-      }
-    </div>
-  </section>
+            ))}
+        </div>
+      </section>
+    )
+  }
 
-  <div class="marginal pt-10">
-    <div class="marginal__meta">Bookshelf</div>
-    <div class="marginal__content"></div>
-  </div>
-  <Bookshelf />
-  <BookStage />
+  {
+    // Bookshelf — hidden for now. To bring it back: flip this to true.
+    false && (
+      <>
+        <div class="marginal pt-10">
+          <div class="marginal__meta">Bookshelf</div>
+          <div class="marginal__content"></div>
+        </div>
+        <Bookshelf />
+        <BookStage />
+      </>
+    )
+  }
   <script>
     import '../scripts/main.js';
     import { initMediaWells } from '../scripts/mediaWell.js';
-    import { initIntroReveal } from '../scripts/introReveal.js';
 
     initMediaWells();
-    initIntroReveal(document.getElementById('about'));
   </script>
 </BaseLayout>

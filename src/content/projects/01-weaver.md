@@ -10,11 +10,11 @@ stack:
   - Neo4j
   - Docker
 accent: "#5B4A7A"
-# cover: ./media/weaver-cover.jpg
-# coverAlt: PLACEHOLDER — describe the image once added
+cover: ./media/weaver-graph.webp
+coverAlt: Force-directed graph view of Weaver's knowledge graph, showing linked concept and paper nodes
 links:
   - label: GitHub
-    url: PLACEHOLDER — https://github.com/ashwin-aggarwal/weaver
+    url: https://github.com/ashwin-aggarwal/weaver
 order: 1
 draft: false
 ---

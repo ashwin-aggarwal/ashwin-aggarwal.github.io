@@ -9,8 +9,7 @@ stack:
   - OpenCV
   - RoboFlow
 accent: "#8C3B2E"
-# cover: ./media/ai-basketball-shot-tracker-cover.jpg
-# coverAlt: PLACEHOLDER — describe the image once added
+video: /media/projects/ai-basketball-shot-tracker-demo.mp4
 links:
   - label: GitHub
     url: PLACEHOLDER — https://github.com/ashwin-aggarwal/ai-basketball-shot-tracker

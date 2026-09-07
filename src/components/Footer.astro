@@ -1,7 +1,19 @@
 ---
+import { getBio } from '../lib/content';
+
 const year = new Date().getFullYear();
+const bio = await getBio();
 ---
 
 <footer class="content-col py-8 pb-12 text-[0.85rem] text-[color:var(--color-ink-muted)]">
-  <p class="m-0">&copy; {year} Ashwin Aggarwal.</p>
+  <div class="footer-contact">
+    <p class="m-0">
+      Please reach out at <a href={`mailto:${bio.data.email}`}>{bio.data.email}</a>
+    </p>
+    <p class="mt-1 mb-0">
+      <a href={bio.data.linkedin}>LinkedIn</a>
+    </p>
+  </div>
+
+  <p class="mt-6 mb-0">&copy; {year} Ashwin Aggarwal.</p>
 </footer>

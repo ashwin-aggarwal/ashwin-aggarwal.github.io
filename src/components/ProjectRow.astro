@@ -6,6 +6,7 @@ import type { CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
 import { Image } from 'astro:assets';
 import { anchorId } from '../lib/content';
+import InlineSvg from './InlineSvg.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -27,20 +28,38 @@ const isBrowserFrame = data.mediaFrame === 'browser';
 >
   <div class="marginal marginal--wide">
     <div class="marginal__meta">
-      <div class="hidden lg:block">
-        <p>{displayIndex}.</p>
-        <p class="text-[color:var(--color-accent)] uppercase tracking-wide">{data.year}</p>
-      </div>
-      <div class="flex flex-wrap gap-x-3 text-sm text-[color:var(--color-accent)] uppercase tracking-wide lg:hidden">
-        <span>{data.year}</span>
-      </div>
+      <p class="project-row__index" data-typewriter aria-hidden="true">
+        <span data-typewriter-text>{displayIndex}</span>
+      </p>
     </div>
 
     <div class="marginal__content">
       <div class="project-row__grid" data-media-side={mediaLeft ? 'left' : 'right'}>
         <div class="project-row__media">
           {
-            data.cover ? (
+            data.logoMark ? (
+              <div class="media-well media-well--logo">
+                <InlineSvg path={`logos/${data.logoMark}`} class="media-well__logo-svg" />
+              </div>
+            ) : data.video ? (
+              isBrowserFrame ? (
+                <div class="browser-frame">
+                  <div class="browser-frame__bar" aria-hidden="true">
+                    <span class="browser-frame__dot" />
+                    <span class="browser-frame__dot" />
+                    <span class="browser-frame__dot" />
+                    <span class="browser-frame__url" />
+                  </div>
+                  <div class="media-well" data-media-well>
+                    <video data-media muted loop playsinline preload="metadata" src={data.video} />
+                  </div>
+                </div>
+              ) : (
+                <div class="media-well" data-media-well>
+                  <video data-media muted loop playsinline preload="metadata" src={data.video} />
+                </div>
+              )
+            ) : data.cover ? (
               isBrowserFrame ? (
                 <div class="browser-frame">
                   <div class="browser-frame__bar" aria-hidden="true">
@@ -67,16 +86,18 @@ const isBrowserFrame = data.mediaFrame === 'browser';
         </div>
 
         <div class="project-row__text">
-          <h3 class="font-display text-2xl">{data.title}</h3>
+          <h3 class="title-mono" data-typewriter aria-label={data.title}>
+            <span data-typewriter-text aria-hidden="true">{data.title}</span>
+          </h3>
 
-          <p class="mt-1 text-xs tracking-wide text-[color:var(--color-ink-muted)] uppercase">
-            {data.affiliation}
+          <p class="eyebrow mt-1" data-typewriter aria-label={data.affiliation}>
+            <span data-typewriter-text aria-hidden="true">{data.affiliation}</span>
           </p>
 
           <p class="prose mt-3">{data.blurb}</p>
 
-          <details class="project-row__details mt-3">
-            <summary class="project-row__summary">Read more</summary>
+          <details class="disclosure mt-3">
+            <summary class="disclosure__summary">Read more</summary>
             <div class="prose mt-3 text-[color:var(--color-ink)]">
               <Content />
             </div>

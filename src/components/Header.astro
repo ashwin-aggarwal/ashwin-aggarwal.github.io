@@ -1,18 +1,18 @@
 ---
-// Site-wide chrome: my name (links home) + four anchor links to sections
-// on the one page. No nav bar, no logo, no background fill, not sticky —
+// Site-wide chrome: brand mark (links home) + four anchor links to
+// sections on the one page. No nav bar, no background fill, not sticky —
 // it scrolls away with the page.
 ---
 
 <header class="content-col flex flex-wrap items-baseline gap-x-6 gap-y-3 pt-8 pb-4 text-[0.95rem]">
-  <a class="font-display text-[1.05rem] font-medium text-[color:var(--color-ink)]" href="/">
-    Ashwin Aggarwal
+  <a class="brand-mark" href="/" data-typewriter aria-label="Ashwin Aggarwal">
+    <span data-typewriter-text aria-hidden="true">AKA</span>
   </a>
 
   <nav class="flex gap-5" aria-label="Site">
     <a class="text-[color:var(--color-ink-muted)]" href="#about">About</a>
     <a class="text-[color:var(--color-ink-muted)]" href="#projects">Projects</a>
     <a class="text-[color:var(--color-ink-muted)]" href="#experience">Experience</a>
-    <a class="text-[color:var(--color-ink-muted)]" href="#journal">Journal</a>
+    <!-- Journal — hidden with the section in index.astro. Restore together. -->
   </nav>
 </header>
