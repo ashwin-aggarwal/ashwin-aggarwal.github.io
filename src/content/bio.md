@@ -17,8 +17,8 @@ headshot: /media/headshot.webp
 
 ---
 
-I'm a computer science student in Cornell Engineering passionate about Machine Learning, Agentic AI, and Physical AI. I have experience with Computer Vision, Deep Learning, and Automation Workflows.
+I'm a Computer Science major in Cornell Engineering passionate about Machine Learning, Agentic AI, and Physical AI. I have experience with Computer Vision, Deep Learning, and Automation Workflows.
 
-I have interned at Virginia Commonwealth University and Next Play. I am also part of Cornell's Generational AI club as an Engineer.
+In the past, I have interned at Virginia Commonwealth University and Next Play. I am also part of Cornell's Generational AI club as an Engineer.
 
-Outside of school I love playing Catan and basketball. I also like to run and read philosophy.
+Outside of school, I love to play Catan, basketball, and spikeball. I also enjoy running and reading philosophy.
