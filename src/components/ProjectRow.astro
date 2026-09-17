@@ -23,6 +23,14 @@ const isBrowserFrame = data.mediaFrame === 'browser';
 // (see the project's own frontmatter) rather than showing a numbered
 // placeholder. Set cover/video/logoMark to bring the media side back.
 const hasMedia = Boolean(data.logoMark || data.video || data.cover);
+
+// When a live demo URL is set, the media well itself becomes a link to it
+// (in addition to any GitHub link rendered below) — otherwise it's a plain
+// wrapper div. Astro supports dynamic tag names via a capitalized variable.
+const MediaWrap = data.demoUrl ? 'a' : 'div';
+const mediaWrapProps = data.demoUrl
+  ? { href: data.demoUrl, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `Open ${data.title} live demo` }
+  : {};
 ---
 
 <article
@@ -41,7 +49,7 @@ const hasMedia = Boolean(data.logoMark || data.video || data.cover);
       <div class={hasMedia ? 'project-row__grid' : ''} data-media-side={hasMedia ? (mediaLeft ? 'left' : 'right') : undefined}>
         {
           hasMedia && (
-            <div class="project-row__media">
+            <MediaWrap class="project-row__media" {...mediaWrapProps}>
               {data.logoMark ? (
                 <div class="media-well media-well--logo">
                   <InlineSvg path={`logos/${data.logoMark}`} class="media-well__logo-svg" />
@@ -81,7 +89,7 @@ const hasMedia = Boolean(data.logoMark || data.video || data.cover);
                   <Image src={data.cover!} alt={data.coverAlt ?? ''} />
                 </div>
               )}
-            </div>
+            </MediaWrap>
           )
         }
 

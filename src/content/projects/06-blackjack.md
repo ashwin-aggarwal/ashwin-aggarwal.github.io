@@ -11,7 +11,7 @@ accent: "#8C5A12"
 links:
   - label: GitHub
     url: PLACEHOLDER — https://github.coecis.cornell.edu/aka96/3110GroupProject
-order: 5
+order: 6
 draft: true
 ---
 
