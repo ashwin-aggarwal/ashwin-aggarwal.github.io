@@ -18,9 +18,5 @@ order: 4
 draft: false
 ---
 
-Ball Knowledge is a hot-seat NBA stat trivia app — pass the phone or laptop around and see who
-actually knows their basketball. Built with Streamlit as a small passion project to play with
-my friends, not to ship anything grand.
+Ball Knowledge is a trivia app to test you NBA knowledge. Click the picture to play!
 
-The cover doubles as the link to the live app, so you can click straight through and start a
-round.
