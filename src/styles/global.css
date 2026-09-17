@@ -421,6 +421,37 @@
   }
 }
 
+/* When a project has a demoUrl, .project-row__media renders as <a> instead
+   of <div> (see ProjectRow.astro) — undo the global underline-wipe link
+   styling (wrong here, it'd draw a bar under the whole image) and swap in a
+   flat dim-on-hover/focus to signal the well itself is clickable. */
+a.project-row__media {
+  display: block;
+}
+
+a.project-row__media::after {
+  content: none;
+}
+
+a.project-row__media .media-well img,
+a.project-row__media .media-well video {
+  transition: opacity 0.15s ease;
+}
+
+a.project-row__media:hover .media-well img,
+a.project-row__media:hover .media-well video,
+a.project-row__media:focus-visible .media-well img,
+a.project-row__media:focus-visible .media-well video {
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.project-row__media .media-well img,
+  a.project-row__media .media-well video {
+    transition: none;
+  }
+}
+
 /* Media well: always rendered, fixed aspect ratio, square corners. Empty
    (no `media`, or a broken file) reads as a plain sunken panel rather than
    a broken image or a collapsed row. */

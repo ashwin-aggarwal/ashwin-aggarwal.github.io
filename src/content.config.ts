@@ -52,6 +52,10 @@ const projects = defineCollection({
         mediaFrame: z.enum(['browser', 'none']).default('browser'),
         cover: image().optional(), // ./media/<file> — omit for the fallback block
         coverAlt: z.string().optional(), // required whenever cover is set (see refine below)
+        // Optional. When set, the cover/video media well becomes a link to
+        // the live app/demo (e.g. a hosted Streamlit app), in addition to
+        // any GitHub link in `links`.
+        demoUrl: z.string().url().optional(),
         // Video can't go through astro:assets' image() (not an image), so
         // it's a plain path served from public/media/projects/<file> rather
         // than co-located under src/content/projects/media/. Takes
