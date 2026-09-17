@@ -2,7 +2,7 @@
 title: Ball Knowledge
 affiliation: Personal Project
 year: "2025"
-blurb: A small passion project to play with my friends — a hot-seat NBA stat trivia app that puts one player on the spot at a time.
+blurb: A fun basketball trivia game.
 stack:
   - Python
   - Streamlit
