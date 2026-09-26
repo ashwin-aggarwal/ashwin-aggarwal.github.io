@@ -10,9 +10,7 @@ stack:
   - OUnit2
   - ANSI terminal rendering
 accent: "#8C5A12"
-# Demo not filmed yet — until public/media/projects/blackjack-demo.mp4
-# exists, the well renders as an empty panel (see scripts/mediaWell.js).
-video: /media/projects/blackjack-demo.mp4
+video: /media/projects/blackjack-demo-web.mp4
 links:
   - label: GitHub
     url: https://github.coecis.cornell.edu/aka96/3110GroupProject
