@@ -12,7 +12,9 @@ draft: false
 Built and improved client-facing tools on the Digital Solutions team, working across the
 frontend and the legacy systems it talks to.
 
+<!-- Bullets hidden for now; only the one-liner above displays.
 - Prototyped client-facing web pages using Vue.js and Tailwind CSS supporting internal tools
   used by 20k+ clients.
 - Integrated 10+ RESTful APIs into the frontend and refactored legacy code against Microsoft
   SQL Server, with Azure DevOps CI/CD.
+-->

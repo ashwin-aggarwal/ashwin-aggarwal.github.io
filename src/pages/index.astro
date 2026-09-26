@@ -134,12 +134,19 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
                     </p>
                   </div>
 
+                  {/* One-liner only for now; the bullets are commented out in
+                      each src/content/experience/*.md. To restore the
+                      disclosure, swap this div back for:
                   <details class="disclosure mt-3">
                     <summary class="disclosure__summary">Read more</summary>
                     <div class="prose mt-3">
                       <Content />
                     </div>
                   </details>
+                  */}
+                  <div class="prose mt-3">
+                    <Content />
+                  </div>
                 </div>
               </div>
             </li>
