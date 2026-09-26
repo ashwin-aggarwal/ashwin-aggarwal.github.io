@@ -17,13 +17,6 @@ order: 4
 draft: false
 ---
 
-Counting your own makes is unreliable in exactly the way you'd expect. This tracker does it
-from video.
-
-A YOLOv8 model fine-tuned on 300+ hand-labeled frames detects the ball and the hoop at 97%
-accuracy — the hard part was less the architecture than the labeling, since a ball mid-flight
-against a bright sky and a ball in someone's hands are different problems. Dataset annotation
-and augmentation ran through RoboFlow across dozens of training and evaluation passes.
-
-From there OpenCV tracks the two positions frame to frame and classifies makes against misses
-by the ball's path relative to the rim, landing above 90% accuracy.
+A YOLOv8 model fine-tuned on 300+ hand-labeled frames detects the ball and hoop at 97%
+accuracy. OpenCV tracks the ball's path relative to the rim to call makes and misses, with over
+90% accuracy.

@@ -2,7 +2,7 @@
 title: LeaseLooker
 affiliation: Personal Project
 year: "2025"
-blurb: Ask a housing lease a question in plain English and get an answer grounded in the actual clause, not a plausible-sounding paraphrase of one.
+blurb: Ask a housing lease a question in plain English and get an answer grounded in the actual clause.
 stack:
   - Python
   - LangChain
@@ -19,14 +19,5 @@ order: 3
 draft: false
 ---
 
-Nobody reads their lease. It's twenty pages of cross-referenced clauses written to be
-skimmed past, and the answer to "can I sublet in the summer" is usually split across three
-sections that never mention each other.
-
-LeaseLooker is a hybrid retrieval pipeline — FAISS vector search for meaning, BM25 for the
-exact legal phrasing that vector search tends to smooth over — feeding an LLM that answers in
-plain language and points back at the clause it used. Scored 94% faithfulness on RAGAS, which
-is the number that actually matters here: a confident wrong answer about your security
-deposit is worse than no answer.
-
-Wrapped in a Streamlit app so you can drop in a PDF and start asking.
+Hybrid retrieval pairs FAISS for meaning with BM25 for exact legal phrasing, and every answer
+points back to its source clause. Scored 94% faithfulness on RAGAS.
