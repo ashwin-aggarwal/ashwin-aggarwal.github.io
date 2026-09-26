@@ -1,6 +1,6 @@
 ---
 company: Fidelity National Financial
-role: Software Development Intern, Digital Solutions
+role: Software Development Intern, Digital Solutions Team
 start: May 2025
 end: Jun 2025
 location: Richmond, VA
@@ -10,7 +10,7 @@ draft: false
 ---
 
 Built and improved client-facing tools on the Digital Solutions team, working across the
-frontend and the legacy systems it talks to.
+frontend and the legacy systems.
 
 <!-- Bullets hidden for now; only the one-liner above displays.
 - Prototyped client-facing web pages using Vue.js and Tailwind CSS supporting internal tools
