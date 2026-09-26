@@ -1,5 +1,5 @@
 ---
-title: Detective-Jev
+title: Detective Jev
 affiliation: Personal Project
 year: "2026"
 blurb: Reads a murder mystery in order and names the likely culprit as it goes, revising the pick as clues land, before the reveal.
@@ -23,4 +23,4 @@ draft: false
 
 Built on TypeSafe's Jev model, it keeps a live prediction through the whole book, so you can
 watch suspicion shift instead of only checking the final answer. A full-novel run costs about
-$0.08.
+$0.07.

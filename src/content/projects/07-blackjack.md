@@ -1,5 +1,5 @@
 ---
-title: OCaml Blackjack
+title: OCaml Cross-Terminal Blackjack
 affiliation: CS 3110 — Final Project (Team of 4)
 year: "2024"
 blurb: Terminal blackjack in OCaml, with an asynchronous Lwt server so several players can sit at the same table.

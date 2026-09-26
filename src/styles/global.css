@@ -421,33 +421,77 @@
   }
 }
 
-/* When a project has a demoUrl, .project-row__media renders as <a> instead
-   of <div> (see ProjectRow.astro) — undo the global underline-wipe link
+/* When a project has a demoUrl, .project-row__media-wrap renders as <a>
+   instead of <div> (see ProjectRow.astro) — undo the global underline-wipe link
    styling (wrong here, it'd draw a bar under the whole image) and swap in a
    flat dim-on-hover/focus to signal the well itself is clickable. */
-a.project-row__media {
+a.project-row__media-wrap {
   display: block;
 }
 
-a.project-row__media::after {
+a.project-row__media-wrap::after {
   content: none;
 }
 
-a.project-row__media .media-well img,
-a.project-row__media .media-well video {
+a.project-row__media-wrap .media-well img,
+a.project-row__media-wrap .media-well video {
   transition: opacity 0.15s ease;
 }
 
-a.project-row__media:hover .media-well img,
-a.project-row__media:hover .media-well video,
-a.project-row__media:focus-visible .media-well img,
-a.project-row__media:focus-visible .media-well video {
+a.project-row__media-wrap:hover .media-well img,
+a.project-row__media-wrap:hover .media-well video,
+a.project-row__media-wrap:focus-visible .media-well img,
+a.project-row__media-wrap:focus-visible .media-well video {
   opacity: 0.85;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  a.project-row__media .media-well img,
-  a.project-row__media .media-well video {
+  a.project-row__media-wrap .media-well img,
+  a.project-row__media-wrap .media-well video {
+    transition: none;
+  }
+}
+
+/* Pause/play toggle under a project video, so the loop can be stopped.
+   mediaWell.js flips .is-paused and the aria-label to match the video. */
+.media-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.6rem;
+  padding: 0;
+  border: 1px solid var(--color-rule);
+  border-radius: 999px;
+  background: var(--color-ground-raise);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.media-toggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.media-toggle__icon {
+  width: 0.8rem;
+  height: 0.8rem;
+  fill: currentColor;
+}
+
+.media-toggle__icon--play,
+.media-toggle.is-paused .media-toggle__icon--pause {
+  display: none;
+}
+
+.media-toggle.is-paused .media-toggle__icon--play {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-toggle {
     transition: none;
   }
 }
