@@ -13,8 +13,6 @@ stack:
   - JavaScript
   - pytest
 accent: "#6E2A2A"
-# Demo not filmed yet — until public/media/projects/detective-jev-demo.mp4
-# exists, the well renders as an empty panel (see scripts/mediaWell.js).
 video: /media/projects/detective-jev-demo.mp4
 links:
   - label: GitHub

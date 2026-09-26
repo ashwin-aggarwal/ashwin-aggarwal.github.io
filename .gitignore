@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# raw demo recordings — over GitHub's 100 MB limit; originals live in ~/Movies.
+# The site uses the compressed *-demo.mp4 / *-demo-web.mp4 files instead.
+/DetectiveJevDemo.mov
+/public/media/projects/blackjack-demo.mp4
