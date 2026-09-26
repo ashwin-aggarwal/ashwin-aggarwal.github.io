@@ -1,6 +1,6 @@
 ---
 title: Detective Jev
-affiliation: Personal Project
+affiliation: Personal Project — (Team of 2)
 year: "2026"
 blurb: Reads a murder mystery in order and names the likely culprit as it goes, revising the pick as clues land, before the reveal.
 stack:
