@@ -16,7 +16,7 @@ coverAlt: Force-directed graph view of Weaver's knowledge graph, showing linked 
 links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/weaver
-order: 1
+order: 2
 draft: false
 ---
 
