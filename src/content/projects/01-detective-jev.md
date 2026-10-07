@@ -2,7 +2,7 @@
 title: Detective Jev
 affiliation: Personal Project — (Team of 2)
 year: "2026"
-blurb: Reads a murder mystery in order and names the likely culprit as it goes, revising the pick as clues land, before the reveal.
+blurb: Tested whether Jev, TypeSafe's low-latency decision model, could return calibrated probability distributions over a typed question and fixed choices. Simulated Jev calls paragraph-by-paragraph across murder mystery novels to track when it could pin down the murderer.
 stack:
   - Python
   - Flask
