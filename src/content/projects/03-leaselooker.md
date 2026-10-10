@@ -2,7 +2,7 @@
 title: LeaseLooker
 affiliation: Personal Project
 year: "2025"
-blurb: Ask a housing lease a question in plain English and get an answer grounded in the actual clause.
+blurb: Using Hybrid RAG, LeaseLooker lets users ask a question about their lease and get a real answer with the right context.
 stack:
   - Python
   - LangChain
