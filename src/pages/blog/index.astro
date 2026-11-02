@@ -21,19 +21,15 @@ const isoDate = (d: Date) => d.toISOString().slice(0, 10);
   title="Blog — Ashwin Aggarwal"
   description="Writing by Ashwin Aggarwal on AI, machine learning, and the questions around them."
 >
-  <section class="py-16">
-    <div class="marginal">
-      <div class="marginal__content">
-        <h1 class="section-title" data-typewriter aria-label="Blog">
-          <span data-typewriter-text aria-hidden="true">Blog</span>
-        </h1>
-      </div>
-    </div>
+  <section class="content-col blog-col py-16">
+    <h1 class="section-title" data-typewriter aria-label="Blog">
+      <span data-typewriter-text aria-hidden="true">Blog</span>
+    </h1>
 
     {/* Must run before the cards parse so collapsed posts never flash open. See scripts/blog.js. */}
     <script is:inline>document.documentElement.classList.add('has-js');</script>
 
-    <ol class="post-list content-col mt-8">
+    <ol class="post-list mt-8">
       {
         posts.map((post, i) => {
           const { Content } = rendered[i];

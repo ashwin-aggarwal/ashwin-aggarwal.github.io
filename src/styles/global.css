@@ -674,9 +674,16 @@ a.project-row__media-wrap:focus-visible .media-well video {
    so with no JS every post is readable in full. No open/close animation —
    same instant show/hide as .disclosure.
 --------------------------------------------------------------------- */
+/* Blog column: wider than the 42rem prose column used elsewhere, so long
+   posts read at a comfortable measure instead of a narrow strip. */
+.blog-col {
+  max-width: 52rem;
+}
+
 .post-list {
   list-style: none;
   margin-block: 0;
+  padding: 0;
 }
 
 .post-card {
@@ -743,7 +750,6 @@ a.project-row__media-wrap:focus-visible .media-well video {
 
 .post-card__description {
   margin-top: 0.5rem;
-  max-width: 42rem;
 }
 
 .post-card__dates {
@@ -767,6 +773,8 @@ a.project-row__media-wrap:focus-visible .media-well video {
    the rhythm is restored here, scoped to posts only. Body headings arrive
    one level down (## → h3) via src/lib/rehype-shift-blog-headings.mjs. */
 .post-body {
+  max-width: none; /* .prose caps at 42rem; posts fill .blog-col instead */
+  font-size: 1.0625rem;
   line-height: 1.7;
 }
 
