@@ -1,7 +1,9 @@
 ---
-// Site-wide chrome: brand mark (links home) + four anchor links to
-// sections on the one page. No nav bar, no background fill, not sticky —
-// it scrolls away with the page.
+// Site-wide chrome: brand mark (links home) + anchor links to sections on
+// the home page, plus Blog (its own page). Section links are root-relative
+// (/#about) so they still work from /blog/. No nav bar, no background fill,
+// not sticky — it scrolls away with the page.
+const onBlog = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 ---
 
 <header class="content-col flex flex-wrap items-baseline gap-x-6 gap-y-3 pt-8 pb-4 text-[0.95rem]">
@@ -9,10 +11,11 @@
     <span data-typewriter-text aria-hidden="true">AKA</span>
   </a>
 
-  <nav class="flex gap-5" aria-label="Site">
-    <a class="text-[color:var(--color-ink-muted)]" href="#about">About</a>
-    <a class="text-[color:var(--color-ink-muted)]" href="#projects">Projects</a>
-    <a class="text-[color:var(--color-ink-muted)]" href="#experience">Experience</a>
+  <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Site">
+    <a class="nav-link" href="/#about">About</a>
+    <a class="nav-link" href="/#projects">Projects</a>
+    <a class="nav-link" href="/#experience">Experience</a>
     <!-- Journal — hidden with the section in index.astro. Restore together. -->
+    <a class="nav-link" href="/blog/" aria-current={onBlog ? 'page' : undefined}>Blog</a>
   </nav>
 </header>

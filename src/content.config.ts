@@ -7,10 +7,11 @@ const bio = defineCollection({
     name: z.string(),
     identityLine: z.string(),
     tagline: z.string(),
-    location: z.string(),
+    location: z.string().optional(),
     email: z.string(),
     github: z.string().url(),
     linkedin: z.string(),
+    x: z.string().url().optional(), // X/Twitter profile URL; handle is derived from the path
     resume: z.string().optional(),
     headshot: z.string().optional(),
   }),
@@ -101,4 +102,17 @@ const experience = defineCollection({
   }),
 });
 
-export const collections = { bio, now, journal, projects, experience };
+// Blog posts, rendered as an accordion on /blog/. The filename (minus .md)
+// is the post's slug and anchor id: ama-ai-oversight.md → /blog/#ama-ai-oversight.
+const blog = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/blog' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(), // one line, shown on the collapsed card
+    published: z.coerce.date(),
+    updated: z.coerce.date().optional(), // "Last edited"; falls back to `published`
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { bio, now, journal, projects, experience, blog };

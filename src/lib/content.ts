@@ -44,3 +44,9 @@ export async function getJournalEntries() {
   return entries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
+
+// Newest first by publish date.
+export async function getBlogPosts() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
+}

@@ -45,10 +45,11 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
         </div>
 
         <p class="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          <span class="text-[color:var(--color-ink-muted)]">{bio.data.location}</span>
+          {bio.data.location && <span class="text-[color:var(--color-ink-muted)]">{bio.data.location}</span>}
           {bio.data.resume && <a href={bio.data.resume}>Resume</a>}
           <a href={bio.data.github}>GitHub</a>
           <a href={bio.data.linkedin}>LinkedIn</a>
+          {bio.data.x && <a href={bio.data.x}>X (@{new URL(bio.data.x).pathname.replace(/^\/|\/$/g, '')})</a>}
         </p>
       </div>
 

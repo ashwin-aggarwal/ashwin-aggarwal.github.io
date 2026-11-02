@@ -1,0 +1,89 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getBlogPosts } from '../../lib/content';
+
+const posts = await getBlogPosts();
+const rendered = await Promise.all(posts.map((post) => render(post)));
+
+// Dates are calendar days in frontmatter (parsed as UTC midnight), so format
+// in UTC — otherwise a build in a US timezone shows the previous day.
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<BaseLayout
+  title="Blog — Ashwin Aggarwal"
+  description="Writing by Ashwin Aggarwal on AI, machine learning, and the questions around them."
+>
+  <section class="py-16">
+    <div class="marginal">
+      <div class="marginal__content">
+        <h1 class="section-title" data-typewriter aria-label="Blog">
+          <span data-typewriter-text aria-hidden="true">Blog</span>
+        </h1>
+      </div>
+    </div>
+
+    {/* Must run before the cards parse so collapsed posts never flash open. See scripts/blog.js. */}
+    <script is:inline>document.documentElement.classList.add('has-js');</script>
+
+    <ol class="post-list content-col mt-8">
+      {
+        posts.map((post, i) => {
+          const { Content } = rendered[i];
+          const updated = post.data.updated ?? post.data.published;
+          const toggleId = `${post.id}-toggle`;
+          const panelId = `${post.id}-panel`;
+          return (
+            <li>
+              <article class="post-card is-open" id={post.id} data-post-card>
+                <header class="post-card__header">
+                  <h2 class="title-mono post-card__title">
+                    <button
+                      type="button"
+                      class="post-card__toggle"
+                      id={toggleId}
+                      aria-expanded="true"
+                      aria-controls={panelId}
+                      data-post-toggle
+                    >
+                      <span class="post-card__chevron" aria-hidden="true" />
+                      <span>{post.data.title}</span>
+                    </button>
+                  </h2>
+                  <p class="post-card__description">{post.data.description}</p>
+                  <p class="post-card__dates">
+                    <span>
+                      Published <time datetime={isoDate(post.data.published)}>{dateFormatter.format(post.data.published)}</time>
+                    </span>
+                    <span>
+                      Last edited <time datetime={isoDate(updated)}>{dateFormatter.format(updated)}</time>
+                    </span>
+                  </p>
+                </header>
+
+                <div class="post-card__panel" id={panelId} role="region" aria-labelledby={toggleId}>
+                  <div class="prose post-body">
+                    <Content />
+                  </div>
+                </div>
+              </article>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </section>
+
+  <script>
+    import { initBlog } from '../../scripts/blog.js';
+
+    initBlog();
+  </script>
+</BaseLayout>

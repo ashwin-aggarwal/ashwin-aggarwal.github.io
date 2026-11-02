@@ -1,13 +1,14 @@
 # Content
 
 Schemas live in `src/content.config.ts`. Content files live in `src/content/`.
-The site is a single scrollable page (`/`) plus `/journal/[slug]` for individual entries.
+The site is a single scrollable page (`/`), a Blog page (`/blog/`), plus `/journal/[slug]` for individual entries.
 
 ## Collections
 
 - `bio.md` — one file, the `#about` section. Frontmatter: `name`, `identityLine`,
-  `tagline`, `location`, `email`, `github`, `linkedin`, `resume` (optional URL),
-  `headshot` (optional image path). No `resume`/`headshot` omits that link/column.
+  `tagline`, `location` (optional), `email`, `github`, `linkedin`, `x` (optional X
+  profile URL; the link text shows the handle from the URL), `resume` (optional URL),
+  `headshot` (optional image path). Omitting an optional field omits that link/column.
 - `now/*.md` — short dated list in `#now`. Frontmatter: `label`, `order`. Body is one
   sentence.
 - `projects/*.md` — project rows in `#projects`. See fields below. Filenames are the
@@ -19,6 +20,18 @@ The site is a single scrollable page (`/`) plus `/journal/[slug]` for individual
   (array, default `[]`), `order`, `draft`.
 - `journal/*.md` — journal entries, listed in `#journal` (grouped by year) and rendered
   at `/journal/[slug]`. Frontmatter: `title`, `date`, `blurb` (optional), `draft`.
+
+- `blog/*.md` — posts on `/blog/`, newest first, each a collapsed card that expands in
+  place. Frontmatter: `title`, `description` (one line), `published`, `updated`
+  (optional "Last edited", defaults to `published`), `draft`. The filename is the slug
+  and shareable link: `ama-ai-oversight.md` → `/blog/#ama-ai-oversight`.
+
+## How to add a blog post
+
+Copy `src/content/blog/_TEMPLATE.md` to `your-slug.md`, fill in the frontmatter, and
+write the body in Markdown below it. Don't repeat the title in the body, and use `##`
+for sections (they render one level down, under the post title). Bump `updated:` when
+you edit a published post. No page or component edit needed.
 
 ## Project fields
 
