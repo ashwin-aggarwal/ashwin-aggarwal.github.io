@@ -5,7 +5,7 @@ published: 2026-11-02
 updated: 2026-11-02
 ---
 
-*As AI enters hospitals, we need to rethink who takes responsibility when it gets something wrong.*
+*As AI enters hospitals, we need to rethink who takes responsibility when something goes wrong.*
 
 Medical AI is becoming increasingly integrated into healthcare, but our liability laws haven't kept up. I don't think it's fair to expect physicians to evaluate the technical reliability of AI systems they didn't build, train, or choose to deploy. The American Medical Association (AMA) recently advanced a framework that would move responsibility toward those best positioned to prevent harm. I agree with that principle, but it leaves one question: **Who verifies that these responsibilities are actually being fulfilled?**
 
@@ -33,9 +33,7 @@ Developers should be responsible for the systems they build. Hospitals should be
 
 I think this is a necessary shift.
 
-Doctors spend years studying medicine, not machine learning engineering. If a hospital introduces an AI tool, physicians should reasonably expect that someone has evaluated its safety.
-
-But identifying responsibility is different from enforcing it.
+Doctors spend years studying medicine, not machine learning. If a hospital introduces an AI tool, physicians should reasonably expect that someone has evaluated its safety. But identifying responsibility is different from enforcing it.
 
 ## Doesn't the FDA Already Regulate Medical AI?
 
@@ -43,7 +41,7 @@ Yes.
 
 The Food and Drug Administration (FDA) already regulates AI-enabled software that qualifies as a medical device.
 
-Its primary pathways include **510(k)** clearance, generally based on substantial equivalence to an existing device; **De Novo** authorization, for novel low- or moderate-risk devices without a suitable predicate; and **Premarket Approval**, typically requiring stronger evidence for high-risk devices.
+Its primary pathways include **510(k)** clearance, generally based on substantial equivalence to an existing device; **De Novo** authorization, for novel low-risk or moderate-risk devices without a suitable predicate; and **Premarket Approval**, typically requiring stronger evidence for high-risk devices.
 
 The FDA also oversees significant modifications. Its August 2025 guidance on *Predetermined Change Control Plans* describes how manufacturers can implement certain modifications covered by an authorized plan without submitting a new application each time. The guidance itself contains nonbinding recommendations, while the underlying authorization and applicable device regulations carry legal significance.
 
@@ -63,7 +61,7 @@ Who should be responsible?
 
 I think it depends on the AI's intended purpose.
 
-If it was assisting a radiologist, and the tumor was reasonably identifiable, the physician may share responsibility.
+If it was assisting a radiologist, and the tumor was reasonably identifiable, the physician may share responsibility, because the tool was not meant to be used as a replacement for the physician's expertise.
 
 But what if the tool was intended to operate autonomously, without independent physician review? Or its performance was inadequately validated on the hospital's patients?
 
@@ -71,15 +69,15 @@ In those cases, I would place greater responsibility on the developer and deploy
 
 The AMA itself identifies increasingly autonomous AI as an unresolved priority.
 
-**Reviewing an AI recommendation is not the same as auditing the AI itself.**
+**But, reviewing an AI recommendation is not the same as auditing the AI itself.**
 
 ## The Technical Problem With Oversight
 
 From a computer science perspective, a model's reported accuracy doesn't tell us enough about its reliability.
 
-Imagine a model achieves 95% accuracy during testing. Sounds impressive, but what if it performs substantially worse on a demographic group underrepresented in its training data?
+Imagine a model achieves 95% accuracy during testing. At face value it definitely sounds impressive, but what if it performs substantially worse on a demographic group underrepresented in its training data?
 
-There's also *distribution shift*: a model that works well during development can become less reliable when exposed to different patients, imaging equipment, or clinical environments.
+There's also a phenomenon known as *distribution shift*: a model that works well during development can become less reliable when exposed to different patients, imaging equipment, or clinical environments. This defect can be hard to detect without frequent validation and monitoring of the model.
 
 Model updates create another challenge. A new version might improve overall performance while introducing previously unseen failures. This is why regression testing and real-world monitoring remain important, even when regulatory change controls exist.
 
@@ -87,9 +85,9 @@ How could we reasonably expect a physician to detect these problems from an indi
 
 I don't think we can.
 
-I do believe AI literacy should become part of medical education. Future doctors should understand training data, model limitations, and demographic bias without needing to become machine learning engineers.
+In fact, I believe AI literacy should become part of medical education. Future doctors should understand training data, model limitations, and demographic bias without needing to become machine learning engineers.
 
-But technical validation should primarily remain the responsibility of developers and deploying institutions.
+But, at the end of the day, technical validation and final approval should remain the responsibility of developers and the deploying hospitals/institutions.
 
 ## Who Should Actually Enforce the Rules?
 
@@ -97,7 +95,7 @@ Fortunately, we don't need to create an entirely new oversight system.
 
 The Centers for Medicare & Medicaid Services (CMS) already requires hospitals to maintain quality assessment and performance improvement programs that monitor patient safety and medical errors.
 
-In 2026, the Joint Commission also introduced a voluntary *Responsible Use of AI in Healthcare* certification covering governance, safeguards, monitoring, validation of safety performance, and education.
+This year (2026), the Joint Commission also introduced a voluntary *Responsible Use of AI in Healthcare* certification covering governance, safeguards, monitoring, validation of safety performance, and education.
 
 However, **the Joint Commission does not validate or certify individual AI products through this program.** A hospital's governance certification does not prove that every model it uses is appropriate for its patients.
 
@@ -143,4 +141,4 @@ And that leaves a practical question worth debating:
 6. [CMS — *Hospital Quality Assessment and Performance Improvement Requirements*, 42 CFR § 482.21](https://www.law.cornell.edu/cfr/text/42/482.21)
 7. [Joint Commission — *Responsible Use of AI in Healthcare*](https://www.jointcommission.org/en-us/certification/responsible-use-of-ai-in-healthcare)
 
-*This post reflects personal analysis and opinion, not legal advice. The radiology scenario is hypothetical. I have not independently evaluated a specific clinical AI system or determined how liability would be allocated in an actual case. Existing CMS hospital quality requirements and the Joint Commission's voluntary AI certification should not be confused with the mandatory, risk-based AI validation regime proposed here.*
+*(This post reflects personal analysis and opinion, not legal advice)*
