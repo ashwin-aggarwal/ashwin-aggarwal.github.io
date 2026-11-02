@@ -7,7 +7,7 @@ The site is a single scrollable page (`/`), a Blog page (`/blog/`), plus `/journ
 
 - `bio.md` — one file, the `#about` section. Frontmatter: `name`, `identityLine`,
   `tagline`, `location` (optional), `email`, `github`, `linkedin`, `x` (optional X
-  profile URL; the link text shows the handle from the URL), `resume` (optional URL),
+  profile URL, shown as "X"), `resume` (optional URL),
   `headshot` (optional image path). Omitting an optional field omits that link/column.
 - `now/*.md` — short dated list in `#now`. Frontmatter: `label`, `order`. Body is one
   sentence.

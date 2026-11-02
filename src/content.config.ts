@@ -11,7 +11,7 @@ const bio = defineCollection({
     email: z.string(),
     github: z.string().url(),
     linkedin: z.string(),
-    x: z.string().url().optional(), // X/Twitter profile URL; handle is derived from the path
+    x: z.string().url().optional(), // X/Twitter profile URL, linked as "X" in #about
     resume: z.string().optional(),
     headshot: z.string().optional(),
   }),
