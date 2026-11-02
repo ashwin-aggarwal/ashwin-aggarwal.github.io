@@ -8,17 +8,17 @@
 name: Ashwin K. Aggarwal
 identityLine: Cornell Student
 tagline: Computer science student at Cornell working on ML, AI, and Robotics.
-location: Richmond, Virginia
 email: aka96@cornell.edu
 github: https://github.com/ashwin-aggarwal
 linkedin: https://linkedin.com/in/ashwin-aggarwal
+x: https://x.com/AshwinKA123
 resume: /resume.pdf
 headshot: /media/headshot.webp
 
 ---
 
-I'm a Computer Science major in Cornell Engineering passionate about Machine Learning, Agentic AI, and Physical AI. I have experience with Computer Vision, Deep Learning, and Automation Workflows.
+I'm a Computer Science major in Cornell Engineering passionate about Machine Learning, Agentic AI, and AI Safety. I have experience with Computer Vision, Deep Learning, and Automation Workflows.
 
-In the past, I have interned at Virginia Commonwealth University and Next Play. I am also part of Cornell's Generational AI club as an Engineer.
+In the past, I have interned at Virginia Commonwealth University and Next Play. I am also part of Cornell's Generative AI club as an Engineer.
 
-Outside of school, I love to play Catan, basketball, and spikeball. I also enjoy running and reading philosophy.
+Outside of school, I enjoy playing Catan, FIFA, basketball, and reading philosophy.
