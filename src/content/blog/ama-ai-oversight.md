@@ -77,7 +77,7 @@ From a computer science perspective, a model's reported accuracy doesn't tell us
 
 Imagine a model achieves 95% accuracy during testing. At face value it definitely sounds impressive, but what if it performs substantially worse on a demographic group underrepresented in its training data?
 
-There's also a phenomenon known as *distribution shift*: a model that works well during development can become less reliable when exposed to different patients, imaging equipment, or clinical environments. This defect can be hard to detect without frequent validation and monitoring of the model.
+There's also a phenomenon known as *distribution shift*: a model that works well during development can become less reliable when exposed to different patients, imaging equipment, or clinical environments. This performance degradation can be difficult to detect without frequent validation and monitoring of the model.
 
 Model updates create another challenge. A new version might improve overall performance while introducing previously unseen failures. This is why regression testing and real-world monitoring remain important, even when regulatory change controls exist.
 
@@ -87,7 +87,7 @@ I don't think we can.
 
 In fact, I believe AI literacy should become part of medical education. Future doctors should understand training data, model limitations, and demographic bias without needing to become machine learning engineers.
 
-But, at the end of the day, technical validation and final approval should remain the responsibility of developers and the deploying hospitals/institutions.
+But, at the end of the day, developers and deploying institutions should bear primary responsibility for technical validation, within their respective roles.
 
 ## Who Should Actually Enforce the Rules?
 
