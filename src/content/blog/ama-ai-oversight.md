@@ -107,7 +107,7 @@ High-risk or autonomous systems should face stronger local validation and ongoin
 
 But there's a legitimate problem with my proposal.
 
-The original chapter warns that hospitals may lack the expertise to evaluate opaque AI, and smaller patient datasets could produce misleading conclusions. The AMA similarly questions how oversight requirements can remain feasible for organizations with limited resources.
+The chapter warns that hospitals may lack the expertise to evaluate opaque AI systems, often called black-box models. It also quotes a court's concern, raised in a medical device case, that a hospital's smaller dataset could lead to inaccurate conclusions. The AMA similarly asks how oversight expectations can be right-sized for organizations with different resources.
 
 I wouldn't expect every small hospital to build its own machine learning evaluation team. Shared validation networks, developer-supported testing, and independent review could help hospitals satisfy requirements without duplicating expensive technical work.
 
