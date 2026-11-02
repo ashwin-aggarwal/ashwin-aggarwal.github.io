@@ -25,11 +25,12 @@
      against --color-ground, so accent-colored link text stays AA. */
   --color-accent-green: #2a6b5e;
   --color-accent-teal: #16707a;
-  --color-accent-blue: #2a5ba8;
+  --color-accent-blue: #1f4788;
   --color-accent-purple: #7240a8;
   --color-accent-red: #b3302a;
   --color-accent-orange: #a8520c;
   --color-accent-pink: #b02f6e;
+  --color-accent-brown: #5c3a21;
 
   --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
   --font-sans: "IBM Plex Sans", system-ui, sans-serif;
@@ -56,6 +57,7 @@
 :root[data-accent='red'] { --color-accent: var(--color-accent-red); }
 :root[data-accent='orange'] { --color-accent: var(--color-accent-orange); }
 :root[data-accent='pink'] { --color-accent: var(--color-accent-pink); }
+:root[data-accent='brown'] { --color-accent: var(--color-accent-brown); }
 
 @layer base {
   * {

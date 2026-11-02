@@ -5,15 +5,12 @@ const SPEED = 196; // px/sec (98 doubled)
 const MAX_DELTA = 0.05; // seconds — clamps a stale/backgrounded frame
 const CORNER_EGG_MS = 2600;
 
-// Same accent, hue-rotated. Saturation/lightness held constant so every
-// variant stays equally legible against --color-ground.
-const COLORS = [
-  'hsl(165 42% 29%)', // the accent itself, #2A6B5E
-  'hsl(215 42% 29%)',
-  'hsl(265 42% 29%)',
-  'hsl(315 42% 29%)',
-  'hsl(15 42% 29%)',
-];
+// Cycles through the site's random-accent palette (styles/global.css),
+// starting from whichever accent this page load picked
+// (components/AccentPicker.astro), so the monogram never sits on a fixed
+// green. Every swatch is AA-legible against --color-ground.
+const PALETTE = ['green', 'teal', 'blue', 'purple', 'red', 'orange', 'pink', 'brown'];
+const COLORS = PALETTE.map((name) => `var(--color-accent-${name})`);
 
 export function initBounce(link, eggEl) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -35,7 +32,8 @@ export function initBounce(link, eggEl) {
   if (Math.abs(vel.x) < SPEED * 0.3) vel.x = Math.sign(vel.x || 1) * SPEED * 0.3;
   if (Math.abs(vel.y) < SPEED * 0.3) vel.y = Math.sign(vel.y || 1) * SPEED * 0.3;
 
-  let colorIndex = Math.floor(Math.random() * COLORS.length);
+  const current = PALETTE.indexOf(document.documentElement.dataset.accent);
+  let colorIndex = current >= 0 ? current : Math.floor(Math.random() * COLORS.length);
   let lastTime = null;
   let rafId = null;
   let running = true;

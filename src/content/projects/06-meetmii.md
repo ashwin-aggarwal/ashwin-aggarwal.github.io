@@ -9,7 +9,6 @@ stack:
   - GCP Cloud Run
   - Gemini API
   - Docker
-accent: "#2A6B5E"
 # Media removed for now — add back later.
 # logoMark: meetmii.svg
 links:
