@@ -19,6 +19,18 @@
   --color-rule: #d3d7cf;
   --color-accent: #2a6b5e;
 
+  /* Accent palette. One is picked at random per page load by
+     components/AccentPicker.astro (see the [data-accent] rules below);
+     --color-accent above stays the no-JS default. Every swatch is >= 4.5:1
+     against --color-ground, so accent-colored link text stays AA. */
+  --color-accent-green: #2a6b5e;
+  --color-accent-teal: #16707a;
+  --color-accent-blue: #2a5ba8;
+  --color-accent-purple: #7240a8;
+  --color-accent-red: #b3302a;
+  --color-accent-orange: #a8520c;
+  --color-accent-pink: #b02f6e;
+
   --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
   --font-sans: "IBM Plex Sans", system-ui, sans-serif;
   /* Section-title-only. A system stack, not a new font dependency. */
@@ -36,6 +48,14 @@
   --color-accent:      #6B9BF5;
 }
 */
+
+:root[data-accent='green'] { --color-accent: var(--color-accent-green); }
+:root[data-accent='teal'] { --color-accent: var(--color-accent-teal); }
+:root[data-accent='blue'] { --color-accent: var(--color-accent-blue); }
+:root[data-accent='purple'] { --color-accent: var(--color-accent-purple); }
+:root[data-accent='red'] { --color-accent: var(--color-accent-red); }
+:root[data-accent='orange'] { --color-accent: var(--color-accent-orange); }
+:root[data-accent='pink'] { --color-accent: var(--color-accent-pink); }
 
 @layer base {
   * {
@@ -517,7 +537,7 @@ a.project-row__media-wrap:focus-visible .media-well video {
    fill only — no gradient, border, dashed affordance, or icon. It's a
    finished-looking state, not a broken one. */
 .media-well--fallback {
-  background: color-mix(in srgb, #2a6b5e 6%, var(--color-ground));
+  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-ground));
   display: flex;
   align-items: center;
   justify-content: center;

@@ -79,3 +79,10 @@ no other edit.
 In `src/styles/global.css`, uncomment the second `@theme` block (labeled "Dark
 variant") right below the main one. Every color on the site is a token reference —
 none should need editing beyond that block.
+
+## How to change the accent colors
+
+Each page load picks a random accent from the `--color-accent-*` palette in
+`src/styles/global.css` (picker: `src/components/AccentPicker.astro`). To add or drop a
+color, edit the palette token, its `:root[data-accent='…']` rule, and the `colors` list in
+the picker. Keep new colors at 4.5:1 contrast or better against `--color-ground`.

@@ -1,0 +1,22 @@
+---
+// Picks a random site accent on every page load by setting
+// <html data-accent="...">; the matching rule in styles/global.css swaps
+// --color-accent to that palette token. Inline and synchronous in <head>
+// so the color is set before first paint (no flash of the default green).
+// Never repeats the previous page's color, so a reload always visibly
+// changes it. With no JS, the default --color-accent applies.
+---
+
+<script is:inline>
+  (function () {
+    var colors = ['green', 'teal', 'blue', 'purple', 'red', 'orange', 'pink'];
+    var last = null;
+    try { last = sessionStorage.getItem('accent'); } catch (e) {}
+    var pick;
+    do {
+      pick = colors[Math.floor(Math.random() * colors.length)];
+    } while (pick === last);
+    document.documentElement.dataset.accent = pick;
+    try { sessionStorage.setItem('accent', pick); } catch (e) {}
+  })();
+</script>
