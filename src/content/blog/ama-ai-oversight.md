@@ -142,3 +142,5 @@ And that leaves a practical question worth debating:
 7. [Joint Commission — *Responsible Use of AI in Healthcare*](https://www.jointcommission.org/en-us/certification/responsible-use-of-ai-in-healthcare)
 
 *(This post reflects personal analysis and opinion, not legal advice)*
+
+Thanks for reading :)
