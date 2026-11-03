@@ -131,7 +131,7 @@ And that leaves a practical question worth debating:
 
 ---
 
-### Sources and Limits
+### Sources
 
 1. [Price, Gerke & Cohen — *Liability for Use of Artificial Intelligence in Medicine* (2024)](https://www.ncbi.nlm.nih.gov/books/NBK613216/)
 2. [AMA — *Issue Brief: Liability for Clinical AI* (October 2026)](https://www.ama-assn.org/system/files/liability-clinical-ai-issue-brief.pdf)
