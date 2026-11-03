@@ -1097,19 +1097,32 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 
 /* Blog index (/blog/) ------------------------------------------------- */
 .post-list {
+  display: grid;
+  gap: var(--space-4);
   max-width: 48rem;
   margin: 0 auto;
   padding: 0 var(--space-4);
   list-style: none;
 }
 
+/* Each post is a framed block, like a block on the die: ink hairline at
+   rest; hover/focus lights it the way the die does — heavy green frame
+   (border + inset shadow, so nothing shifts) and a faint green wash. */
 .post-item {
   position: relative;
-  padding-block: var(--space-4) var(--space-6);
+  padding: var(--space-4);
+  border: var(--w-hair) solid var(--color-ink);
+  background: var(--color-ground);
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
 }
 
-.post-item + .post-item {
-  border-top: var(--w-hair) solid var(--color-line);
+.post-item:is(:hover, :focus-within) {
+  border-color: var(--color-gpu);
+  box-shadow: inset 0 0 0 calc(var(--w-active) - var(--w-hair)) var(--color-gpu);
+  background: color-mix(in srgb, var(--color-gpu) 6%, var(--color-ground));
 }
 
 .post-item__title {
@@ -1133,23 +1146,6 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 .post-item:hover .post-item__title a {
   text-decoration: underline;
   text-decoration-thickness: 2px;
-}
-
-.post-item::before {
-  content: '';
-  position: absolute;
-  left: calc(-1 * var(--space-4));
-  top: var(--space-4);
-  bottom: var(--space-6);
-  border-left: var(--w-active) solid var(--color-gpu);
-  opacity: 0;
-  transition: opacity var(--dur) var(--ease);
-}
-
-@media (min-width: 52rem) {
-  .post-item:is(:hover, :focus-within)::before {
-    opacity: 1;
-  }
 }
 
 .post-item__description {
