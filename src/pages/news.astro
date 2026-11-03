@@ -1,0 +1,35 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { getNews } from '../lib/content';
+
+const items = await getNews();
+const rendered = await Promise.all(items.map((i) => render(i)));
+---
+
+<BaseLayout title="Recent news — Ashwin Aggarwal">
+  <PageHead title="Recent news" part="Display engine" />
+
+  <section class="news">
+    {
+      items.length ? (
+        <ol class="news__list" role="list">
+          {items.map((item, i) => {
+            const { Content } = rendered[i];
+            return (
+              <li class="news__item">
+                {item.data.label && <p class="news__label">{item.data.label}</p>}
+                <div class="news__body prose">
+                  <Content />
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      ) : (
+        <p class="empty-state">No news yet.</p>
+      )
+    }
+  </section>
+</BaseLayout>

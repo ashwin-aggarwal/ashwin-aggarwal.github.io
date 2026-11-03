@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { getCoursework } from '../lib/content';
+
+const courses = await getCoursework();
+
+// Group by term, keeping terms in the order their first course appears.
+const terms = new Map<string, typeof courses>();
+for (const c of courses) {
+  const list = terms.get(c.data.term) ?? [];
+  list.push(c);
+  terms.set(c.data.term, list);
+}
+---
+
+<BaseLayout title="Coursework — Ashwin Aggarwal">
+  <PageHead title="Coursework" part="GPC 3" />
+
+  <section class="courses">
+    {
+      terms.size ? (
+        [...terms.entries()].map(([term, list]) => (
+          <section class="term">
+            <h2 class="term__name">{term}</h2>
+            <ul class="term__grid" role="list">
+              {list.map((c) => (
+                <li class="course">
+                  <span class="course__code">{c.data.code}</span>
+                  <span class="course__title">{c.data.title}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      ) : (
+        <p class="empty-state">No courses listed yet.</p>
+      )
+    }
+  </section>
+</BaseLayout>

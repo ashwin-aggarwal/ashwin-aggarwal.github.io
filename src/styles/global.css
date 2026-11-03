@@ -197,14 +197,14 @@
 .project-row__grid {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-4);
 }
 
 @media (min-width: 900px) {
   .project-row__grid {
     flex-direction: row;
     align-items: flex-start;
-    gap: 2.5rem;
+    gap: var(--space-6);
   }
 
   .project-row__grid[data-media-side='right'] {
@@ -221,46 +221,46 @@
   }
 }
 
-/* Minimal browser chrome for mediaFrame: 'browser' — a flat title bar
-   above the media well, no shadow/gradient/traffic-light colors. */
+/* Browser chrome for mediaFrame: 'browser' — an ink hairline frame and a
+   flat title bar. The "dots" are square pads, not traffic lights. */
 .browser-frame {
-  border: 1px solid var(--color-rule);
+  border: var(--w-trace) solid var(--color-ink);
 }
 
 .browser-frame__bar {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  height: 28px;
+  height: 26px;
   padding-inline: 0.6rem;
-  background: var(--color-ground-raise);
-  border-bottom: 1px solid var(--color-rule);
+  border-bottom: var(--w-hair) solid var(--color-ink);
 }
 
 .browser-frame__dot {
   width: 6px;
   height: 6px;
-  border-radius: 999px;
-  background: var(--color-rule);
+  background: var(--color-line);
 }
 
 .browser-frame__url {
   flex: 1;
-  height: 12px;
+  height: 10px;
   margin-inline-start: 0.4rem;
-  background: var(--color-ground-sunk);
+  border: var(--w-hair) solid var(--color-line);
 }
 
-/* Writeup disclosure — shared by project rows and experience entries.
-   Native <details>/<summary> — no JS, no transition, instant open/close.
-   Deliberately not one of the site's four budgeted interaction effects:
-   nothing animates, it just shows or hides. */
+/* Writeup disclosure (project "Read more"). Native <details>; the summary
+   is a mono label with the same +/− sign as the experience layers, and
+   the opened panel keeps the frame language: dashed hairline above, plain
+   readable text inside. */
 .disclosure__summary {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  color: var(--color-accent);
-  font-size: 0.9rem;
+  gap: var(--space-2);
+  padding-block: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-ink);
   cursor: pointer;
   list-style: none;
 }
@@ -269,44 +269,119 @@
   display: none;
 }
 
-.disclosure__summary::before {
-  content: '▸';
-  font-size: 0.7em;
+.disclosure__summary:hover span:first-child {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
 }
 
-.disclosure[open] > .disclosure__summary::before {
-  content: '▾';
+.disclosure__sign {
+  position: relative;
+  width: 10px;
+  height: 10px;
 }
 
-/* #about: two columns (prose + headshot) above 900px, single column
-   below. The headshot slot always renders as a media-well-style square —
-   a real image if `headshot` is set, otherwise a flat placeholder — the
-   same degrade pattern project media wells use. */
-.about-grid {
+.disclosure__sign::before,
+.disclosure__sign::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  border-top: var(--w-trace) solid currentColor;
+  translate: 0 -50%;
+}
+
+.disclosure__sign::after {
+  rotate: 90deg;
+}
+
+.disclosure[open] .disclosure__sign::after {
+  opacity: 0;
+}
+
+.disclosure[open] > .disclosure__summary {
+  color: var(--color-gpu);
+}
+
+.disclosure__panel {
+  margin-top: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: var(--w-hair) dashed var(--color-line);
+  line-height: 1.65;
+  color: var(--color-ink);
+}
+
+/* /about/: text + framed photo, two columns above 900px. The photo frame
+   is a chip package: ink outline with a pin-1 notch. */
+.about {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: var(--space-6);
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
 }
 
 @media (min-width: 900px) {
-  .about-grid {
+  .about {
     grid-template-columns: 1fr 18rem;
     align-items: start;
-    gap: 3rem;
+    gap: var(--space-8);
   }
 }
 
-.about-grid__headshot {
-  aspect-ratio: 1 / 1;
-  background: var(--color-ground-sunk);
-  overflow: hidden;
+.about__identity {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-line);
 }
 
-.about-grid__headshot img {
+.about__name {
+  margin: var(--space-1) 0 0;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.about__bio {
+  margin-top: var(--space-4);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+.about__bio > * + * {
+  margin-top: 0.9em;
+}
+
+.about__location {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-line);
+}
+
+.about__photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1 / 1;
+  border: var(--w-trace) solid var(--color-ink);
+  padding: var(--space-2);
+}
+
+.about__photo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-top: 14px solid var(--color-ink);
+  border-right: 14px solid transparent;
+}
+
+.about__photo img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 /* Small footer contact box: a flat inset panel, square corners, no
@@ -409,18 +484,6 @@
   }
 }
 
-/* Page heading block for the routed pages (/experience/, ...): same
-   width and gutters as the content below it. */
-.page-head {
-  max-width: 48rem;
-  margin-inline: auto;
-  padding: var(--space-12) var(--space-4) var(--space-6);
-}
-
-.page-head .section-title {
-  margin: 0;
-}
-
 /* Home intro above the die: name and the existing tagline, nothing else. */
 .home-intro__name {
   margin: 0;
@@ -445,102 +508,62 @@
   text-decoration: none;
 }
 
-/* Section titles (Projects, Experience, Journal, ...): bigger, monospace,
-   with a typewriter reveal on load — see scripts/typewriter.js. Fully
-   visible with no JS or under prefers-reduced-motion; the script only
-   clears and re-types the visible span when animation is safe to run. */
+/* Section title (legacy pages: journal). Routed pages use .page-head. */
 .section-title {
   font-family: var(--font-mono);
   font-size: 1.75rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
 }
 
-.section-title__cursor {
-  display: inline-block;
-  margin-left: 0.05em;
-  color: var(--color-accent);
-  animation: section-title-blink 1s step-end infinite;
-}
-
-@keyframes section-title-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-/* Project row index number: big, bold, monospace — replaces the old
-   index+year meta line now that dates are gone from the row. Purely
-   decorative (order is already conveyed by document order/heading
-   structure), so it's hidden from assistive tech. */
+/* Project row index: the SM cell number it carries on the die. */
 .project-row__index {
+  margin: 0;
   font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 3.5rem;
-  line-height: 1;
-  color: var(--color-ink);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-gpu);
 }
 
-/* Entry title — project rows and experience roles alike: same typewriter
-   identity as the index number and the section titles, instead of the
-   site's Fraunces display face. */
+/* Entry titles (project rows). */
 .title-mono {
+  margin: 0;
   font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.01em;
+  font-weight: 600;
+  font-size: 1.375rem;
+  line-height: 1.3;
   color: var(--color-ink);
 }
 
 .title-mono__wip {
   font-weight: 400;
-  color: var(--color-ink-muted);
+  color: var(--color-line);
 }
 
-/* Eyebrow labels (identity line, project affiliation): sentence case, not
-   tracked-out all-caps. */
+/* Small secondary line under a title (project affiliation). */
 .eyebrow {
-  font-size: 0.85rem;
-  letter-spacing: 0.01em;
-  color: var(--color-accent);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-line);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .section-title__cursor {
-    animation: none;
-    display: none;
-  }
-}
-
-/* When a project has a demoUrl, .project-row__media-wrap renders as <a>
-   instead of <div> (see ProjectRow.astro) — undo the global underline-wipe link
-   styling (wrong here, it'd draw a bar under the whole image) and swap in a
-   flat dim-on-hover/focus to signal the well itself is clickable. */
+/* When a project has a demoUrl, .project-row__media-wrap renders as <a>:
+   the frame itself is the link. Hover/focus thickens the frame to green. */
 a.project-row__media-wrap {
   display: block;
+  text-decoration: none;
 }
 
-a.project-row__media-wrap::after {
-  content: none;
+a.project-row__media-wrap .browser-frame,
+a.project-row__media-wrap > .media-well {
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
-a.project-row__media-wrap .media-well img,
-a.project-row__media-wrap .media-well video {
-  transition: opacity 0.15s ease;
-}
-
-a.project-row__media-wrap:hover .media-well img,
-a.project-row__media-wrap:hover .media-well video,
-a.project-row__media-wrap:focus-visible .media-well img,
-a.project-row__media-wrap:focus-visible .media-well video {
-  opacity: 0.85;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  a.project-row__media-wrap .media-well img,
-  a.project-row__media-wrap .media-well video {
-    transition: none;
-  }
+a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
+  border-color: var(--color-gpu);
+  box-shadow: 0 0 0 1px var(--color-gpu);
 }
 
 /* Pause/play toggle under a project video, so the loop can be stopped.
@@ -551,19 +574,20 @@ a.project-row__media-wrap:focus-visible .media-well video {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  margin-top: 0.6rem;
+  margin-top: var(--space-2);
   padding: 0;
-  border: 1px solid var(--color-rule);
-  border-radius: 999px;
-  background: var(--color-ground-raise);
+  border: var(--w-trace) solid var(--color-ink);
+  background: var(--color-ground);
   color: var(--color-ink);
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition:
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
 }
 
 .media-toggle:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--color-gpu);
+  color: var(--color-gpu);
 }
 
 .media-toggle__icon {
@@ -581,18 +605,10 @@ a.project-row__media-wrap:focus-visible .media-well video {
   display: block;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .media-toggle {
-    transition: none;
-  }
-}
-
-/* Media well: always rendered, fixed aspect ratio, square corners. Empty
-   (no `media`, or a broken file) reads as a plain sunken panel rather than
-   a broken image or a collapsed row. */
+/* Media well: fixed aspect ratio, square corners. */
 .media-well {
   aspect-ratio: 4 / 3;
-  background: var(--color-ground-sunk);
+  background: var(--color-ground);
   overflow: hidden;
 }
 
@@ -604,29 +620,13 @@ a.project-row__media-wrap:focus-visible .media-well video {
   display: block;
 }
 
-/* Missing-cover fallback: same slot and dimensions as a real cover, flat
-   fill only — no gradient, border, dashed affordance, or icon. It's a
-   finished-looking state, not a broken one. */
-.media-well--fallback {
-  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-ground));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.media-well__fallback-index {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  color: color-mix(in srgb, var(--color-ink) 25%, transparent);
-}
-
-/* Brand-mark media slot: a single-color inline SVG logo (currentColor),
-   centered on a flat well — no browser chrome, since this isn't a
-   screenshot. */
+/* Brand-mark media slot: a single-color inline SVG logo, centered, in an
+   ink frame (no browser chrome — it isn't a screenshot). */
 .media-well--logo {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: var(--w-trace) solid var(--color-ink);
   color: var(--color-ink);
 }
 
@@ -635,13 +635,16 @@ a.project-row__media-wrap:focus-visible .media-well video {
   height: auto;
 }
 
-/* Interaction 2 of 4: accent rule wipe on project rows. The row's own
-   --project-accent custom property (set inline per row, since it varies
-   per project) drives the color; the hairline itself is a real border so
-   it's present with or without JS/hover. */
+/* /projects/: rows are SM cells. Each sits under an ink rule; hovering or
+   focusing inside a row lights its rule green at active weight. */
+.project-list {
+  padding-bottom: var(--space-4);
+}
+
 .project-row {
   position: relative;
-  border-top: 1px solid var(--color-rule);
+  padding-block: var(--space-6) var(--space-8);
+  border-top: var(--w-hair) solid var(--color-ink);
 }
 
 .project-row::before {
@@ -649,101 +652,90 @@ a.project-row__media-wrap:focus-visible .media-well video {
   position: absolute;
   top: -1px;
   left: 0;
-  width: 0%;
-  height: 1px;
-  background: var(--project-accent, var(--color-accent));
-  transition: width 0.2s ease;
+  right: 0;
+  border-top: var(--w-active) solid var(--color-gpu);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
 }
 
-.project-row:hover::before,
-.project-row:focus-within::before {
-  width: 100%;
+.project-row:is(:hover, :focus-within)::before {
+  opacity: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .project-row::before {
-    transition: none;
-  }
+.project-row .prose {
+  line-height: 1.65;
 }
 
-/* 404 page. Full-viewport, no nav/footer (see src/pages/404.astro). The
-   monogram is position: absolute so scripts/bounce.js can freely place it
-   via a CSS transform; under reduced motion it drops back into the flex
-   flow, static and centered with the copy. */
+.project-row__text .prose {
+  margin-top: var(--space-3);
+}
+
+.project-row__stack {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-line);
+}
+
+.project-row__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+/* 404 page (src/pages/404.astro): standalone, centered — the chip mark
+   is the link home. Static; nothing moves. */
 .notfound {
-  position: fixed;
-  inset: 0;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  background: var(--color-ground);
+  gap: var(--space-6);
+  padding: var(--space-4);
+  background-color: var(--color-ground);
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-line) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-line) 12%, transparent) 1px, transparent 1px);
+  background-size: var(--grid) var(--grid);
   color: var(--color-ink);
-  overflow: hidden;
-}
-
-.notfound__copy {
-  text-align: center;
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--color-ink);
-  max-width: 20rem;
-}
-
-.notfound__hint {
-  margin: 0.5rem 0 0;
-  font-size: 0.75rem;
 }
 
 .notfound__mark {
-  position: absolute;
-  top: 0;
-  left: 0;
   display: block;
-  width: 140px;
+  width: 9rem;
   color: var(--color-ink);
-  will-change: transform;
+  transition: color var(--dur) var(--ease);
+}
+
+.notfound__mark:is(:hover, :focus-visible) {
+  color: var(--color-gpu);
 }
 
 .notfound__mark-svg {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
 }
 
-.notfound__egg {
-  position: absolute;
-  bottom: 2rem;
+.notfound__copy {
+  max-width: 22rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.notfound__copy p {
   margin: 0;
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  color: var(--color-ink-muted);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
 }
 
-.notfound__egg.is-visible {
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .notfound__mark {
-    position: static;
-    width: 160px;
-  }
-
-  .notfound__egg {
-    display: none;
-  }
-}
-
-@media print {
-  .notfound {
-    display: none;
-  }
+.notfound__hint {
+  margin-top: var(--space-2) !important;
+  font-size: 0.8rem;
+  color: var(--color-line);
 }
 
 /* Header nav links: muted, with the current page (Blog, on /blog/) in ink
@@ -775,166 +767,498 @@ a.project-row__media-wrap:focus-visible .media-well video {
 }
 
 /* ---------------------------------------------------------------------
-   Blog (/blog/). Each post is an accordion card: hairline-ruled like the
-   project rows, with the title as a heading-wrapped toggle button. The
-   whole header (title, description, dates) is clickable via a stretched
-   ::after on the button; focus ring stays on the button itself. Collapsed
-   cards are hidden only once `has-js` is on <html> (see scripts/blog.js),
-   so with no JS every post is readable in full. No open/close animation —
-   same instant show/hide as .disclosure.
+   Routed page frame: heading block + reading width. PageHead pairs the page
+   name with its die block over one ink rule.
 --------------------------------------------------------------------- */
-/* Blog column: wider than the 42rem prose column used elsewhere, so long
-   posts read at a comfortable measure instead of a narrow strip. */
-.blog-col {
-  max-width: 52rem;
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  /* Width excludes the gutters so the rule spans the content only. */
+  width: min(48rem - 2 * var(--space-4), 100% - 2 * var(--space-4));
+  margin: var(--space-12) auto var(--space-6);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--w-trace) solid var(--color-ink);
 }
 
+.page-head--wide {
+  width: min(64rem - 2 * var(--space-4), 100% - 2 * var(--space-4));
+}
+
+.page-head__title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.page-head__part {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-line);
+}
+
+.page-head + .project-list .project-row:first-child {
+  border-top: 0;
+}
+
+.empty-state {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-line);
+}
+
+/* Blog index (/blog/) ------------------------------------------------- */
 .post-list {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
   list-style: none;
-  margin-block: 0;
-  padding: 0;
 }
 
-.post-card {
-  border-top: 1px solid var(--color-rule);
-  scroll-margin-top: 1.5rem;
-}
-
-.post-list > li:last-child .post-card {
-  border-bottom: 1px solid var(--color-rule);
-}
-
-.post-card__header {
+.post-item {
   position: relative;
-  padding-block: 1.5rem;
+  padding-block: var(--space-4) var(--space-6);
 }
 
-.post-card__title {
+.post-item + .post-item {
+  border-top: var(--w-hair) solid var(--color-line);
+}
+
+.post-item__title {
+  margin: 0;
   font-size: 1.25rem;
+  font-weight: 600;
   line-height: 1.35;
 }
 
-.post-card__toggle {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+.post-item__title a {
+  text-decoration: none;
 }
 
-.post-card__toggle::after {
+/* Whole item clickable; focus ring stays on the link. */
+.post-item__title a::after {
   content: '';
   position: absolute;
   inset: 0;
 }
 
-.post-card__header:hover .post-card__toggle {
-  color: var(--color-accent);
+.post-item:hover .post-item__title a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
-.post-card__chevron {
-  flex: none;
-  color: var(--color-accent);
-  font-size: 0.7em;
+.post-item::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--space-4));
+  top: var(--space-4);
+  bottom: var(--space-6);
+  border-left: var(--w-active) solid var(--color-gpu);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
 }
 
-.post-card__chevron::before {
-  content: '▸';
+@media (min-width: 52rem) {
+  .post-item:is(:hover, :focus-within)::before {
+    opacity: 1;
+  }
 }
 
-.post-card.is-open .post-card__chevron::before {
-  content: '▾';
+.post-item__description {
+  margin: var(--space-2) 0 0;
+  line-height: 1.6;
 }
 
-.post-card__description,
-.post-card__dates {
-  padding-left: 1.4rem;
-}
-
-.post-card__description {
-  margin-top: 0.5rem;
-}
-
-.post-card__dates {
+.post-item__dates,
+.post__dates {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
-  margin-top: 0.5rem;
+  gap: var(--space-1) var(--space-4);
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-line);
+}
+
+/* Post page (/blog/<slug>/) -------------------------------------------
+   Reading rules: the grid shows only in the margins (the article sits on
+   a solid ground panel), the column is ~68ch, nothing animates. */
+.post-page {
+  padding-block: var(--space-8) 0;
+}
+
+@media (min-width: 56rem) {
+  .post-page {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--color-line) 10%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-line) 10%, transparent) 1px, transparent 1px);
+    background-size: var(--grid) var(--grid);
+  }
+}
+
+.post {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+  background: var(--color-ground);
+}
+
+@media (min-width: 56rem) {
+  .post {
+    padding-inline: var(--space-8);
+    border-inline: var(--w-hair) solid var(--color-ink);
+  }
+}
+
+.post__head {
+  padding-bottom: var(--space-4);
+  border-bottom: var(--w-trace) solid var(--color-ink);
+}
+
+.post__crumb {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: var(--color-ink-muted);
 }
 
-.has-js .post-card:not(.is-open) .post-card__panel {
-  display: none;
-}
-
-.post-card__panel {
-  padding-bottom: 2.5rem;
-}
-
-/* Long-form post body. Preflight zeroes every margin and heading size, so
-   the rhythm is restored here, scoped to posts only. Body headings arrive
-   one level down (## → h3) via src/lib/rehype-shift-blog-headings.mjs. */
-.post-body {
-  max-width: none; /* .prose caps at 42rem; posts fill .blog-col instead */
-  font-size: 1.0625rem;
-  line-height: 1.7;
-}
-
-.post-body > * + * {
-  margin-top: 1em;
-}
-
-.post-body h3,
-.post-body h4 {
-  font-family: var(--font-display);
+.post__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.6vw, 2.25rem);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.post__description {
+  margin: var(--space-3) 0 0;
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: var(--color-line);
+}
+
+.post__foot {
+  margin-top: var(--space-8);
+  padding-top: var(--space-3);
+  border-top: var(--w-hair) solid var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+/* Long-form body. Preflight zeroes margins and heading sizes, so the
+   rhythm is restored here. */
+.post-body {
+  max-width: 68ch;
+  margin-top: var(--space-6);
+  font-size: 1.0625rem;
+  line-height: 1.75;
   color: var(--color-ink);
 }
 
+.post-body > * + * {
+  margin-top: 1.1em;
+}
+
+.post-body h2,
 .post-body h3 {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.post-body h2 {
   margin-top: 2.25em;
-  font-size: 1.35rem;
+  font-size: 1.4rem;
 }
 
-.post-body h4 {
+.post-body h3 {
   margin-top: 1.75em;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
-.post-body h3 + *,
-.post-body h4 + * {
+.post-body h2 + *,
+.post-body h3 + * {
   margin-top: 0.6em;
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 1.25em;
+}
+
+.post-body ul { list-style: disc; }
+.post-body ol { list-style: decimal; }
+
+.post-body li + li {
+  margin-top: 0.4em;
 }
 
 .post-body hr {
   margin-block: 2.5em;
   border: 0;
-  border-top: 1px solid var(--color-rule);
+  border-top: var(--w-hair) solid var(--color-line);
 }
 
-/* Link text (source titles especially) is long; let it wrap like prose
-   instead of moving as one inline-block. The drawn-underline wipe is
-   swapped for a plain underline here, since a single ::after can't
-   follow a link across line breaks. */
+.post-body blockquote {
+  padding-left: var(--space-4);
+  border-left: var(--w-trace) solid var(--color-ink);
+}
+
 .post-body a {
-  display: inline;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
 }
 
-.post-body a::after {
-  content: none;
+/* Code: framed like a die block — ink outline, mono, no syntax rainbow
+   beyond what Shiki emits. Inline code gets a hairline box. */
+.post-body pre {
+  padding: var(--space-3) var(--space-4);
+  border: var(--w-trace) solid var(--color-ink);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
-.post-body a:hover {
-  text-decoration-thickness: 2px;
+.post-body pre,
+.post-body code {
+  font-family: var(--font-mono);
+}
+
+.post-body :not(pre) > code {
+  padding: 0.05em 0.3em;
+  border: var(--w-hair) solid var(--color-line);
+  font-size: 0.9em;
+}
+
+/* Recent news (/news/) ------------------------------------------------ */
+.news,
+.courses {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}
+
+.news__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: var(--w-trace) solid var(--color-ink);
+}
+
+.news__item {
+  position: relative;
+  padding: 0 0 var(--space-6) var(--space-6);
+}
+
+.news__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: var(--space-4);
+  border-top: var(--w-trace) solid var(--color-ink);
+}
+
+.news__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-line);
+}
+
+.news__body {
+  margin-top: var(--space-1);
+  line-height: 1.65;
+}
+
+/* Coursework (/coursework/) ------------------------------------------- */
+.term + .term {
+  margin-top: var(--space-8);
+}
+
+.term__name {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-line);
+}
+
+.term__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: var(--w-trace) solid var(--color-gpu);
+}
+
+.course__code {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-gpu);
+}
+
+.course__title {
+  line-height: 1.4;
+}
+
+/* Readings wheel (/readings/) ----------------------------------------- */
+.wheel {
+  --book-w: 13rem;
+
+  max-width: 64rem;
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}
+
+.wheel__viewport {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+  border-block: var(--w-hair) solid var(--color-ink);
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-line) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-line) 10%, transparent) 1px, transparent 1px);
+  background-size: var(--grid) var(--grid);
+  background-attachment: local;
+}
+
+.wheel__viewport:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+.wheel__track {
+  display: flex;
+  gap: var(--space-6);
+  width: max-content;
+  margin: 0;
+  /* Side padding lets the first and last book snap to center. */
+  padding: var(--space-6) calc(50cqi - var(--book-w) / 2);
+  list-style: none;
+}
+
+.wheel__viewport {
+  container-type: inline-size;
+}
+
+.book {
+  flex: none;
+  width: var(--book-w);
+  scroll-snap-align: center;
+}
+
+.book__cover {
+  margin: 0;
+  aspect-ratio: 2 / 3;
+  border: var(--w-trace) solid var(--color-ink);
+  background: var(--color-ground);
+  overflow: hidden;
+}
+
+.book__cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book__title {
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.book__author {
+  margin: var(--space-1) 0 0;
+  font-size: 0.9rem;
+  color: var(--color-line);
+}
+
+.book__status {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-gpu);
+}
+
+.book__note {
+  margin-top: var(--space-2);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+/* The wheel: books shrink and fade as they leave center. Scroll-driven,
+   so it only moves when the reader scrolls; off under reduced motion and
+   absent where unsupported (books just sit at full size). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .book {
+      animation: wheel-turn linear both;
+      animation-timeline: view(inline);
+    }
+
+    @keyframes wheel-turn {
+      0%, 100% { opacity: 0.45; scale: 0.82; }
+      50% { opacity: 1; scale: 1; }
+    }
+  }
+}
+
+.wheel__controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.wheel__btn {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: var(--w-trace) solid var(--color-ink);
+  background: var(--color-ground);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition:
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.wheel__btn:is(:hover, :focus-visible) {
+  border-color: var(--color-gpu);
+  color: var(--color-gpu);
+}
+
+.wheel__chev {
+  width: 9px;
+  height: 9px;
+  border-top: var(--w-trace) solid currentColor;
+  border-right: var(--w-trace) solid currentColor;
+  rotate: 45deg;
+  translate: -2px 0;
+}
+
+.wheel__chev--prev {
+  rotate: -135deg;
+  translate: 2px 0;
 }

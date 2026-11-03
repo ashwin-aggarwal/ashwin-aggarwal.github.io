@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
 import ProjectRow from '../components/ProjectRow.astro';
 import { getProjects } from '../lib/content';
 
@@ -7,16 +8,11 @@ const projects = await getProjects();
 ---
 
 <BaseLayout title="Projects — Ashwin Aggarwal">
-  <section id="projects" class="scroll-mt-24 py-10">
-    <div class="marginal marginal--wide">
-      <div class="marginal__content">
-        <h1 class="section-title">Projects</h1>
-      </div>
-    </div>
+  <PageHead title="Projects" part="GPC 0" wide />
 
+  <div class="project-list">
     {projects.map((project) => <ProjectRow project={project} />)}
-  </section>
-
+  </div>
 
   <script>
     import { initMediaWells } from '../scripts/mediaWell.js';

@@ -1,0 +1,18 @@
+---
+// Shared page heading for every routed page: the page name on the left, the
+// die block it maps to on the right (GPC 0, L2 cache, ...), over one ink
+// rule — the same name/part pairing the homepage die uses, so each page
+// reads as one block of the chip, opened up.
+interface Props {
+  title: string;
+  part: string;
+  wide?: boolean;
+}
+
+const { title, part, wide = false } = Astro.props;
+---
+
+<header class:list={['page-head', { 'page-head--wide': wide }]}>
+  <h1 class="page-head__title">{title}</h1>
+  <p class="page-head__part" aria-hidden="true">{part}</p>
+</header>

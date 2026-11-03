@@ -1,0 +1,20 @@
+---
+// "AKA" as a packaged chip: square body, pin-1 notch, pin rows on all four
+// edges. Single color via currentColor. Used as the 404 page's home link.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+const pins = [0, 1, 2, 3, 4, 5].map((i) => 30 + i * 14);
+---
+
+<svg class={className} viewBox="0 0 140 140" aria-hidden="true" fill="none" stroke="currentColor">
+  {pins.map((p) => (
+    <>
+      <path d={`M${p} 6V18M${p} 122V134M6 ${p}H18M122 ${p}H134`} stroke-width="3" />
+    </>
+  ))}
+  <rect x="18" y="18" width="104" height="104" stroke-width="3" />
+  <path d="M18 18h16L18 34z" fill="currentColor" stroke="none" />
+  <text x="70" y="78" text-anchor="middle" fill="currentColor" stroke="none" font-family="IBM Plex Mono, monospace" font-weight="600" font-size="26">AKA</text>
+</svg>

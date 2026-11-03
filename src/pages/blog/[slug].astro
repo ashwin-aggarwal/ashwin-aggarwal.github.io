@@ -1,0 +1,48 @@
+---
+// One page per post. The theme only frames the page (header rule, die-grid
+// in the margins on wide screens, code-block styling); the reading column
+// itself is plain ground, high-contrast text, normal measure, no motion.
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getBlogPosts } from '../../lib/content';
+import { formatDate, isoDate } from '../../lib/dates';
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const updated = post.data.updated ?? post.data.published;
+---
+
+<BaseLayout title={`${post.data.title} — Ashwin Aggarwal`} description={post.data.description}>
+  <div class="post-page">
+    <article class="post">
+      <header class="post__head">
+        <p class="post__crumb"><a href="/blog/">Blog</a></p>
+        <h1 class="post__title">{post.data.title}</h1>
+        <p class="post__description">{post.data.description}</p>
+        <p class="post__dates">
+          <span>
+            Published <time datetime={isoDate(post.data.published)}>{formatDate(post.data.published)}</time>
+          </span>
+          {updated.valueOf() !== post.data.published.valueOf() && (
+            <span>
+              Last edited <time datetime={isoDate(updated)}>{formatDate(updated)}</time>
+            </span>
+          )}
+        </p>
+      </header>
+
+      <div class="post-body">
+        <Content />
+      </div>
+
+      <footer class="post__foot">
+        <a href="/blog/">All posts</a>
+      </footer>
+    </article>
+  </div>
+</BaseLayout>

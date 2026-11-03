@@ -1,0 +1,75 @@
+---
+// Readings: a horizontal wheel of covers. Native scroll with snap points —
+// swipe, trackpad, shift+wheel, or the arrow keys once the wheel has focus;
+// the two buttons step one book at a time. Where scroll-driven animations
+// are supported (and motion is allowed), books ease down in size and
+// opacity as they move off-center, which is what makes it read as a wheel.
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { getReadings } from '../lib/content';
+
+const books = await getReadings();
+const rendered = await Promise.all(books.map((b) => render(b)));
+---
+
+<BaseLayout title="Readings — Ashwin Aggarwal">
+  <PageHead title="Readings" part="GPC 2" wide />
+
+  <section class="wheel" data-wheel>
+    {
+      books.length ? (
+        <>
+          <div class="wheel__viewport" tabindex="0" role="region" aria-label="Books, scroll sideways" data-wheel-viewport>
+            <ol class="wheel__track" role="list">
+              {books.map((book, i) => {
+                const { Content } = rendered[i];
+                return (
+                  <li class="book">
+                    <figure class="book__cover">
+                      <Image src={book.data.cover} alt="" width={320} />
+                    </figure>
+                    <p class="book__title">{book.data.title}</p>
+                    <p class="book__author">{book.data.author}</p>
+                    {book.data.status === 'reading' && <p class="book__status">Reading now</p>}
+                    {book.body?.trim() && (
+                      <div class="book__note">
+                        <Content />
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+          <div class="wheel__controls">
+            <button type="button" class="wheel__btn" data-wheel-step="-1" aria-label="Previous book">
+              <span class="wheel__chev wheel__chev--prev" aria-hidden="true" />
+            </button>
+            <button type="button" class="wheel__btn" data-wheel-step="1" aria-label="Next book">
+              <span class="wheel__chev" aria-hidden="true" />
+            </button>
+          </div>
+        </>
+      ) : (
+        <p class="empty-state">No books listed yet.</p>
+      )
+    }
+  </section>
+
+  <script>
+    const viewport = document.querySelector<HTMLElement>('[data-wheel-viewport]');
+    if (viewport) {
+      const step = () => viewport.querySelector<HTMLElement>('.book')?.offsetWidth ?? 240;
+      const smooth = () =>
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+      document.querySelectorAll<HTMLButtonElement>('[data-wheel-step]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const dir = Number(btn.dataset.wheelStep);
+          viewport.scrollBy({ left: dir * step(), behavior: smooth() });
+        });
+      });
+    }
+  </script>
+</BaseLayout>
