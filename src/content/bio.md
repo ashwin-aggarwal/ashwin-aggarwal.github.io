@@ -19,6 +19,6 @@ headshot: /media/headshot.webp
 
 I'm a Computer Science major in Cornell Engineering passionate about Machine Learning, Agentic AI, and AI Safety. I have experience with Computer Vision, Deep Learning, and Automation Workflows.
 
-In the past, I have interned at Virginia Commonwealth University and Next Play. I am also part of Cornell's [Generative AI club](https://cornellgenai.vercel.app/) as an Engineer and Open-Source Contributor.
+In the past, I have interned at Virginia Commonwealth University, Next Play, and Fidelity National Financial. I am also part of Cornell's [Generative AI club](https://cornellgenai.vercel.app/) as an Engineer and Open-Source Contributor.
 
 Outside of school, I enjoy playing Catan, FIFA, basketball, and reading philosophy.
