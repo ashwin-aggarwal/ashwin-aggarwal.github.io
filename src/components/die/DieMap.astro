@@ -3,12 +3,12 @@
 //   - compute clusters (GPCs) in the top and bottom rows,
 //   - a full-width L2 cache strip through the middle,
 //   - memory-controller pads down both long edges,
-//   - the host / I/O interface on the bottom edge, where every live trace
-//     enters the chip.
-// Site sections map onto those regions: Projects and Experience are live
-// GPCs, Blog is the L2, About is the GigaThread (command) engine, Contact
-// is the PCIe / I/O block. GPC 2 and GPC 3 are idle silicon: drawn in the
-// gray line color, aria-hidden, not interactive.
+//   - the host / I/O interface and display engine on the bottom edge;
+//     every live trace enters the chip at the I/O block.
+// Site sections map onto those regions: Projects, Experience, Readings and
+// Coursework are the four GPCs, Blog is the L2, About is the GigaThread
+// (command) engine, Recent News is the display engine, Contact is the
+// PCIe / I/O block. Off-site links sit on memory-controller pads.
 //
 // Two renderings of the same five links:
 //   .die       — SVG floorplan, >= 820px
@@ -55,13 +55,19 @@ const routes = {
   projects: route([[232, 536], [232, 528], [102, 528], [102, 268], [352, 268], [352, 258]]),
   about: route([[252, 536], [252, 516], [200, 516], [200, 508]]),
   blog: route([[320, 536], [320, 342]]),
-  experience: route([[408, 536], [408, 528], [898, 528], [898, 268], [750, 268], [750, 258]]),
+  readings: route([[372, 536], [372, 508]]),
+  coursework: route([[396, 536], [396, 516], [760, 516], [760, 508]]),
+  experience: route([[412, 536], [412, 528], [898, 528], [898, 268], [750, 268], [750, 258]]),
+  news: route([[420, 560], [460, 560]]),
 };
 const vias: Record<string, [number, number][]> = {
   projects: [[232, 536], [352, 258]],
   about: [[252, 536], [200, 508]],
   blog: [[320, 536], [320, 342]],
-  experience: [[408, 536], [750, 258]],
+  readings: [[372, 536], [372, 508]],
+  coursework: [[396, 536], [760, 508]],
+  experience: [[412, 536], [750, 258]],
+  news: [[420, 560], [460, 560]],
 };
 
 // Decorative crossbar stubs (L2 <-> GPC) and pad fingers. Gray, idle.
@@ -71,14 +77,27 @@ const stubsBottom = [160, 260, 400, 480, 560, 680, 760, 840];
 const mcPads = [2, 3, 4, 5].map((i) => 84 + i * 84);
 const ioFingers = Array.from({ length: 13 }, (_, i) => 228 + i * 15);
 
+// Readings GPC: book spines, fixed pattern so the die never reflows.
+const spines = [
+  [14, 72], [10, 58], [18, 80], [12, 64], [16, 76], [10, 54], [14, 70], [20, 84],
+  [12, 60], [16, 74], [10, 66], [14, 78],
+].reduce<{ x: number; w: number; h: number }[]>((acc, [w, h]) => {
+  const prev = acc[acc.length - 1];
+  acc.push({ x: prev ? prev.x + prev.w + 4 : 364, w, h });
+  return acc;
+}, []);
+
 // Projects GPC: one SM cell per project, numbered in display order.
 const cellX0 = 128, cellW = (448 - 6 * 8) / 7;
 
 const stackBlocks = [
   { key: 'projects', href: '/projects/', name: 'Projects', part: 'GPC 0', compute: true },
   { key: 'experience', href: '/experience/', name: 'Experience', part: 'GPC 1', compute: true },
+  { key: 'readings', href: '/readings/', name: 'Readings', part: 'GPC 2', compute: true },
+  { key: 'coursework', href: '/coursework/', name: 'Coursework', part: 'GPC 3', compute: true },
   { key: 'blog', href: '/blog/', name: 'Blog', part: 'L2 cache', compute: false },
   { key: 'about', href: '/about/', name: 'About', part: 'GigaThread engine', compute: false },
+  { key: 'news', href: '/news/', name: 'Recent news', part: 'Display engine', compute: false },
   { key: 'contact', href: '#contact', name: 'Contact', part: 'PCIe / I/O', compute: false },
 ];
 ---
@@ -114,21 +133,6 @@ const stackBlocks = [
       {stubsBottom.map((x) => <path class="die__stub" d={`M${x} 342V362`} />)}
       {ioFingers.map((x) => <rect class="die__finger" x={x} y="590" width="8" height="12" />)}
 
-      <!-- Idle silicon: GPC 2 and GPC 3. -->
-      {
-        [
-          { x: 340, w: 270, name: 'GPC 2' },
-          { x: 630, w: 258, name: 'GPC 3' },
-        ].map((g) => (
-          <g class="die__idle">
-            <rect x={g.x} y="362" width={g.w} height="146" />
-            <text class="die__part" x={g.x + 16} y="388">{g.name}</text>
-            {[0, 1, 2, 3, 4].map((i) => (
-              <rect x={g.x + 16 + i * ((g.w - 32 - 32) / 5 + 8)} y="404" width={(g.w - 32 - 32) / 5} height="88" />
-            ))}
-          </g>
-        ))
-      }
     </g>
 
     <!-- Live routes, drawn under the blocks. Each has a signal overlay
@@ -224,6 +228,54 @@ const stackBlocks = [
         <text class="blk__name" x="128" y="392">About</text>
         <text class="blk__part" x="128" y="412">GigaThread</text>
         {[0, 1, 2].map((i) => <path class="blk__sched" d={`M128 ${448 + i * 14}H284`} />)}
+      </g>
+    </a>
+
+    <a class="blk blk--compute blk--readings" href="/readings/" aria-label="Readings">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="332" y="354" width="286" height="162" />
+        <rect class="blk__frame" x="340" y="362" width="270" height="146" />
+        <text class="blk__name" x="356" y="392">Readings</text>
+        <text class="blk__part" x="594" y="392" text-anchor="end">GPC 2</text>
+        <!-- A shelf of spines: varied widths and heights on one baseline. -->
+        <path class="blk__residual" d="M356 492H594" />
+        {
+          spines.map((sp) => (
+            <g class="blk__cell">
+              <rect x={sp.x} y={492 - sp.h} width={sp.w} height={sp.h} />
+              <rect class="blk__core" x={sp.x + 2} y={492 - sp.h + 8} width={sp.w - 4} height="5" />
+              <rect class="blk__core" x={sp.x + 2} y="476" width={sp.w - 4} height="3" />
+            </g>
+          ))
+        }
+      </g>
+    </a>
+
+    <a class="blk blk--compute blk--coursework" href="/coursework/" aria-label="Coursework">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="622" y="354" width="274" height="162" />
+        <rect class="blk__frame" x="630" y="362" width="258" height="146" />
+        <text class="blk__name" x="646" y="392">Coursework</text>
+        <text class="blk__part" x="872" y="392" text-anchor="end">GPC 3</text>
+        <!-- A term grid: rows of course slots. -->
+        {
+          [0, 1, 2].map((r) =>
+            [0, 1, 2, 3, 4, 5].map((c) => (
+              <g class="blk__cell">
+                <rect x={646 + c * 38} y={410 + r * 28} width="30" height="20" />
+              </g>
+            )),
+          )
+        }
+      </g>
+    </a>
+
+    <a class="blk blk--news" href="/news/" aria-label="Recent news">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="452" y="528" width="436" height="64" />
+        <rect class="blk__frame" x="460" y="536" width="420" height="48" />
+        <text class="blk__name" x="476" y="566">Recent news</text>
+        <text class="blk__part" x="864" y="566" text-anchor="end">Display engine</text>
       </g>
     </a>
 

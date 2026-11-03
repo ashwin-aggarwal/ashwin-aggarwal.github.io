@@ -44,8 +44,7 @@
 }
 
 .die__pad,
-.die__finger,
-.die__idle rect {
+.die__finger {
   fill: none;
   stroke: var(--color-line);
   stroke-width: var(--w-hair);
@@ -89,9 +88,12 @@
   animation: die-draw 900ms var(--ease) both;
 }
 
-.route--about .route__trace { animation-delay: 80ms; }
+.route--about .route__trace,
+.route--readings .route__trace { animation-delay: 80ms; }
 .route--blog .route__trace { animation-delay: 160ms; }
-.route--experience .route__trace { animation-delay: 240ms; }
+.route--experience .route__trace,
+.route--coursework .route__trace,
+.route--news .route__trace { animation-delay: 240ms; }
 
 .route__signal {
   stroke: var(--color-gpu);
@@ -218,7 +220,10 @@
 .die:has(.blk--projects:is(:hover, :focus-visible)) .route--projects .route__trace,
 .die:has(.blk--about:is(:hover, :focus-visible)) .route--about .route__trace,
 .die:has(.blk--blog:is(:hover, :focus-visible)) .route--blog .route__trace,
-.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__trace {
+.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__trace,
+.die:has(.blk--readings:is(:hover, :focus-visible)) .route--readings .route__trace,
+.die:has(.blk--coursework:is(:hover, :focus-visible)) .route--coursework .route__trace,
+.die:has(.blk--news:is(:hover, :focus-visible)) .route--news .route__trace {
   stroke: var(--color-gpu);
   stroke-width: var(--w-active);
 }
@@ -226,14 +231,20 @@
 .die:has(.blk--projects:is(:hover, :focus-visible)) .route--projects .route__via,
 .die:has(.blk--about:is(:hover, :focus-visible)) .route--about .route__via,
 .die:has(.blk--blog:is(:hover, :focus-visible)) .route--blog .route__via,
-.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__via {
+.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__via,
+.die:has(.blk--readings:is(:hover, :focus-visible)) .route--readings .route__via,
+.die:has(.blk--coursework:is(:hover, :focus-visible)) .route--coursework .route__via,
+.die:has(.blk--news:is(:hover, :focus-visible)) .route--news .route__via {
   stroke: var(--color-gpu);
 }
 
 .die:has(.blk--projects:is(:hover, :focus-visible)) .route--projects .route__signal,
 .die:has(.blk--about:is(:hover, :focus-visible)) .route--about .route__signal,
 .die:has(.blk--blog:is(:hover, :focus-visible)) .route--blog .route__signal,
-.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__signal {
+.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__signal,
+.die:has(.blk--readings:is(:hover, :focus-visible)) .route--readings .route__signal,
+.die:has(.blk--coursework:is(:hover, :focus-visible)) .route--coursework .route__signal,
+.die:has(.blk--news:is(:hover, :focus-visible)) .route--news .route__signal {
   animation: die-signal 700ms var(--ease) 1 forwards;
 }
 
