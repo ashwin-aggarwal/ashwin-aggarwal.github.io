@@ -498,16 +498,6 @@
   color: var(--color-line);
 }
 
-/* Header brand mark: bold, bigger, monospace, typewriter reveal on load —
-   same mechanism as .section-title (scripts/typewriter.js). */
-.brand-mark {
-  font-family: var(--font-mono);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-ink);
-  text-decoration: none;
-}
-
 /* Section title (legacy pages: journal). Routed pages use .page-head. */
 .section-title {
   font-family: var(--font-mono);
@@ -740,23 +730,6 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   color: var(--color-line);
 }
 
-/* Header nav links: muted, with the current page (Blog, on /blog/) in ink
-   so you can tell where you are. */
-.nav-link {
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--color-line);
-  text-decoration: none;
-}
-
-.nav-link:hover,
-.nav-link:focus-visible,
-.nav-link[aria-current='page'] {
-  color: var(--color-ink);
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-}
-
 /* Site chrome: header and footer read as the die's package edge — a
    single ink rule, with the content between them. Same 64rem frame as the
    die and the wide pages, rule spanning the content only. */
@@ -768,7 +741,209 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 }
 
 .site-header {
-  border-bottom: var(--w-hair) solid var(--color-ink);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-6);
+  padding-top: var(--space-6);
+  border-bottom: var(--w-trace) solid var(--color-ink);
+}
+
+/* Brand: packaged chip + full name, links home. Hover/focus powers the
+   chip on (green body = compute block) and underlines the name. */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.brand__chip {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  stroke: var(--color-ink);
+}
+
+.brand__pins {
+  stroke-width: 2;
+  transition: stroke var(--dur) var(--ease);
+}
+
+.brand__body {
+  stroke-width: 2;
+  fill: var(--color-ground);
+  transition: fill var(--dur) var(--ease), stroke var(--dur) var(--ease);
+}
+
+.brand__notch {
+  fill: var(--color-ink);
+  stroke: none;
+  transition: fill var(--dur) var(--ease);
+}
+
+.brand__label {
+  fill: var(--color-ink);
+  stroke: none;
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 600;
+  transition: fill var(--dur) var(--ease);
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.brand__name {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--dur) var(--ease);
+}
+
+.brand__hint {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-line);
+  transition: color var(--dur) var(--ease);
+}
+
+.brand:hover .brand__pins,
+.brand:focus-visible .brand__pins,
+.brand:hover .brand__body,
+.brand:focus-visible .brand__body {
+  stroke: var(--color-gpu);
+}
+
+.brand:hover .brand__body,
+.brand:focus-visible .brand__body {
+  fill: var(--color-gpu);
+}
+
+.brand:hover .brand__notch,
+.brand:focus-visible .brand__notch,
+.brand:hover .brand__label,
+.brand:focus-visible .brand__label {
+  fill: var(--color-ground);
+}
+
+.brand:hover .brand__name,
+.brand:focus-visible .brand__name {
+  text-decoration-color: currentColor;
+}
+
+.brand:hover .brand__hint,
+.brand:focus-visible .brand__hint {
+  color: var(--color-ink);
+}
+
+/* Nav as taps on the bus: the header's bottom rule. Each link drops a stub
+   to a via pad sitting on the rule. Idle: gray hairline, hollow pad.
+   Hover/focus: ink, trace weight. Current page: lit — green stub at active
+   weight, filled pad. The nav's 6px bottom padding (cancelled by a negative
+   margin) keeps the pads inside its scroll box on narrow screens. */
+.bus {
+  display: flex;
+  gap: var(--space-3);
+  padding-bottom: 6px;
+  margin-bottom: -6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.bus::-webkit-scrollbar {
+  display: none;
+}
+
+.bus__tap {
+  --tap: var(--color-line);
+  --tap-w: var(--w-hair);
+  position: relative;
+  flex: none;
+  padding: var(--space-1) 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-line);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+
+/* Stub */
+.bus__tap::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: var(--tap-w);
+  height: var(--space-3);
+  translate: -50% 0;
+  background: var(--tap);
+  transition: background var(--dur) var(--ease), width var(--dur) var(--ease);
+}
+
+/* Via pad, centred on the rule */
+.bus__tap::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(-1 * (var(--w-trace) / 2));
+  width: 7px;
+  height: 7px;
+  translate: -50% 50%;
+  background: var(--color-ground);
+  border: var(--w-hair) solid var(--tap);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.bus__tap:hover,
+.bus__tap:focus-visible {
+  --tap: var(--color-ink);
+  --tap-w: var(--w-trace);
+  color: var(--color-ink);
+}
+
+.bus__tap[aria-current='page'] {
+  --tap: var(--color-gpu);
+  --tap-w: var(--w-active);
+  color: var(--color-ink);
+}
+
+.bus__tap[aria-current='page']::before {
+  background: var(--color-gpu);
+}
+
+/* Narrow: brand on its own row, the bus row below scrolls sideways. */
+@media (max-width: 60rem) {
+  .site-header {
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    flex-basis: 100%;
+    padding-bottom: 0;
+  }
+
+  .bus {
+    width: 100%;
+  }
+}
+
+/* Phones: the bus row overflows; fade its right edge so it reads as
+   scrollable. The mask only uses alpha, so the ink token is just a stand-in. */
+@media (max-width: 36rem) {
+  .bus {
+    mask-image: linear-gradient(to right, var(--color-ink) 82%, transparent);
+  }
 }
 
 .site-footer {

@@ -1,8 +1,12 @@
 ---
-// Site-wide chrome: brand mark (links home, to the die) + one link per
-// route. The current route gets aria-current so it reads (and looks)
-// selected. Not sticky — it scrolls away with the page.
+// Site-wide chrome. The header's bottom rule is a bus: every nav link taps
+// into it with a short stub and a via pad, and the current route's tap is
+// lit (green, active weight). The brand on the left is a small packaged chip
+// plus the full name — the name is the conventional "home" cue, and off the
+// homepage a "← home" subline spells it out. Hover/focus lighting is CSS
+// only. Not sticky — it scrolls away with the page.
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = path === '/';
 const links = [
   { href: '/about/', label: 'About' },
   { href: '/projects/', label: 'Projects' },
@@ -13,15 +17,30 @@ const links = [
   { href: '/news/', label: 'News' },
 ];
 const isCurrent = (href: string) => path === href.replace(/\/$/, '') || path.startsWith(href);
+// Three pins per edge on a 40-unit package.
+const pins = [13, 20, 27];
 ---
 
-<header class="site-header content-col flex flex-wrap items-baseline gap-x-6 gap-y-3 pt-8 pb-4 text-[0.95rem]">
-  <a class="brand-mark" href="/" aria-label="Ashwin Aggarwal, home">AKA</a>
+<header class="site-header content-col">
+  <a class="brand" href="/" aria-label="Ashwin Aggarwal, home" aria-current={isHome ? 'page' : undefined}>
+    <svg class="brand__chip" viewBox="0 0 40 40" aria-hidden="true" fill="none">
+      <g class="brand__pins">
+        {pins.map((p) => <path d={`M${p} 2V7M${p} 33V38M2 ${p}H7M33 ${p}H38`} />)}
+      </g>
+      <rect class="brand__body" x="7" y="7" width="26" height="26" />
+      <path class="brand__notch" d="M7 7h6L7 13z" />
+      <text class="brand__label" x="20" y="23.2" text-anchor="middle">AKA</text>
+    </svg>
+    <span class="brand__text">
+      <span class="brand__name">Ashwin Aggarwal</span>
+      {!isHome && <span class="brand__hint" aria-hidden="true">← home</span>}
+    </span>
+  </a>
 
-  <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Site">
+  <nav class="bus" aria-label="Site">
     {
       links.map((l) => (
-        <a class="nav-link" href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+        <a class="bus__tap" href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
           {l.label}
         </a>
       ))
