@@ -29,6 +29,19 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    {/* Resolve the theme before first paint so dark visitors never see a
+        light flash: saved choice first, else the system setting. The header
+        switch (components/Header.astro) updates it afterwards. */}
+    <script is:inline>
+      (function () {
+        var t;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
   </head>
   <body>
     <Header />

@@ -37,6 +37,29 @@
   --font-display: var(--font-sans);
 }
 
+/* Dark theme: the same four roles re-valued for a dark substrate — the
+   only other place hex values may appear. Applied by an explicit
+   data-theme="dark" (the header switch / saved choice, set before paint
+   in BaseLayout) or, with no choice stored and no JS, by the system
+   setting. Contrast on ground: ink 14.9:1, line 6.5:1, gpu 6.4:1. */
+:root[data-theme='dark'] {
+  --color-ground: #141615;
+  --color-ink: #e8e9e4;
+  --color-line: #999b96;
+  --color-gpu: #76a389;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-ground: #141615;
+    --color-ink: #e8e9e4;
+    --color-line: #999b96;
+    --color-gpu: #76a389;
+    color-scheme: dark;
+  }
+}
+
 :root {
   /* Die grid: the faint substrate lattice on themed (non-reading) surfaces. */
   --grid: 24px;
@@ -920,6 +943,80 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 
 .bus__tap[aria-current='page']::before {
   background: var(--color-gpu);
+}
+
+/* Theme switch: a PCB slide switch in the header's top-right corner, sun
+   on the off side, moon on the on side. The knob position comes from the
+   root data-theme (set before paint), not aria-checked, so it never jumps
+   on load. Hidden when no theme was resolved (no JS) — it couldn't work. */
+.site-header {
+  position: relative;
+}
+
+.theme-switch {
+  position: absolute;
+  top: var(--space-2);
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px;
+  border: 0;
+  background: none;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+:root:not([data-theme]) .theme-switch {
+  display: none;
+}
+
+.theme-switch__icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: color var(--dur) var(--ease);
+}
+
+.theme-switch__track {
+  position: relative;
+  width: 1.75rem;
+  height: 0.9rem;
+  border: var(--w-trace) solid currentColor;
+  transition: border-width var(--dur) var(--ease);
+}
+
+.theme-switch__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(0.9rem - 2 * var(--w-trace) - 4px);
+  height: calc(0.9rem - 2 * var(--w-trace) - 4px);
+  background: currentColor;
+  transition: translate var(--dur) var(--ease);
+}
+
+/* Off (light): sun lit, moon idle. On (dark): knob slides right. */
+.theme-switch__icon--moon,
+:root[data-theme='dark'] .theme-switch__icon--sun {
+  color: var(--color-line);
+}
+
+:root[data-theme='dark'] .theme-switch__icon--moon {
+  color: var(--color-ink);
+}
+
+:root[data-theme='dark'] .theme-switch__knob {
+  translate: calc(1.75rem - 0.9rem) 0;
+}
+
+.theme-switch:hover .theme-switch__track,
+.theme-switch:focus-visible .theme-switch__track {
+  border-width: var(--w-active);
 }
 
 /* Narrow: brand on its own row, the bus row below scrolls sideways. */

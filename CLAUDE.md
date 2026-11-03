@@ -6,7 +6,11 @@ Static output, deployed to Pages via Actions.
 ## Design (theme/gpu-transformer)
 A GPU die and a transformer stack. Off-white ground, black ink, one gray, one
 calm muted green — FOUR colors total, all in `src/styles/global.css` under
-`@theme`. Never hardcode a hex outside that block. Green is only for GPU
+`@theme`, with their dark-theme values in the `[data-theme='dark']` block
+right below it. Never hardcode a hex outside those two blocks (the favicon
+SVG is the one exception: it copies the token values). Dark mode is set
+before paint in `BaseLayout` (saved choice, else system) and flipped by the
+header's slide switch. Green is only for GPU
 elements: compute blocks and lit traces/layers. Hierarchy comes from line
 weight (`--w-hair` / `--w-trace` / `--w-active`) and spacing, not more colors.
 
