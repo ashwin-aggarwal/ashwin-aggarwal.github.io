@@ -6,7 +6,7 @@ const year = new Date().getFullYear();
 const bio = await getBio();
 ---
 
-<footer class="content-col py-8 pb-12 text-[0.85rem] text-[color:var(--color-ink-muted)]">
+<footer class="site-footer content-col py-8 pb-12 text-[0.85rem] text-[color:var(--color-ink-muted)]">
   <div class="footer-contact">
     <p class="m-0">
       Please reach out at <a href={`mailto:${bio.data.email}`}>{bio.data.email}</a>

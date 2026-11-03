@@ -1,63 +1,71 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------
-   Design tokens. Single source of truth for the site's color and type.
-   This is a quiet, modern, off-white room — no ad hoc hex values or
-   font-family strings anywhere else in the site.
+   Design tokens — GPU die / transformer theme (theme/gpu-transformer).
+   Single source of truth. No hex values anywhere outside this block.
 
-   The bookshelf panel is its own separate lighting environment (dark
-   walnut, lamp, parchment) and is deliberately NOT represented here —
-   see the :root block at the top of components/bookshelf/bookshelf.css.
-   It must never bleed into these tokens or vice versa.
+   FOUR colors, no more:
+     ground  — the off-white substrate
+     ink     — text, borders, active traces
+     line    — idle traces, secondary text, hairlines (AA as text: 5.2:1)
+     gpu     — compute blocks and lit traces ONLY (AA as text: 5.0:1).
+               Never used for body links, headings or decoration.
+   Hierarchy comes from line weight and spacing, not more colors. Tints
+   (the faint grid, idle fills) are these same colors at reduced opacity.
+
+   The bookshelf panel is its own separate lighting environment and is
+   deliberately NOT represented here — see components/bookshelf/.
 --------------------------------------------------------------------- */
 @theme {
   --color-ground: #f0f1ed;
-  --color-ground-sunk: #e7e9e3;
-  --color-ground-raise: #ffffff;
-  --color-ink: #1a1f1c;
-  --color-ink-muted: #5e655f;
-  --color-rule: #d3d7cf;
-  --color-accent: #2a6b5e;
+  --color-ink: #141414;
+  --color-line: #61635f;
+  --color-gpu: #46705a;
 
-  /* Accent palette. One is picked at random per page load by
-     components/AccentPicker.astro (see the [data-accent] rules below);
-     --color-accent above stays the no-JS default. Every swatch is >= 4.5:1
-     against --color-ground, so accent-colored link text stays AA. */
-  --color-accent-green: #2a6b5e;
-  --color-accent-teal: #16707a;
-  --color-accent-blue: #1f4788;
-  --color-accent-purple: #552d82;
-  --color-accent-red: #b3302a;
-  --color-accent-orange: #a8520c;
-  --color-accent-pink: #b02f6e;
-  --color-accent-brown: #5c3a21;
+  /* Legacy aliases — older component CSS still reads these names. They
+     resolve onto the four colors above; nothing new should use them. */
+  --color-ground-sunk: var(--color-ground);
+  --color-ground-raise: var(--color-ground);
+  --color-ink-muted: var(--color-line);
+  --color-rule: var(--color-line);
+  --color-accent: var(--color-ink);
 
-  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  /* One family, two cuts: Plex Sans for reading, Plex Mono for labels,
+     part numbers and anything that names a piece of the chip. */
   --font-sans: "IBM Plex Sans", system-ui, sans-serif;
-  /* Section-title-only. A system stack, not a new font dependency. */
-  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --font-display: var(--font-sans);
 }
 
-/* Dark variant — uncomment this block to override the above.
-@theme {
-  --color-ground:      #131B2E;
-  --color-ground-sunk: #1B2440;
-  --color-ground-raise:#222D4D;
-  --color-ink:         #E8ECF5;
-  --color-ink-muted:   #8A96B0;
-  --color-rule:        #2A3654;
-  --color-accent:      #6B9BF5;
-}
-*/
+:root {
+  /* Die grid: the faint substrate lattice on themed (non-reading) surfaces. */
+  --grid: 24px;
+  --grid-alpha: 0.12;
 
-:root[data-accent='green'] { --color-accent: var(--color-accent-green); }
-:root[data-accent='teal'] { --color-accent: var(--color-accent-teal); }
-:root[data-accent='blue'] { --color-accent: var(--color-accent-blue); }
-:root[data-accent='purple'] { --color-accent: var(--color-accent-purple); }
-:root[data-accent='red'] { --color-accent: var(--color-accent-red); }
-:root[data-accent='orange'] { --color-accent: var(--color-accent-orange); }
-:root[data-accent='pink'] { --color-accent: var(--color-accent-pink); }
-:root[data-accent='brown'] { --color-accent: var(--color-accent-brown); }
+  /* Line weights — the main hierarchy tool. */
+  --w-hair: 1px;     /* idle traces, rules */
+  --w-trace: 1.5px;  /* block outlines */
+  --w-active: 2.5px; /* lit traces, focused/active block outlines */
+
+  /* Spacing scale, in grid quarters (6px). */
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1.125rem;
+  --space-4: 1.5rem;
+  --space-6: 2.25rem;
+  --space-8: 3rem;
+  --space-12: 4.5rem;
+
+  /* Motion: one duration, one curve. Zeroed under reduced motion below. */
+  --dur: 220ms;
+  --ease: cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur: 0ms;
+  }
+}
 
 @layer base {
   * {
@@ -88,44 +96,19 @@
     outline-offset: 3px;
   }
 
-  /* Interaction 1 of 4: drawn underline on inline links, revealed left to
-     right on hover/focus via a clip-path wipe over a static SVG stroke. The
-     stroke shape is applied as a mask over a solid --color-accent fill
-     (rather than baked into the SVG as a literal color), so it still flips
-     when the dark @theme block above is uncommented. */
+  /* Links: ink with a hairline underline; hover/focus thickens the line.
+     Weight, not color, is the cue. */
   a {
-    position: relative;
-    display: inline-block;
-    color: var(--color-accent);
-    text-decoration: none;
+    color: var(--color-ink);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--w-hair);
+    text-underline-offset: 0.22em;
+    transition: text-decoration-thickness var(--dur) var(--ease);
   }
 
-  a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -0.15em;
-    height: 0.4em;
-    background: var(--color-accent);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1,3.4 C20,1.6 40,4.6 60,2.6 C75,1 90,4.2 99,3' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
-      left center / 100% 55% no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1,3.4 C20,1.6 40,4.6 60,2.6 C75,1 90,4.2 99,3' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
-      left center / 100% 55% no-repeat;
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.3s ease;
-    pointer-events: none;
-  }
-
-  a:hover::after,
-  a:focus-visible::after {
-    clip-path: inset(0 0 0 0);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    a::after {
-      transition: none;
-    }
+  a:hover,
+  a:focus-visible {
+    text-decoration-thickness: 2px;
   }
 }
 
@@ -362,8 +345,8 @@
 /* Small footer contact box: a flat inset panel, square corners, no
    border/shadow — just enough visual separation from the copyright line. */
 .footer-contact {
-  background: var(--color-ground-sunk);
-  padding: 1rem 1.25rem;
+  border: var(--w-trace) solid var(--color-ink);
+  padding: var(--space-3) var(--space-4);
 }
 
 /* Social link chips (components/SocialLinks.astro): icon + label in a
@@ -400,8 +383,10 @@
     box-shadow 0.2s ease;
 }
 
-.social-link::after {
-  content: none;
+.social-link,
+.social-link:hover,
+.social-link:focus-visible {
+  text-decoration: none;
 }
 
 .social-link__icon {
@@ -461,10 +446,10 @@
    same mechanism as .section-title (scripts/typewriter.js). */
 .brand-mark {
   font-family: var(--font-mono);
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--color-ink);
-  letter-spacing: 0.01em;
+  text-decoration: none;
 }
 
 /* Section titles (Projects, Experience, Journal, ...): bigger, monospace,
@@ -771,11 +756,29 @@ a.project-row__media-wrap:focus-visible .media-well video {
 /* Header nav links: muted, with the current page (Blog, on /blog/) in ink
    so you can tell where you are. */
 .nav-link {
-  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-line);
+  text-decoration: none;
 }
 
+.nav-link:hover,
+.nav-link:focus-visible,
 .nav-link[aria-current='page'] {
   color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* Site chrome: header and footer read as the die's package edge — a
+   single ink rule, with the content between them. */
+.site-header {
+  border-bottom: var(--w-hair) solid var(--color-ink);
+}
+
+.site-footer {
+  border-top: var(--w-hair) solid var(--color-ink);
+  margin-top: var(--space-12);
 }
 
 /* ---------------------------------------------------------------------

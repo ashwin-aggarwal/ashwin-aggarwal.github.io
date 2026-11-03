@@ -1,13 +1,14 @@
 ---
 import '../styles/global.css';
-// Self-hosted, sitewide fonts only — Fraunces (display) and IBM Plex Sans
-// (body/UI). Caveat is bookshelf-only and is imported from
+// Self-hosted, sitewide fonts only — IBM Plex Sans (reading) and IBM Plex
+// Mono (labels). Caveat is bookshelf-only and is imported from
 // components/bookshelf/Bookshelf.astro instead, never here.
-import '@fontsource-variable/fraunces/full.css';
 import '@fontsource/ibm-plex-sans/latin.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/ibm-plex-mono/latin-600.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import AccentPicker from '../components/AccentPicker.astro';
 
 interface Props {
   title?: string;
@@ -25,7 +26,6 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <AccentPicker />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content={description} />
     <title>{title}</title>
@@ -36,10 +36,5 @@ const {
       <slot />
     </main>
     <Footer />
-    <script>
-      import { initTypewriter } from '../scripts/typewriter.js';
-
-      initTypewriter();
-    </script>
   </body>
 </html>
