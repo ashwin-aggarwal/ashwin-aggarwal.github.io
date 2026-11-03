@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import { getProjects } from '../lib/content';
+
+const projects = await getProjects();
+---
+
+<BaseLayout title="Projects — Ashwin Aggarwal">
+  <section id="projects" class="scroll-mt-24 py-10">
+    <div class="marginal marginal--wide">
+      <div class="marginal__content">
+        <h1 class="section-title">Projects</h1>
+      </div>
+    </div>
+
+    {projects.map((project) => <ProjectRow project={project} />)}
+  </section>
+
+
+  <script>
+    import { initMediaWells } from '../scripts/mediaWell.js';
+
+    initMediaWells();
+  </script>
+</BaseLayout>

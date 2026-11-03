@@ -3,20 +3,15 @@ import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Bookshelf from '../components/bookshelf/Bookshelf.astro';
 import BookStage from '../components/bookshelf/BookStage.astro';
-import ProjectRow from '../components/ProjectRow.astro';
-import SocialLinks from '../components/SocialLinks.astro';
-import { getBio, getNowItems, getProjects, getExperience, getJournalEntries } from '../lib/content';
+import DieMap from '../components/die/DieMap.astro';
+import { anchorId, getBio, getNowItems, getProjects, getJournalEntries } from '../lib/content';
 
 const bio = await getBio();
-const { Content: BioContent } = await render(bio);
 
 const nowItems = await getNowItems();
 const nowRendered = await Promise.all(nowItems.map((item) => render(item)));
 
-const projects = await getProjects();
-
-const experience = await getExperience();
-const experienceRendered = await Promise.all(experience.map((item) => render(item)));
+const projectIds = (await getProjects()).map((p) => anchorId(p.id));
 
 const journalEntries = await getJournalEntries();
 const journalByYear = new Map<number, typeof journalEntries>();
@@ -31,29 +26,23 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
 ---
 
 <BaseLayout>
-  <section id="about" class="content-col content-col--wide scroll-mt-24 py-16">
-    <div class="about-grid">
-      <div class="min-w-0">
-        <p class="eyebrow" data-typewriter aria-label={bio.data.identityLine}>
-          <span data-typewriter-text aria-hidden="true">{bio.data.identityLine}</span>
-        </p>
-        <h1 class="font-display mt-2 text-4xl sm:text-5xl" data-typewriter aria-label={bio.data.name}>
-          <span data-typewriter-text aria-hidden="true">{bio.data.name}</span>
-        </h1>
-
-        <div class="prose mt-6 text-[#000]">
-          <BioContent />
-        </div>
-
-        {bio.data.location && <p class="mt-6 mb-0 text-sm text-[color:var(--color-ink-muted)]">{bio.data.location}</p>}
-        <SocialLinks class="mt-4" />
-      </div>
-
-      <div class="about-grid__headshot" data-media-well>
-        {bio.data.headshot && <img data-media src={bio.data.headshot} alt="" width="320" height="320" />}
-      </div>
-    </div>
+  <section class="home-intro content-col py-12">
+    <h1 class="home-intro__name">{bio.data.name}</h1>
+    <p class="home-intro__tagline">{bio.data.tagline}</p>
   </section>
+
+  <DieMap />
+
+  {/* Old single-page deep links (/#about, /#leaselooker, ...) now live on
+      their own routes. Hashes never reach the server, so forward them here. */}
+  <script is:inline define:vars={{ projectIds }}>
+    (function () {
+      var h = location.hash.slice(1);
+      if (!h) return;
+      if (h === 'about' || h === 'projects' || h === 'experience') location.replace('/' + h + '/');
+      else if (projectIds.indexOf(h) !== -1) location.replace('/projects/#' + h);
+    })();
+  </script>
 
   {
     // "Recent News" — disabled for now. To bring it back: flip this to
@@ -85,73 +74,6 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
       </section>
     )
   }
-
-  <section id="projects" class="scroll-mt-24 py-10">
-    <div class="marginal marginal--wide">
-      <div class="marginal__content">
-        <h2 class="section-title" data-typewriter aria-label="Projects">
-          <span data-typewriter-text aria-hidden="true">Projects</span>
-        </h2>
-      </div>
-    </div>
-
-    {projects.map((project) => <ProjectRow project={project} />)}
-  </section>
-
-  <section id="experience" class="scroll-mt-24 py-10">
-    <div class="marginal">
-      <div class="marginal__content">
-        <h2 class="section-title" data-typewriter aria-label="Experience">
-          <span data-typewriter-text aria-hidden="true">Experience</span>
-        </h2>
-      </div>
-    </div>
-
-    <ol class="timeline mt-8">
-      {
-        experience.map((item, i) => {
-          const { Content } = experienceRendered[i];
-          return (
-            <li class="timeline__item content-col">
-              <div class="timeline__row">
-                <span class="timeline__rail" aria-hidden="true" />
-                <span class="timeline__marker" aria-hidden="true" />
-                <div class="timeline__body">
-                  <h3 class="title-mono" data-typewriter aria-label={item.data.role}>
-                    <span data-typewriter-text aria-hidden="true">{item.data.role}</span>
-                  </h3>
-
-                  <div class="mt-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <p class="text-sm text-[color:var(--color-ink-muted)]">
-                      {item.data.company}
-                      {item.data.location && <>{' — '}{item.data.location}</>}
-                    </p>
-                    <p class="text-sm text-[color:var(--color-accent)]">
-                      {item.data.start} — {item.data.end}
-                    </p>
-                  </div>
-
-                  {/* One-liner only for now; the bullets are commented out in
-                      each src/content/experience/*.md. To restore the
-                      disclosure, swap this div back for:
-                  <details class="disclosure mt-3">
-                    <summary class="disclosure__summary">Read more</summary>
-                    <div class="prose mt-3">
-                      <Content />
-                    </div>
-                  </details>
-                  */}
-                  <div class="prose mt-3">
-                    <Content />
-                  </div>
-                </div>
-              </div>
-            </li>
-          );
-        })
-      }
-    </ol>
-  </section>
 
   {
     // Journal — hidden for now. To bring it back: flip this to true (and
@@ -207,8 +129,5 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
   }
   <script>
     import '../scripts/main.js';
-    import { initMediaWells } from '../scripts/mediaWell.js';
-
-    initMediaWells();
   </script>
 </BaseLayout>

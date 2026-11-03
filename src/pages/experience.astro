@@ -1,0 +1,62 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getExperience } from '../lib/content';
+
+const experience = await getExperience();
+const experienceRendered = await Promise.all(experience.map((item) => render(item)));
+---
+
+<BaseLayout title="Experience — Ashwin Aggarwal">
+  <section id="experience" class="scroll-mt-24 py-10">
+    <div class="marginal">
+      <div class="marginal__content">
+        <h1 class="section-title">Experience</h1>
+      </div>
+    </div>
+
+    <ol class="timeline mt-8">
+      {
+        experience.map((item, i) => {
+          const { Content } = experienceRendered[i];
+          return (
+            <li class="timeline__item content-col">
+              <div class="timeline__row">
+                <span class="timeline__rail" aria-hidden="true" />
+                <span class="timeline__marker" aria-hidden="true" />
+                <div class="timeline__body">
+                  <h2 class="title-mono">{item.data.role}</h2>
+
+                  <div class="mt-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <p class="text-sm text-[color:var(--color-ink-muted)]">
+                      {item.data.company}
+                      {item.data.location && <>{' — '}{item.data.location}</>}
+                    </p>
+                    <p class="text-sm text-[color:var(--color-accent)]">
+                      {item.data.start} — {item.data.end}
+                    </p>
+                  </div>
+
+                  {/* One-liner only for now; the bullets are commented out in
+                      each src/content/experience/*.md. To restore the
+                      disclosure, swap this div back for:
+                  <details class="disclosure mt-3">
+                    <summary class="disclosure__summary">Read more</summary>
+                    <div class="prose mt-3">
+                      <Content />
+                    </div>
+                  </details>
+                  */}
+                  <div class="prose mt-3">
+                    <Content />
+                  </div>
+                </div>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </section>
+
+</BaseLayout>

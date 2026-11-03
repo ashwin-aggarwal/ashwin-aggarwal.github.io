@@ -1,0 +1,368 @@
+/* ---------------------------------------------------------------------
+   Homepage die map (components/die/DieMap.astro).
+   Colors only from the four theme tokens. Line weight carries hierarchy:
+     hairline gray   — substrate, idle silicon, decorative stubs
+     1.5 ink         — live traces, non-compute block frames
+     1.5 gpu         — compute block frames and cells
+     2.5 gpu         — the hovered/focused block and its route
+   Motion: live traces draw in once on load; a single signal runs along a
+   route when its block is hovered or focused. Nothing loops. Under
+   prefers-reduced-motion every animation and transition is off.
+--------------------------------------------------------------------- */
+
+.die-wrap {
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.die {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-mono);
+}
+
+/* Substrate ---------------------------------------------------------- */
+.die__edge {
+  fill: var(--color-ground);
+  stroke: var(--color-ink);
+  stroke-width: var(--w-trace);
+}
+
+.die__grid-line {
+  fill: none;
+  stroke: var(--color-line);
+  stroke-width: 1;
+  opacity: var(--grid-alpha);
+}
+
+.die__pin1 {
+  fill: var(--color-ink);
+}
+
+.die__pad,
+.die__finger,
+.die__idle rect {
+  fill: none;
+  stroke: var(--color-line);
+  stroke-width: var(--w-hair);
+}
+
+.die__finger {
+  fill: var(--color-line);
+}
+
+.die__stub {
+  stroke: var(--color-line);
+  stroke-width: var(--w-hair);
+}
+
+.die__part {
+  fill: var(--color-line);
+  font-size: 12px;
+}
+
+.die__l2-line {
+  stroke: var(--color-line);
+  stroke-width: 1;
+}
+
+/* Live routes -------------------------------------------------------- */
+.route__trace,
+.route__signal {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.route__trace {
+  stroke: var(--color-ink);
+  stroke-width: var(--w-trace);
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+  transition:
+    stroke var(--dur) var(--ease),
+    stroke-width var(--dur) var(--ease);
+  animation: die-draw 900ms var(--ease) both;
+}
+
+.route--about .route__trace { animation-delay: 80ms; }
+.route--blog .route__trace { animation-delay: 160ms; }
+.route--experience .route__trace { animation-delay: 240ms; }
+
+.route__signal {
+  stroke: var(--color-gpu);
+  stroke-width: 4;
+  stroke-dasharray: 60 1000;
+  stroke-dashoffset: 60;
+  opacity: 0;
+}
+
+.route__via {
+  fill: var(--color-ground);
+  stroke: var(--color-ink);
+  stroke-width: var(--w-trace);
+  transition: stroke var(--dur) var(--ease);
+}
+
+@keyframes die-draw {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes die-signal {
+  0% { stroke-dashoffset: 60; opacity: 1; }
+  90% { opacity: 1; }
+  100% { stroke-dashoffset: -1000; opacity: 0; }
+}
+
+/* Blocks ------------------------------------------------------------- */
+.blk {
+  cursor: pointer;
+  outline: none; /* replaced by .blk__focus below */
+}
+
+.blk__frame {
+  fill: var(--color-ground);
+  stroke: var(--color-ink);
+  stroke-width: var(--w-trace);
+  transition:
+    stroke var(--dur) var(--ease),
+    stroke-width var(--dur) var(--ease),
+    fill var(--dur) var(--ease);
+}
+
+.blk--compute .blk__frame {
+  stroke: var(--color-gpu);
+}
+
+.blk__name {
+  fill: var(--color-ink);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.blk__part {
+  fill: var(--color-line);
+  font-size: 12px;
+}
+
+.blk__cell rect {
+  fill: color-mix(in srgb, var(--color-gpu) 8%, transparent);
+  stroke: var(--color-gpu);
+  stroke-width: 1;
+}
+
+.blk__cell text {
+  fill: var(--color-gpu);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.blk__cell .blk__core {
+  fill: color-mix(in srgb, var(--color-gpu) 22%, transparent);
+  stroke: none;
+}
+
+.blk__residual {
+  fill: none;
+  stroke: var(--color-gpu);
+  stroke-width: 1;
+}
+
+.blk__add {
+  fill: var(--color-ground);
+  stroke: var(--color-gpu);
+  stroke-width: 1;
+}
+
+.blk__bank {
+  stroke: var(--color-line);
+  stroke-width: var(--w-hair);
+}
+
+.blk__sched {
+  stroke: var(--color-line);
+  stroke-width: var(--w-hair);
+}
+
+/* Keyboard focus: an ink dashed ring around the block, distinct from the
+   green hover state, so focus is always visible even mid-hover. */
+.blk__focus {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  opacity: 0;
+}
+
+.blk:focus-visible .blk__focus {
+  opacity: 1;
+}
+
+/* Active block (hover or keyboard focus): frame goes heavy green, a light
+   green wash comes up inside it. */
+.blk:is(:hover, :focus-visible) .blk__frame {
+  stroke: var(--color-gpu);
+  stroke-width: var(--w-active);
+  fill: color-mix(in srgb, var(--color-gpu) 6%, var(--color-ground));
+}
+
+/* Active route: lit from the I/O edge to its block. :has() keeps the
+   wiring in CSS — no script. Contact has no route; its block lights the
+   I/O pad fingers instead. */
+.die:has(.blk--projects:is(:hover, :focus-visible)) .route--projects .route__trace,
+.die:has(.blk--about:is(:hover, :focus-visible)) .route--about .route__trace,
+.die:has(.blk--blog:is(:hover, :focus-visible)) .route--blog .route__trace,
+.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__trace {
+  stroke: var(--color-gpu);
+  stroke-width: var(--w-active);
+}
+
+.die:has(.blk--projects:is(:hover, :focus-visible)) .route--projects .route__via,
+.die:has(.blk--about:is(:hover, :focus-visible)) .route--about .route__via,
+.die:has(.blk--blog:is(:hover, :focus-visible)) .route--blog .route__via,
+.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__via {
+  stroke: var(--color-gpu);
+}
+
+.die:has(.blk--projects:is(:hover, :focus-visible)) .route--projects .route__signal,
+.die:has(.blk--about:is(:hover, :focus-visible)) .route--about .route__signal,
+.die:has(.blk--blog:is(:hover, :focus-visible)) .route--blog .route__signal,
+.die:has(.blk--experience:is(:hover, :focus-visible)) .route--experience .route__signal {
+  animation: die-signal 700ms var(--ease) 1 forwards;
+}
+
+.die:has(.blk--contact:is(:hover, :focus-visible)) .die__finger {
+  fill: var(--color-gpu);
+  stroke: var(--color-gpu);
+}
+
+/* Mobile stack ------------------------------------------------------- */
+.die-stack {
+  display: none;
+}
+
+@media (max-width: 819px) {
+  .die {
+    display: none;
+  }
+
+  .die-wrap {
+    padding-inline: var(--space-4);
+  }
+
+  /* The chip: ink outline, pin rows down both long edges (dashed borders
+     read as pads), the substrate grid inside. */
+  .die-stack {
+    display: block;
+    position: relative;
+    padding: var(--space-4) var(--space-4) var(--space-4) var(--space-3);
+    border: var(--w-trace) solid var(--color-ink);
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--color-line) 12%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-line) 12%, transparent) 1px, transparent 1px);
+    background-size: var(--grid) var(--grid);
+  }
+
+  .die-stack::before,
+  .die-stack::after {
+    content: '';
+    position: absolute;
+    top: var(--space-4);
+    bottom: var(--space-4);
+    width: 0;
+    border-left: 6px dashed var(--color-line);
+  }
+
+  .die-stack::before { left: -8px; }
+  .die-stack::after { right: -8px; }
+
+  .die-stack__part {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-line);
+  }
+
+  /* The bus: one ink trace down the left; each block taps it with a stub. */
+  .die-stack__bus {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0 0 0 var(--space-4);
+    list-style: none;
+    border-left: var(--w-trace) solid var(--color-ink);
+  }
+
+  .die-stack__item {
+    position: relative;
+  }
+
+  .die-stack__item::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-4));
+    top: 50%;
+    width: var(--space-4);
+    border-top: var(--w-trace) solid var(--color-ink);
+    transition:
+      border-color var(--dur) var(--ease),
+      border-top-width var(--dur) var(--ease);
+  }
+
+  .die-stack__blk {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+    min-height: 3.5rem;
+    padding: var(--space-3) var(--space-3);
+    border: var(--w-trace) solid var(--color-ink);
+    background: var(--color-ground);
+    font-family: var(--font-mono);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+      border-color var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease);
+  }
+
+  .die-stack__item--compute .die-stack__blk {
+    border-color: var(--color-gpu);
+  }
+
+  .die-stack__name {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .die-stack__desc {
+    font-size: 0.75rem;
+    color: var(--color-line);
+  }
+
+  .die-stack__blk:is(:hover, :focus-visible) {
+    border-color: var(--color-gpu);
+    box-shadow: inset 0 0 0 1px var(--color-gpu);
+  }
+
+  .die-stack__item:has(.die-stack__blk:is(:hover, :focus-visible))::before {
+    border-color: var(--color-gpu);
+    border-top-width: var(--w-active);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route__trace,
+  .route__signal {
+    animation: none !important;
+  }
+
+  .route__signal {
+    opacity: 0 !important;
+  }
+}

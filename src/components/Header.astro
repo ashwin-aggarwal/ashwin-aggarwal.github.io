@@ -1,21 +1,27 @@
 ---
-// Site-wide chrome: brand mark (links home) + anchor links to sections on
-// the home page, plus Blog (its own page). Section links are root-relative
-// (/#about) so they still work from /blog/. No nav bar, no background fill,
-// not sticky — it scrolls away with the page.
-const onBlog = Astro.url.pathname.replace(/\/$/, '') === '/blog';
+// Site-wide chrome: brand mark (links home, to the die) + one link per
+// route. The current route gets aria-current so it reads (and looks)
+// selected. Not sticky — it scrolls away with the page.
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  { href: '/about/', label: 'About' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/experience/', label: 'Experience' },
+  { href: '/blog/', label: 'Blog' },
+];
+const isCurrent = (href: string) => path === href.replace(/\/$/, '') || path.startsWith(href);
 ---
 
 <header class="site-header content-col flex flex-wrap items-baseline gap-x-6 gap-y-3 pt-8 pb-4 text-[0.95rem]">
-  <a class="brand-mark" href="/" data-typewriter aria-label="Ashwin Aggarwal">
-    <span data-typewriter-text aria-hidden="true">AKA</span>
-  </a>
+  <a class="brand-mark" href="/" aria-label="Ashwin Aggarwal, home">AKA</a>
 
   <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Site">
-    <a class="nav-link" href="/#about">About</a>
-    <a class="nav-link" href="/#projects">Projects</a>
-    <a class="nav-link" href="/#experience">Experience</a>
-    <!-- Journal — hidden with the section in index.astro. Restore together. -->
-    <a class="nav-link" href="/blog/" aria-current={onBlog ? 'page' : undefined}>Blog</a>
+    {
+      links.map((l) => (
+        <a class="nav-link" href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))
+    }
   </nav>
 </header>

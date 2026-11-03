@@ -442,6 +442,20 @@
   }
 }
 
+/* Home intro above the die: name and the existing tagline, nothing else. */
+.home-intro__name {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.home-intro__tagline {
+  margin: var(--space-2) 0 0;
+  color: var(--color-line);
+}
+
 /* Header brand mark: bold, bigger, monospace, typewriter reveal on load —
    same mechanism as .section-title (scripts/typewriter.js). */
 .brand-mark {

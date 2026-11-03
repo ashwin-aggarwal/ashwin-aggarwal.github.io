@@ -1,0 +1,230 @@
+---
+// Homepage die map. Layout follows a real GA102-style floorplan:
+//   - compute clusters (GPCs) in the top and bottom rows,
+//   - a full-width L2 cache strip through the middle,
+//   - memory-controller pads down both long edges,
+//   - the host / I/O interface on the bottom edge, where every live trace
+//     enters the chip.
+// Site sections map onto those regions: Projects and Experience are live
+// GPCs, Blog is the L2, About is the GigaThread (command) engine, Contact
+// is the PCIe / I/O block. GPC 2 and GPC 3 are idle silicon: drawn in the
+// gray line color, aria-hidden, not interactive.
+//
+// Two renderings of the same five links:
+//   .die       — SVG floorplan, >= 820px
+//   .die-stack — vertical stack of the same blocks, < 820px
+// Only one is displayed at a time (display:none), so screen readers and the
+// tab order only ever see one set of links.
+//
+// Hover/focus wiring is pure CSS (:has), no JS. See die.css.
+import './die.css';
+import { getProjects } from '../../lib/content';
+
+const projects = await getProjects();
+const experienceCount = 5;
+
+// Orthogonal route with chamfered (45°) corners, PCB style.
+function route(points: [number, number][], r = 8): string {
+  let d = `M${points[0][0]},${points[0][1]}`;
+  for (let i = 1; i < points.length - 1; i++) {
+    const [px, py] = points[i - 1];
+    const [cx, cy] = points[i];
+    const [nx, ny] = points[i + 1];
+    const inX = Math.sign(cx - px), inY = Math.sign(cy - py);
+    const outX = Math.sign(nx - cx), outY = Math.sign(ny - cy);
+    d += ` L${cx - inX * r},${cy - inY * r} L${cx + outX * r},${cy + outY * r}`;
+  }
+  const last = points[points.length - 1];
+  return d + ` L${last[0]},${last[1]}`;
+}
+
+// Live routes: each starts on the top edge of the I/O block and ends at the
+// block it feeds. Lanes run in the gutters between blocks and never cross.
+const routes = {
+  projects: route([[232, 536], [232, 528], [102, 528], [102, 268], [352, 268], [352, 258]]),
+  about: route([[252, 536], [252, 516], [200, 516], [200, 508]]),
+  blog: route([[320, 536], [320, 342]]),
+  experience: route([[408, 536], [408, 528], [898, 528], [898, 268], [750, 268], [750, 258]]),
+};
+const vias: Record<string, [number, number][]> = {
+  projects: [[232, 536], [352, 258]],
+  about: [[252, 536], [200, 508]],
+  blog: [[320, 536], [320, 342]],
+  experience: [[408, 536], [750, 258]],
+};
+
+// Decorative crossbar stubs (L2 <-> GPC) and pad fingers. Gray, idle.
+const stubsTop = [160, 240, 440, 520, 660, 820];
+const stubsBottom = [160, 260, 400, 480, 560, 680, 760, 840];
+const mcPads = [0, 1, 2, 3, 4, 5].map((i) => 84 + i * 84);
+const ioFingers = Array.from({ length: 13 }, (_, i) => 228 + i * 15);
+
+// Projects GPC: one SM cell per project, numbered in display order.
+const cellX0 = 128, cellW = (448 - 6 * 8) / 7;
+
+const stackBlocks = [
+  { key: 'projects', href: '/projects/', name: 'Projects', part: 'GPC 0', compute: true },
+  { key: 'experience', href: '/experience/', name: 'Experience', part: 'GPC 1', compute: true },
+  { key: 'blog', href: '/blog/', name: 'Blog', part: 'L2 cache', compute: false },
+  { key: 'about', href: '/about/', name: 'About', part: 'GigaThread engine', compute: false },
+  { key: 'contact', href: '#contact', name: 'Contact', part: 'PCIe / I/O', compute: false },
+];
+---
+
+<div class="die-wrap">
+  <svg class="die" viewBox="0 0 1000 640" role="group" aria-label="Site map, drawn as a GPU die">
+    <defs>
+      <pattern id="die-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <path d="M24 0H0V24" class="die__grid-line" />
+      </pattern>
+      <pattern id="die-l2" width="6" height="10" patternUnits="userSpaceOnUse">
+        <path d="M3 0V10" class="die__l2-line" />
+      </pattern>
+    </defs>
+
+    <!-- Substrate: die outline, grid, pin-1 notch, edge pads. -->
+    <g aria-hidden="true">
+      <rect class="die__edge" x="40" y="40" width="920" height="570" />
+      <rect x="41" y="41" width="918" height="568" fill="url(#die-grid)" />
+      <path class="die__pin1" d="M40 40h22L40 62z" />
+      <text class="die__part" x="960" y="30" text-anchor="end">AKA-102</text>
+      {
+        mcPads.map((y) => (
+          <>
+            <rect class="die__pad" x="52" y={y} width="36" height="60" />
+            <rect class="die__pad" x="912" y={y} width="36" height="60" />
+          </>
+        ))
+      }
+      <text class="die__part" x="70" y="76" text-anchor="middle">MC</text>
+      <text class="die__part" x="930" y="76" text-anchor="middle">MC</text>
+      {stubsTop.map((x) => <path class="die__stub" d={`M${x} 258V278`} />)}
+      {stubsBottom.map((x) => <path class="die__stub" d={`M${x} 342V362`} />)}
+      {ioFingers.map((x) => <rect class="die__finger" x={x} y="590" width="8" height="12" />)}
+
+      <!-- Idle silicon: GPC 2 and GPC 3. -->
+      {
+        [
+          { x: 340, w: 270, name: 'GPC 2' },
+          { x: 630, w: 258, name: 'GPC 3' },
+        ].map((g) => (
+          <g class="die__idle">
+            <rect x={g.x} y="362" width={g.w} height="146" />
+            <text class="die__part" x={g.x + 16} y="388">{g.name}</text>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <rect x={g.x + 16 + i * ((g.w - 32 - 32) / 5 + 8)} y="404" width={(g.w - 32 - 32) / 5} height="88" />
+            ))}
+          </g>
+        ))
+      }
+    </g>
+
+    <!-- Live routes, drawn under the blocks. Each has a signal overlay
+         that runs once along it when its block is hovered or focused. -->
+    <g aria-hidden="true">
+      {
+        Object.entries(routes).map(([key, d]) => (
+          <g class={`route route--${key}`}>
+            <path class="route__trace" d={d} pathLength="1000" />
+            <path class="route__signal" d={d} pathLength="1000" />
+            {vias[key].map(([cx, cy]) => <circle class="route__via" cx={cx} cy={cy} r="3.5" />)}
+          </g>
+        ))
+      }
+    </g>
+
+    <!-- Live blocks. Each is one link; its drawing is aria-hidden so the
+         accessible name is just the section name. -->
+    <a class="blk blk--compute blk--projects" href="/projects/" aria-label="Projects">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="104" y="64" width="496" height="202" />
+        <rect class="blk__frame" x="112" y="72" width="480" height="186" />
+        <text class="blk__name" x="128" y="102">Projects</text>
+        <text class="blk__part" x="576" y="102" text-anchor="end">GPC 0</text>
+        {
+          projects.map((_, i) => {
+            const x = cellX0 + i * (cellW + 8);
+            return (
+              <g class="blk__cell">
+                <rect x={x} y="120" width={cellW} height="122" />
+                <text x={x + 8} y="138">{String(i + 1).padStart(2, '0')}</text>
+                <rect class="blk__core" x={x + 8} y="202" width={cellW - 16} height="10" />
+                <rect class="blk__core" x={x + 8} y="218" width={cellW - 16} height="10" />
+              </g>
+            );
+          })
+        }
+      </g>
+    </a>
+
+    <a class="blk blk--compute blk--experience" href="/experience/" aria-label="Experience">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="604" y="64" width="292" height="202" />
+        <rect class="blk__frame" x="612" y="72" width="276" height="186" />
+        <text class="blk__name" x="628" y="102">Experience</text>
+        <text class="blk__part" x="872" y="102" text-anchor="end">GPC 1</text>
+        <!-- Transformer stack: layers bottom-up, residual stream on the right. -->
+        <path class="blk__residual" d="M860 246V116" />
+        {
+          Array.from({ length: experienceCount }, (_, i) => {
+            const y = 224 - i * 26;
+            return (
+              <g class="blk__cell">
+                <rect x="628" y={y} width="208" height="18" />
+                <text x="636" y={y + 13}>{`L${i + 1}`}</text>
+                <path class="blk__residual" d={`M836 ${y + 9}H854`} />
+                <circle class="blk__add" cx="860" cy={y + 9} r="4" />
+              </g>
+            );
+          })
+        }
+      </g>
+    </a>
+
+    <a class="blk blk--blog" href="/blog/" aria-label="Blog">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="104" y="270" width="792" height="80" />
+        <rect class="blk__frame" x="112" y="278" width="776" height="64" />
+        <text class="blk__name" x="128" y="316">Blog</text>
+        <text class="blk__part" x="872" y="316" text-anchor="end">L2 cache</text>
+        <rect class="blk__bank" x="220" y="290" width="264" height="40" fill="url(#die-l2)" />
+        <rect class="blk__bank" x="508" y="290" width="264" height="40" fill="url(#die-l2)" />
+      </g>
+    </a>
+
+    <a class="blk blk--about" href="/about/" aria-label="About">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="104" y="354" width="204" height="162" />
+        <rect class="blk__frame" x="112" y="362" width="188" height="146" />
+        <text class="blk__name" x="128" y="392">About</text>
+        <text class="blk__part" x="128" y="412">GigaThread</text>
+        {[0, 1, 2].map((i) => <path class="blk__sched" d={`M128 ${448 + i * 14}H284`} />)}
+      </g>
+    </a>
+
+    <a class="blk blk--contact" href="#contact" aria-label="Contact">
+      <g aria-hidden="true">
+        <rect class="blk__focus" x="212" y="528" width="216" height="64" />
+        <rect class="blk__frame" x="220" y="536" width="200" height="48" />
+        <text class="blk__name" x="236" y="566">Contact</text>
+        <text class="blk__part" x="404" y="566" text-anchor="end">PCIe / I/O</text>
+      </g>
+    </a>
+  </svg>
+
+  <nav class="die-stack" aria-label="Site map">
+    <p class="die-stack__part" aria-hidden="true">AKA-102</p>
+    <ol class="die-stack__bus">
+      {
+        stackBlocks.map((b) => (
+          <li class={`die-stack__item${b.compute ? ' die-stack__item--compute' : ''}`}>
+            <a class="die-stack__blk" href={b.href}>
+              <span class="die-stack__name">{b.name}</span>
+              <span class="die-stack__desc" aria-hidden="true">{b.part}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+</div>
