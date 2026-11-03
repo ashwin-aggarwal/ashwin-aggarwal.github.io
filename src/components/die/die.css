@@ -6,7 +6,8 @@
      1.5 gpu         — compute block frames and cells
      2.5 gpu         — the hovered/focused block and its route
    Motion: live traces draw in once on load; a single signal runs along a
-   route when its block is hovered or focused. Nothing loops. Under
+   route when its block is hovered or focused, and its name types itself
+   out. Nothing loops. Under
    prefers-reduced-motion every animation and transition is off.
 --------------------------------------------------------------------- */
 
@@ -253,6 +254,28 @@
   stroke: var(--color-gpu);
 }
 
+/* Typewriter: on hover/focus the block's name types itself out one
+   character per step, then its part label. Plex Mono is monospaced, so a
+   right-edge clip stepped once per character (counts set per block as
+   --name / --part in DieMap.astro) reveals exactly one glyph at a time.
+   Runs once per hover, never loops; at rest the text is fully shown. */
+@keyframes die-type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.blk:is(:hover, :focus-visible) .blk__name {
+  animation: die-type calc(var(--name) * 45ms) steps(var(--name), end) both;
+}
+
+.blk:is(:hover, :focus-visible) .blk__part {
+  animation: die-type calc(var(--part) * 30ms) steps(var(--part), end) calc(var(--name) * 45ms) both;
+}
+
 /* Memory-controller pad links --------------------------------------- */
 .pad-link {
   cursor: pointer;
@@ -447,7 +470,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .route__trace,
-  .route__signal {
+  .route__signal,
+  .blk__name,
+  .blk__part {
     animation: none !important;
   }
 
