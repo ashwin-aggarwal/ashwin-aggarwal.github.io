@@ -1122,6 +1122,12 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   line-height: 1.4;
 }
 
+.course__meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-line);
+}
+
 /* Readings wheel (/readings/) ----------------------------------------- */
 .wheel {
   --book-w: 13rem;

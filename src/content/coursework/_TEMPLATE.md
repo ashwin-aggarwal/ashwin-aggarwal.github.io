@@ -3,7 +3,9 @@
 # This template stays hidden because draft: true. One file per course.
 code: CS 0000
 title: Course title
-term: Fall 2025
-order: 1
+area: Computer science # or: Mathematics, Science and engineering
+note: Python # optional — e.g. the language
+term: Fall 2025 # optional
+order: 1 # position within its area
 draft: true
 ---

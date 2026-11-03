@@ -115,15 +115,18 @@ const blog = defineCollection({
   }),
 });
 
-// Coursework, one file per course (/coursework/). Grouped by `term` on the
-// page, terms in first-seen order of `order`.
+// Coursework, one file per course (/coursework/). Grouped by `area` on the
+// page (in the order listed in the enum), sorted by `order` within each.
+export const COURSE_AREAS = ['Computer science', 'Mathematics', 'Science and engineering'] as const;
 const coursework = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/coursework' }),
   schema: z.object({
-    code: z.string(), // "CS 4780"
-    title: z.string(), // "Machine Learning for Intelligent Systems"
-    term: z.string(), // "Fall 2025" — display string
-    order: z.number(), // ascending = top of the page
+    code: z.string(), // "CS 3780"
+    title: z.string(), // official Cornell title
+    area: z.enum(COURSE_AREAS),
+    note: z.string().optional(), // e.g. the language: "OCaml"
+    term: z.string().optional(), // "Fall 2025" — display string
+    order: z.number(), // ascending within its area
     draft: z.boolean().default(false),
   }),
 });
