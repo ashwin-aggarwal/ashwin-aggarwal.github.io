@@ -128,7 +128,7 @@
 
 .marginal {
   display: grid;
-  grid-template-columns: 1fr min(42rem, 100%) 1fr;
+  grid-template-columns: 1fr min(42rem, 100% - 3rem) 1fr;
   column-gap: 1.5rem;
   padding-inline: 1.5rem;
 }
@@ -163,7 +163,7 @@
 }
 
 .marginal--wide {
-  grid-template-columns: 1fr min(64rem, 100%) 1fr;
+  grid-template-columns: 1fr min(64rem, 100% - 3rem) 1fr;
 }
 
 .prose {
@@ -756,7 +756,15 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 }
 
 /* Site chrome: header and footer read as the die's package edge — a
-   single ink rule, with the content between them. */
+   single ink rule, with the content between them. Same 64rem frame as the
+   die and the wide pages, rule spanning the content only. */
+.site-header,
+.site-footer {
+  width: min(64rem - 2 * var(--space-4), 100% - 2 * var(--space-4));
+  max-width: none;
+  padding-inline: 0;
+}
+
 .site-header {
   border-bottom: var(--w-hair) solid var(--color-ink);
 }
