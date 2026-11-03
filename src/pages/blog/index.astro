@@ -32,16 +32,26 @@ const slugs = posts.map((p) => p.id);
               <a href={`/blog/${post.id}/`}>{post.data.title}</a>
             </h2>
             <p class="post-item__description">{post.data.description}</p>
-            <p class="post-item__dates">
-              <span>
-                Published <time datetime={isoDate(post.data.published)}>{formatDate(post.data.published)}</time>
-              </span>
-              {updated.valueOf() !== post.data.published.valueOf() && (
+            <div class="post-item__foot">
+              <p class="post-item__dates">
                 <span>
-                  Last edited <time datetime={isoDate(updated)}>{formatDate(updated)}</time>
+                  Published <time datetime={isoDate(post.data.published)}>{formatDate(post.data.published)}</time>
                 </span>
-              )}
-            </p>
+                {updated.valueOf() !== post.data.published.valueOf() && (
+                  <span>
+                    Last edited <time datetime={isoDate(updated)}>{formatDate(updated)}</time>
+                  </span>
+                )}
+              </p>
+              {/* Visual affordance only: the title link already covers the
+                  whole card, so this stays out of the a11y tree / tab order. */}
+              <span class="post-item__cta" aria-hidden="true">
+                Read article
+                <svg class="post-item__cta-arrow" viewBox="0 0 12 12">
+                  <path d="M2 6h8M7 3l3 3-3 3" />
+                </svg>
+              </span>
+            </div>
           </li>
         );
       })

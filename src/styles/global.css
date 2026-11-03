@@ -1168,6 +1168,58 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   color: var(--color-line);
 }
 
+/* Card footer: dates left, "Read article" right. The CTA is drawn as a
+   button so the card reads as clickable at rest; hovering anywhere on the
+   card (or focusing its title link) floods it ink and nudges the arrow. */
+.post-item__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.post-item__foot .post-item__dates {
+  margin: 0;
+}
+
+.post-item__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.7rem;
+  border: var(--w-hair) solid var(--color-ink);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.post-item__cta-arrow {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: translate var(--dur) var(--ease);
+}
+
+.post-item:is(:hover, :focus-within) .post-item__cta {
+  background: var(--color-ink);
+  color: var(--color-ground);
+}
+
+.post-item:is(:hover, :focus-within) .post-item__cta-arrow {
+  translate: 3px 0;
+}
+
 /* Post page (/blog/<slug>/) -------------------------------------------
    Reading rules: the grid shows only in the margins (the article sits on
    a solid ground panel), the column is ~68ch, nothing animates. */
