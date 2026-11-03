@@ -815,9 +815,7 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 }
 
 .empty-state {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding-inline: var(--space-4);
+  margin: 0;
   font-family: var(--font-mono);
   font-size: 0.9rem;
   color: var(--color-line);
