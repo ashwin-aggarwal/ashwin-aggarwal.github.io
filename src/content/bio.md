@@ -7,7 +7,7 @@
 # PLACEHOLDER until real values are confirmed.
 name: Ashwin K. Aggarwal
 identityLine: Cornell Student
-tagline: Computer science student at Cornell working on ML, AI, and Robotics.
+tagline: Computer science student at Cornell Engineering working on Machine Learning and AI Safety
 email: aka96@cornell.edu
 github: https://github.com/ashwin-aggarwal
 linkedin: https://linkedin.com/in/ashwin-aggarwal

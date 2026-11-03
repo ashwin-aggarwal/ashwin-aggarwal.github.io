@@ -309,39 +309,6 @@
   display: block;
 }
 
-/* #experience: a 1px rule down the left with a small square marker per
-   entry. Each item's rail spans its own row edge-to-edge with no gap
-   between items, so consecutive rails read as one continuous line. */
-.timeline {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.timeline__row {
-  position: relative;
-  padding-block: 1.5rem;
-  padding-left: 1.75rem;
-}
-
-.timeline__rail {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--color-rule);
-}
-
-.timeline__marker {
-  position: absolute;
-  left: -3px;
-  top: 1.85rem;
-  width: 7px;
-  height: 7px;
-  background: var(--color-accent);
-}
-
 /* Small footer contact box: a flat inset panel, square corners, no
    border/shadow — just enough visual separation from the copyright line. */
 .footer-contact {
@@ -440,6 +407,18 @@
   .social-link:focus-visible .social-link__arrow {
     translate: none;
   }
+}
+
+/* Page heading block for the routed pages (/experience/, ...): same
+   width and gutters as the content below it. */
+.page-head {
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: var(--space-12) var(--space-4) var(--space-6);
+}
+
+.page-head .section-title {
+  margin: 0;
 }
 
 /* Home intro above the die: name and the existing tagline, nothing else. */
