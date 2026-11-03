@@ -1106,6 +1106,7 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 
 .course {
   display: grid;
+  align-content: start;
   gap: var(--space-1);
   padding: var(--space-3);
   border: var(--w-trace) solid var(--color-gpu);
