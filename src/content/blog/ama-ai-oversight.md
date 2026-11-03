@@ -2,7 +2,7 @@
 title: The American Medical Association Wants Meaningful AI Oversight. But Who Is Actually Auditing the Models?
 description: If medical AI harms a patient, responsibility should fall on those who could have prevented it. But who makes sure they're doing their jobs?
 published: 2026-11-02
-updated: 2026-11-02
+updated: 2026-11-03
 ---
 
 *As AI enters hospitals, we need to rethink who takes responsibility when something goes wrong.*
@@ -144,3 +144,5 @@ And that leaves a practical question worth debating:
 *(This post reflects personal analysis and opinion, not legal advice)*
 
 Thanks for reading :)
+
+Have thoughts? Share them in the comments on [the X post](https://x.com/AshwinKA123/status/2117145580128346306).
