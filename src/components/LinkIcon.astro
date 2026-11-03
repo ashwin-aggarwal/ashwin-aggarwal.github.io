@@ -1,0 +1,23 @@
+---
+// One shared off-site link icon (see src/lib/icons.ts). Renders a nested
+// <svg>, so it works both in HTML and inside the die's SVG.
+import { icons, type LinkKey } from '../lib/icons';
+
+interface Props {
+  name: LinkKey;
+  class?: string;
+  x?: number;
+  y?: number;
+  size?: number;
+}
+
+const { name, class: className, x, y, size } = Astro.props;
+const icon = icons[name];
+const paint = icon.stroke
+  ? { fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }
+  : { fill: 'currentColor' };
+---
+
+<svg class={className} viewBox="0 0 24 24" x={x} y={y} width={size} height={size} aria-hidden="true" {...paint}>
+  {icon.d.map((d) => <path d={d} />)}
+</svg>

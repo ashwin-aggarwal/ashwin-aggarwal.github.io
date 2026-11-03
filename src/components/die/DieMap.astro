@@ -18,9 +18,20 @@
 //
 // Hover/focus wiring is pure CSS (:has), no JS. See die.css.
 import './die.css';
-import { getProjects } from '../../lib/content';
+import { getBio, getProjects } from '../../lib/content';
+import LinkIcon from '../LinkIcon.astro';
 
 const projects = await getProjects();
+const bio = await getBio();
+
+// Off-chip links live on memory-controller pads: the MCs are where a real
+// die talks to the outside world. Two per edge, top pads first.
+const padLinks = [
+  { key: 'resume', label: 'Resume', href: bio.data.resume, x: 52, y: 84 },
+  { key: 'github', label: 'GitHub', href: bio.data.github, x: 52, y: 168 },
+  { key: 'linkedin', label: 'LinkedIn', href: bio.data.linkedin, x: 912, y: 84 },
+  { key: 'x', label: 'X (Twitter)', href: bio.data.x, x: 912, y: 168 },
+].filter((l) => l.href) as { key: 'resume' | 'github' | 'linkedin' | 'x'; label: string; href: string; x: number; y: number }[];
 const experienceCount = 5;
 
 // Orthogonal route with chamfered (45°) corners, PCB style.
@@ -57,7 +68,7 @@ const vias: Record<string, [number, number][]> = {
 // Top stubs stay clear of the Projects/Experience lanes (x 102–352, 750–898).
 const stubsTop = [400, 470, 540, 650, 710];
 const stubsBottom = [160, 260, 400, 480, 560, 680, 760, 840];
-const mcPads = [0, 1, 2, 3, 4, 5].map((i) => 84 + i * 84);
+const mcPads = [2, 3, 4, 5].map((i) => 84 + i * 84);
 const ioFingers = Array.from({ length: 13 }, (_, i) => 228 + i * 15);
 
 // Projects GPC: one SM cell per project, numbered in display order.
@@ -133,6 +144,19 @@ const stackBlocks = [
         ))
       }
     </g>
+
+    <!-- Memory-controller pads carrying the off-site links. -->
+    {
+      padLinks.map((l) => (
+        <a class="pad-link" href={l.href} aria-label={l.label}>
+          <g aria-hidden="true">
+            <rect class="pad-link__focus" x={l.x - 6} y={l.y - 6} width="48" height="72" />
+            <rect class="pad-link__frame" x={l.x} y={l.y} width="36" height="60" />
+            <LinkIcon name={l.key} class="pad-link__icon" x={l.x + 7} y={l.y + 19} size={22} />
+          </g>
+        </a>
+      ))
+    }
 
     <!-- Live blocks. Each is one link; its drawing is aria-hidden so the
          accessible name is just the section name. -->
@@ -227,5 +251,16 @@ const stackBlocks = [
         ))
       }
     </ol>
+    <ul class="die-stack__pads" aria-label="Elsewhere">
+      {
+        padLinks.map((l) => (
+          <li>
+            <a class="die-stack__pad" href={l.href} aria-label={l.label}>
+              <LinkIcon name={l.key} class="die-stack__pad-icon" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </nav>
 </div>
