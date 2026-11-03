@@ -50,3 +50,20 @@ export async function getBlogPosts() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
 }
+
+export async function getCoursework() {
+  const items = await getCollection('coursework', ({ data }) => !data.draft);
+  return items.sort((a, b) => a.data.order - b.data.order);
+}
+
+export async function getReadings() {
+  const items = await getCollection('readings', ({ data }) => !data.draft);
+  return items.sort((a, b) => a.data.order - b.data.order);
+}
+
+// Recent news items with real text. The seed files are empty bullets
+// (label: ""), which shouldn't render.
+export async function getNews() {
+  const items = await getNowItems();
+  return items.filter((i) => i.data.label.trim() || (i.body ?? '').trim());
+}

@@ -115,4 +115,32 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { bio, now, journal, projects, experience, blog };
+// Coursework, one file per course (/coursework/). Grouped by `term` on the
+// page, terms in first-seen order of `order`.
+const coursework = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/coursework' }),
+  schema: z.object({
+    code: z.string(), // "CS 4780"
+    title: z.string(), // "Machine Learning for Intelligent Systems"
+    term: z.string(), // "Fall 2025" — display string
+    order: z.number(), // ascending = top of the page
+    draft: z.boolean().default(false),
+  }),
+});
+
+// Readings, one file per book (/readings/, the cover wheel). Optional
+// markdown body = a short note shown under the selected book.
+const readings = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/readings' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      author: z.string(),
+      cover: image(), // ./covers/<file>
+      status: z.enum(['reading', 'read']).default('read'),
+      order: z.number(), // ascending = first in the wheel
+      draft: z.boolean().default(false),
+    }),
+});
+
+export const collections = { bio, now, journal, projects, experience, blog, coursework, readings };
