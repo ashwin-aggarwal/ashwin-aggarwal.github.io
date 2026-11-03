@@ -728,8 +728,10 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   font-size: 0.9rem;
 }
 
-.notfound__copy p {
+.notfound__copy p,
+.notfound__title {
   margin: 0;
+  font: inherit;
 }
 
 .notfound__hint {

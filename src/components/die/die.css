@@ -154,7 +154,7 @@
 }
 
 .blk__cell rect {
-  fill: color-mix(in srgb, var(--color-gpu) 8%, transparent);
+  fill: color-mix(in srgb, var(--color-gpu) 5%, transparent);
   stroke: var(--color-gpu);
   stroke-width: 1;
 }
