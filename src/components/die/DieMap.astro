@@ -54,7 +54,8 @@ const vias: Record<string, [number, number][]> = {
 };
 
 // Decorative crossbar stubs (L2 <-> GPC) and pad fingers. Gray, idle.
-const stubsTop = [160, 240, 440, 520, 660, 820];
+// Top stubs stay clear of the Projects/Experience lanes (x 102–352, 750–898).
+const stubsTop = [400, 470, 540, 650, 710];
 const stubsBottom = [160, 260, 400, 480, 560, 680, 760, 840];
 const mcPads = [0, 1, 2, 3, 4, 5].map((i) => 84 + i * 84);
 const ioFingers = Array.from({ length: 13 }, (_, i) => 228 + i * 15);

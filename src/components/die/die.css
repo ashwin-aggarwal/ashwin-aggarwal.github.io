@@ -10,7 +10,8 @@
    prefers-reduced-motion every animation and transition is off.
 --------------------------------------------------------------------- */
 
-.die-wrap {
+.die-wrap,
+.home-intro {
   max-width: 64rem;
   margin-inline: auto;
   padding-inline: var(--space-4);
@@ -122,6 +123,7 @@
 .blk {
   cursor: pointer;
   outline: none; /* replaced by .blk__focus below */
+  text-decoration: none;
 }
 
 .blk__frame {
