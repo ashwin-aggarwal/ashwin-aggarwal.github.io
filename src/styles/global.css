@@ -272,18 +272,42 @@
   border: var(--w-hair) solid var(--color-line);
 }
 
-/* Writeup disclosure (project "Read more"). Native <details>; the summary
-   is a mono label with the same +/− sign as the experience layers, and
-   the opened panel keeps the frame language: dashed hairline above, plain
-   readable text inside. */
-.disclosure__summary {
+/* Outlined mono button: blog "Read article" and project "Read more".
+   Ink hairline at rest, floods ink on hover/focus (each user decides what
+   triggers that). Weight and fill, not color, carry the state. */
+.cta {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding-block: var(--space-1);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  gap: 0.45rem;
+  padding: 0.4rem 0.7rem;
+  border: var(--w-hair) solid var(--color-ink);
   color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.cta__arrow {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: translate var(--dur) var(--ease);
+}
+
+/* Writeup disclosure (project "Read more"). Native <details>; the summary
+   is a .cta with the same +/− sign as the experience layers. Hover/focus
+   floods it; open keeps it flooded and swaps the label to "Show less".
+   The opened panel keeps the frame language: dashed hairline above, plain
+   readable text inside. */
+.disclosure__summary {
   cursor: pointer;
   list-style: none;
 }
@@ -292,10 +316,19 @@
   display: none;
 }
 
-.disclosure__summary:hover span:first-child {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.22em;
+.disclosure__summary:is(:hover, :focus-visible),
+.disclosure[open] > .disclosure__summary {
+  background: var(--color-ink);
+  color: var(--color-ground);
+}
+
+.disclosure__less,
+.disclosure[open] .disclosure__more {
+  display: none;
+}
+
+.disclosure[open] .disclosure__less {
+  display: inline;
 }
 
 .disclosure__sign {
@@ -319,10 +352,6 @@
 
 .disclosure[open] .disclosure__sign::after {
   opacity: 0;
-}
-
-.disclosure[open] > .disclosure__summary {
-  color: var(--color-gpu);
 }
 
 .disclosure__panel {
@@ -1164,9 +1193,10 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   color: var(--color-line);
 }
 
-/* Card footer: dates left, "Read article" right. The CTA is drawn as a
-   button so the card reads as clickable at rest; hovering anywhere on the
-   card (or focusing its title link) floods it ink and nudges the arrow. */
+/* Card footer: dates left, "Read article" right. The CTA (.cta, shared
+   with the project "Read more" toggle) makes the card read as clickable at
+   rest; hovering anywhere on the card (or focusing its title link) floods
+   it ink and nudges the arrow. */
 .post-item__foot {
   display: flex;
   flex-wrap: wrap;
@@ -1180,39 +1210,12 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   margin: 0;
 }
 
-.post-item__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.4rem 0.7rem;
-  border: var(--w-hair) solid var(--color-ink);
-  color: var(--color-ink);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  transition:
-    background-color var(--dur) var(--ease),
-    color var(--dur) var(--ease);
-}
-
-.post-item__cta-arrow {
-  width: 0.75rem;
-  height: 0.75rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: translate var(--dur) var(--ease);
-}
-
-.post-item:is(:hover, :focus-within) .post-item__cta {
+.post-item:is(:hover, :focus-within) .cta {
   background: var(--color-ink);
   color: var(--color-ground);
 }
 
-.post-item:is(:hover, :focus-within) .post-item__cta-arrow {
+.post-item:is(:hover, :focus-within) .cta__arrow {
   translate: 3px 0;
 }
 

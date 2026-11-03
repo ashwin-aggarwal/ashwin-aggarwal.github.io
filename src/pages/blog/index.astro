@@ -45,9 +45,9 @@ const slugs = posts.map((p) => p.id);
               </p>
               {/* Visual affordance only: the title link already covers the
                   whole card, so this stays out of the a11y tree / tab order. */}
-              <span class="post-item__cta" aria-hidden="true">
+              <span class="cta" aria-hidden="true">
                 Read article
-                <svg class="post-item__cta-arrow" viewBox="0 0 12 12">
+                <svg class="cta__arrow" viewBox="0 0 12 12">
                   <path d="M2 6h8M7 3l3 3-3 3" />
                 </svg>
               </span>
