@@ -45,9 +45,9 @@ const total = experience.length;
                   aria-controls={panelId}
                   data-layer-toggle
                 >
-                  <span class="layer__index">Layer {n}</span>
-                  <span class="layer__company">{item.data.company}</span>
-                  <span class="layer__role">{item.data.role}</span>
+                  <span class="layer__index">Layer {n}<span class="sr-only">: </span></span>
+                  <span class="layer__company">{item.data.company}<span class="sr-only">, </span></span>
+                  <span class="layer__role">{item.data.role}<span class="sr-only">, </span></span>
                   <span class="layer__dates">
                     {item.data.start} – {item.data.end}
                   </span>

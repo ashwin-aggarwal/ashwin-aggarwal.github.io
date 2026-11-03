@@ -214,6 +214,7 @@
   grid-area: sign;
   position: relative;
   align-self: center;
+  justify-self: end;
   width: 12px;
   height: 12px;
 }
