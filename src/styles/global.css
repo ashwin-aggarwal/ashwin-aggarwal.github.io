@@ -366,6 +366,97 @@
   padding: 1rem 1.25rem;
 }
 
+/* Social link chips (components/SocialLinks.astro): icon + label in a
+   square-cornered outlined tag. Hover/focus floods it with the accent,
+   lifts it 2px and nudges the arrow out. Suppresses the drawn-underline
+   ::after from the base `a` rule — the fill is the hover cue here. */
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.7rem 0.4rem 0.6rem;
+  border: 1px solid var(--color-rule);
+  background: var(--color-ground-raise);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 0 var(--color-rule);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    translate 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.social-link::after {
+  content: none;
+}
+
+.social-link__icon {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  color: var(--color-accent);
+  transition: color 0.2s ease;
+}
+
+.social-link__arrow {
+  width: 0.65rem;
+  height: 0.65rem;
+  flex: none;
+  opacity: 0.45;
+  transition:
+    translate 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.social-link:hover,
+.social-link:focus-visible {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-ground-raise);
+  translate: 0 -2px;
+  box-shadow: 0 3px 0 var(--color-ink);
+}
+
+.social-link:hover .social-link__icon,
+.social-link:focus-visible .social-link__icon {
+  color: var(--color-ground-raise);
+}
+
+.social-link:hover .social-link__arrow,
+.social-link:focus-visible .social-link__arrow {
+  opacity: 1;
+  translate: 2px -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-link,
+  .social-link__icon,
+  .social-link__arrow {
+    transition: none;
+  }
+
+  .social-link:hover,
+  .social-link:focus-visible,
+  .social-link:hover .social-link__arrow,
+  .social-link:focus-visible .social-link__arrow {
+    translate: none;
+  }
+}
+
 /* Header brand mark: bold, bigger, monospace, typewriter reveal on load —
    same mechanism as .section-title (scripts/typewriter.js). */
 .brand-mark {

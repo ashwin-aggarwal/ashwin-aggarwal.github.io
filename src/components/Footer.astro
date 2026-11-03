@@ -1,5 +1,6 @@
 ---
 import { getBio } from '../lib/content';
+import SocialLinks from './SocialLinks.astro';
 
 const year = new Date().getFullYear();
 const bio = await getBio();
@@ -10,9 +11,7 @@ const bio = await getBio();
     <p class="m-0">
       Please reach out at <a href={`mailto:${bio.data.email}`}>{bio.data.email}</a>
     </p>
-    <p class="mt-1 mb-0">
-      <a href={bio.data.linkedin}>LinkedIn</a>
-    </p>
+    <SocialLinks class="mt-3" include={['linkedin', 'x']} />
   </div>
 
   <p class="mt-6 mb-0">&copy; {year} Ashwin Aggarwal.</p>

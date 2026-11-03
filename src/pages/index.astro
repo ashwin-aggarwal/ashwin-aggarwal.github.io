@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Bookshelf from '../components/bookshelf/Bookshelf.astro';
 import BookStage from '../components/bookshelf/BookStage.astro';
 import ProjectRow from '../components/ProjectRow.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import { getBio, getNowItems, getProjects, getExperience, getJournalEntries } from '../lib/content';
 
 const bio = await getBio();
@@ -44,13 +45,8 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'n
           <BioContent />
         </div>
 
-        <p class="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          {bio.data.location && <span class="text-[color:var(--color-ink-muted)]">{bio.data.location}</span>}
-          {bio.data.resume && <a href={bio.data.resume}>Resume</a>}
-          <a href={bio.data.github}>GitHub</a>
-          <a href={bio.data.linkedin}>LinkedIn</a>
-          {bio.data.x && <a href={bio.data.x}>X</a>}
-        </p>
+        {bio.data.location && <p class="mt-6 mb-0 text-sm text-[color:var(--color-ink-muted)]">{bio.data.location}</p>}
+        <SocialLinks class="mt-4" />
       </div>
 
       <div class="about-grid__headshot" data-media-well>
