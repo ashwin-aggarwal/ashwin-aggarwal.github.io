@@ -1407,51 +1407,159 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   line-height: 1.65;
 }
 
-/* Coursework (/coursework/) ------------------------------------------- */
-.term + .term {
+/* Coursework (/coursework/) -------------------------------------------
+   A board of packaged chips. Each area is a bank: name and a die-style
+   part label over a hairline. Each course is an IC — pin rows down both
+   sides (pseudo-elements, one repeating stripe each), a notch at pin 1,
+   the course code as its marking. Ink at rest; hover powers the chip the
+   way the die lights a block: green frame at active weight (border +
+   inset shadow, so nothing shifts), green pins and notch, a faint wash,
+   and the marking types in (stepped clip — Plex Mono is monospaced, so
+   each step is one glyph; --chars is set per chip). */
+@property --ic-pin {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --ic-notch {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+.bank {
+  --pin: 7px;
+}
+
+.bank + .bank {
   margin-top: var(--space-8);
 }
 
-.term__name {
-  margin: 0 0 var(--space-3);
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--color-line);
+.bank__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: var(--w-hair) solid var(--color-line);
 }
 
-.term__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: var(--space-2);
+.bank__name {
   margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.course {
-  display: grid;
-  align-content: start;
-  gap: var(--space-1);
-  padding: var(--space-3);
-  border: var(--w-trace) solid var(--color-gpu);
-}
-
-.course__code {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: var(--color-gpu);
 }
 
-.course__title {
-  line-height: 1.4;
-}
-
-.course__meta {
+.bank__part {
+  margin: 0;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--color-line);
+}
+
+/* Inset by one pin length so the pins, not the bodies, meet the rule's
+   ends; columns leave room for two facing pin rows. */
+.bank__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--space-3) calc(2 * var(--pin) + var(--space-3));
+  margin: 0;
+  padding: 0 var(--pin);
+  list-style: none;
+}
+
+.ic {
+  --ic-pin: var(--color-line);
+  --ic-notch: var(--color-ink);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-3) var(--space-3) calc(var(--space-3) + 0.25rem);
+  border: var(--w-trace) solid var(--color-ink);
+  background-color: var(--color-ground);
+  background-image: linear-gradient(135deg, var(--ic-notch) 0 0.5rem, transparent 0.5rem);
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    background-color var(--dur) var(--ease),
+    --ic-pin var(--dur) var(--ease),
+    --ic-notch var(--dur) var(--ease);
+}
+
+/* Pin rows: one 2px pin per ~12px tile, centred in the tile; `round`
+   fits a whole number of tiles to the row so no pin is cut in half. */
+.ic::before,
+.ic::after {
+  content: '';
+  position: absolute;
+  top: var(--space-2);
+  bottom: var(--space-2);
+  width: var(--pin);
+  background: linear-gradient(transparent 5px, var(--ic-pin) 5px 7px, transparent 7px) 0 0 / 100% 12px;
+  background-repeat: no-repeat round;
+}
+
+.ic::before {
+  right: 100%;
+  margin-right: var(--w-trace);
+}
+
+.ic::after {
+  left: 100%;
+  margin-left: var(--w-trace);
+}
+
+.ic:hover {
+  --ic-pin: var(--color-gpu);
+  --ic-notch: var(--color-gpu);
+  border-color: var(--color-gpu);
+  box-shadow: inset 0 0 0 calc(var(--w-active) - var(--w-trace)) var(--color-gpu);
+  background-color: color-mix(in srgb, var(--color-gpu) 6%, var(--color-ground));
+}
+
+.ic__code {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color var(--dur) var(--ease);
+}
+
+.ic:hover .ic__code {
+  color: var(--color-gpu);
+  animation: ic-type calc(var(--chars) * 45ms) steps(var(--chars), end) both;
+}
+
+@keyframes ic-type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.ic__title {
+  line-height: 1.4;
+}
+
+.ic__meta {
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ic:hover .ic__code {
+    animation: none;
+  }
 }
 
 /* Readings wheel (/readings/) ----------------------------------------- */

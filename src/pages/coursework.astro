@@ -1,4 +1,9 @@
 ---
+// Coursework as a board of packaged chips. Each area is a bank (named like a
+// die block, with a unit count); each course is a small IC: pin rows down
+// both sides, a notch at pin 1, the course code as the part marking. At rest
+// the chips are ink; hovering one powers it (green frame, pins and notch,
+// the marking types in) the same way the homepage die lights a block.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import { getCoursework } from '../lib/content';
@@ -9,6 +14,7 @@ const groups = COURSE_AREAS.map((area) => ({
   area,
   list: courses.filter((c) => c.data.area === area),
 })).filter((g) => g.list.length);
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 ---
 
 <BaseLayout title="Coursework — Ashwin Aggarwal">
@@ -17,16 +23,23 @@ const groups = COURSE_AREAS.map((area) => ({
   <section class="courses">
     {
       groups.length ? (
-        groups.map(({ area, list }) => (
-          <section class="term">
-            <h2 class="term__name">{area}</h2>
-            <ul class="term__grid" role="list">
+        groups.map(({ area, list }, i) => (
+          <section class="bank" aria-labelledby={`bank-${slug(area)}`}>
+            <header class="bank__head">
+              <h2 class="bank__name" id={`bank-${slug(area)}`}>
+                {area}
+              </h2>
+              <p class="bank__part" aria-hidden="true">
+                BANK {i} · {list.length} {list.length === 1 ? 'unit' : 'units'}
+              </p>
+            </header>
+            <ul class="bank__grid" role="list">
               {list.map((c) => (
-                <li class="course">
-                  <span class="course__code">{c.data.code}</span>
-                  <span class="course__title">{c.data.title}</span>
+                <li class="ic" style={`--chars: ${c.data.code.length}`}>
+                  <span class="ic__code">{c.data.code}</span>
+                  <span class="ic__title">{c.data.title}</span>
                   {(c.data.note || c.data.term) && (
-                    <span class="course__meta">{[c.data.note, c.data.term].filter(Boolean).join(', ')}</span>
+                    <span class="ic__meta">{[c.data.note, c.data.term].filter(Boolean).join(', ')}</span>
                   )}
                 </li>
               ))}
