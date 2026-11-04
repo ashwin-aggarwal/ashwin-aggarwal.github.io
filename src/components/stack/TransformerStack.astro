@@ -2,9 +2,9 @@
 // Experience as a transformer stack. One continuous residual stream runs
 // up the left edge (data flows bottom → top, like a transformer diagram);
 // each role is a layer that forks off the stream at its top and adds back
-// into it at its bottom through a ⊕ node. Layer 1 is the earliest role, so
-// the newest sits at the top of the stack and the page still reads
-// newest-first.
+// into it at its bottom through a ⊕ node. The earliest role is the bottom
+// layer, so the newest sits at the top and the page still reads
+// newest-first. Each header's small top line is the role's location.
 //
 // Each layer header is a real <button> inside the heading, with
 // aria-expanded / aria-controls. With no JS every panel stays open (the
@@ -13,6 +13,7 @@
 import { render } from 'astro:content';
 import './stack.css';
 import { getExperience } from '../../lib/content';
+import TypeText from '../TypeText.astro';
 
 const experience = await getExperience();
 const rendered = await Promise.all(experience.map((item) => render(item)));
@@ -45,8 +46,8 @@ const total = experience.length;
                   aria-controls={panelId}
                   data-layer-toggle
                 >
-                  <span class="layer__index">Layer {n}<span class="sr-only">: </span></span>
-                  <span class="layer__company">{item.data.company}<span class="sr-only">, </span></span>
+                  <span class="layer__index">{item.data.location}{item.data.location && <span class="sr-only">: </span>}</span>
+                  <span class="layer__company"><TypeText text={item.data.company} /><span class="sr-only">, </span></span>
                   <span class="layer__role">{item.data.role}<span class="sr-only">, </span></span>
                   <span class="layer__dates">
                     {item.data.start} – {item.data.end}
@@ -56,7 +57,6 @@ const total = experience.length;
               </h2>
 
               <div class="layer__panel" id={panelId} role="region" aria-labelledby={btnId}>
-                {item.data.location && <p class="layer__location">{item.data.location}</p>}
                 <div class="layer__body">
                   <Content />
                 </div>

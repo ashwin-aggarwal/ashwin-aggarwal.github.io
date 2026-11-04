@@ -245,13 +245,6 @@
   border-top: var(--w-hair) dashed var(--color-line);
 }
 
-.layer__location {
-  margin: 0 0 var(--space-2);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--color-line);
-}
-
 .layer__body {
   max-width: 62ch;
   font-size: 1rem;

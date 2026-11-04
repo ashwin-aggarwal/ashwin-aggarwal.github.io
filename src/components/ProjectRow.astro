@@ -1,11 +1,11 @@
 ---
-// One row per project on /projects/. Each row is one SM cell of the die's
-// Projects GPC: "SM 01" is the same number the cell carries on the homepage.
+// One row per project on /projects/, numbered 01, 02, … in the margin.
 import type { CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
 import { Image } from 'astro:assets';
 import { anchorId } from '../lib/content';
 import InlineSvg from './InlineSvg.astro';
+import TypeText from './TypeText.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -16,6 +16,8 @@ const { data } = project;
 const { Content } = await render(project);
 
 const displayIndex = String(data.order).padStart(2, '0');
+// Hovering the row types the number, then the title (TypeText).
+const indexLabel = displayIndex;
 const mediaLeft = data.order % 2 === 1;
 const isBrowserFrame = data.mediaFrame === 'browser';
 // No fallback block when media is absent — some rows are text-only for now
@@ -38,7 +40,7 @@ const mediaWrapProps = data.demoUrl
 >
   <div class="marginal marginal--wide">
     <div class="marginal__meta">
-      <p class="project-row__index" aria-hidden="true">SM {displayIndex}</p>
+      <p class="project-row__index" aria-hidden="true"><TypeText text={indexLabel} /></p>
     </div>
 
     <div class="marginal__content">
@@ -106,7 +108,7 @@ const mediaWrapProps = data.demoUrl
 
         <div class="project-row__text">
           <h2 class="title-mono">
-            {data.title}
+            <TypeText text={data.title} offset={indexLabel.length} />
             {data.wip && <span class="title-mono__wip"> (WIP)</span>}
           </h2>
 

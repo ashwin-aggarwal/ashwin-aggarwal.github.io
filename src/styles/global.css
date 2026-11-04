@@ -561,8 +561,9 @@
 .project-row__index {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
   color: var(--color-gpu);
 }
 
@@ -1078,8 +1079,8 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 }
 
 /* ---------------------------------------------------------------------
-   Routed page frame: heading block + reading width. PageHead pairs the page
-   name with its die block over one ink rule.
+   Routed page frame: heading block + reading width. PageHead sets the page
+   name over one ink rule.
 --------------------------------------------------------------------- */
 .page-head {
   display: flex;
@@ -1104,13 +1105,6 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 600;
   line-height: 1.2;
-}
-
-.page-head__part {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--color-line);
 }
 
 .page-head + .project-list .project-row:first-child {
@@ -1675,6 +1669,23 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   }
 }
 
+/* Typewriter text (components/TypeText.astro): per-character spans, so
+   it works across line wraps and in any font. Hovering a project row, or
+   hovering/focusing an experience layer's header, hides the characters and
+   brings them back one at a time, ~22ms apart. Off under reduced motion. */
+@keyframes type-char {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+:is(.project-row:hover, .layer__toggle:is(:hover, :focus-visible)) .type__chars > span {
+  animation: type-char 1ms steps(1, end) calc(var(--i) * 22ms) both;
+}
+
 /* Shared typewriter reveal (coursework node code, blog line address):
    stepped clip — Plex Mono is monospaced, so each step is one glyph; the
    caller sets --chars. */
@@ -1688,6 +1699,7 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  :is(.project-row:hover, .layer__toggle:is(:hover, :focus-visible)) .type__chars > span,
   .node:hover .node__code,
   .post-item:is(:hover, :focus-within) .cline__addr {
     animation: none;

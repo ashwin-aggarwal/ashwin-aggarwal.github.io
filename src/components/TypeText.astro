@@ -1,0 +1,17 @@
+---
+// Typewriter text that survives line wraps. Each character is its own span
+// carrying its position (--i); global.css reveals them one after another
+// when the surrounding block is hovered or focused (see "Typewriter text").
+// The split copy is aria-hidden and a plain copy sits in .sr-only, so
+// screen readers read the words, not letter by letter. `offset` starts the
+// count later, to chain after another TypeText (e.g. index, then title).
+interface Props {
+  text: string;
+  offset?: number;
+}
+
+const { text, offset = 0 } = Astro.props;
+const chars = [...text];
+---
+
+<span class="type"><span class="sr-only">{text}</span><span class="type__chars" aria-hidden="true">{chars.map((c, i) => <span style={`--i: ${i + offset}`}>{c}</span>)}</span></span>
