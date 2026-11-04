@@ -37,14 +37,16 @@ Siddhartha chose his experiences, and he decided what counted as a lesson. A mod
 
 So when we trust a model's judgment, we aren't really trusting the model. We're trusting the developer who trained it. **The model's moral line is the developer's moral line.**
 
-This also changes how I see another topic from the meeting: Should we trust AI to supervise other AIs. It sounds like a safeguard, and for low-stakes tasks it can be. But if the supervisor came from the same developer, it shares the same values and blind spots. You haven't removed the trust problem. You've added another layer of it.
+This also changes how I see another topic from the meeting: Should we trust AI to supervise other AIs. It sounds like a safeguard, and for low-stakes tasks it can be. But if the supervisor came from the same developer, it shares the same values and blind spots. You haven't removed the trust problem. You've added another layer of bias.
 
 ## The real danger
 
 I don't think it's wrong that developers draw the moral line. Someone has to. The problem is that most people don't see it being drawn. They talk to a model and treat it as an independent mind with its own morals, without asking who trained it or what that organization values.
 
-If a weapons contractor built a model, I wouldn't take its moral judgment at face value. The same question applies to every model, even ones from developers I like.
+If a weapons contractor built a model, would you take its moral judgment at face value? The same question applies to every model, even ones from developers you like.
 
 Transparency helps. Some developers now publish the values they train toward, and that's a real step. But a published rulebook tells you what a company intended, not what the model actually learned. Closing that gap is, as I understand it, a big part of what alignment research is trying to do.
 
 Siddhartha had to find wisdom for himself. A model can't do that. Its wisdom always belongs to somebody else, and we should know whose it is.
+
+Thanks for reading :)
