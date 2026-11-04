@@ -7,5 +7,6 @@ area: Computer science # or: Mathematics, Science and engineering
 note: Python # optional — e.g. the language
 term: Fall 2025 # optional
 order: 1 # position within its area
+prereqs: [] # optional — codes of listed courses it builds on, e.g. ["CS 2110"]
 draft: true
 ---

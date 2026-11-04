@@ -1,54 +1,149 @@
 ---
-// Coursework as a board of packaged chips. Each area is a bank (named like a
-// die block, with a unit count); each course is a small IC: pin rows down
-// both sides, a notch at pin 1, the course code as the part marking. At rest
-// the chips are ink; hovering one powers it (green frame, pins and notch,
-// the marking types in) the same way the homepage die lights a block.
+// Coursework as a feed-forward network. Each layer is a course level
+// (1000s → 4000s: input, hidden, hidden, output); each course is a node; the
+// edges are prerequisites, drawn left to right. Hovering a course traces
+// every path into it — all the courses it built on light green, the rest
+// fade back.
+//
+// Geometry is computed here at build time: x in percent of the board width
+// (columns are fluid; passed unitless as --x / --w), y in px (nodes have a fixed height). The edge SVG
+// uses the same frame — viewBox 0 0 100 H with preserveAspectRatio="none"
+// and non-scaling strokes — so lines meet node edges at any width. Below
+// 60rem the board unfolds into a plain list per layer, prereqs spelled out
+// under each course, and the SVG is hidden.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import { getCoursework } from '../lib/content';
 import { COURSE_AREAS } from '../content.config';
 
 const courses = await getCoursework();
-const groups = COURSE_AREAS.map((area) => ({
-  area,
-  list: courses.filter((c) => c.data.area === area),
-})).filter((g) => g.list.length);
-const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const slug = (code: string) => code.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const level = (code: string) => Number(code.match(/\d/)?.[0] ?? 0);
+const listed = new Set(courses.map((c) => c.data.code));
+
+const levels = [...new Set(courses.map((c) => level(c.data.code)))].sort();
+const layers = levels.map((lv) =>
+  courses
+    .filter((c) => level(c.data.code) === lv)
+    .sort(
+      (a, b) =>
+        COURSE_AREAS.indexOf(a.data.area) - COURSE_AREAS.indexOf(b.data.area) || a.data.order - b.data.order,
+    ),
+);
+
+const NODE_H = 108; // px — keep in sync with --node-h in global.css
+const GAP_Y = 16;
+const GAP_X = 6; // percent of board width between columns
+const cols = layers.length;
+const nodeW = cols ? (100 - (cols - 1) * GAP_X) / cols : 100;
+const tallest = Math.max(0, ...layers.map((l) => l.length));
+const H = tallest * NODE_H + Math.max(0, tallest - 1) * GAP_Y;
+
+const pos = new Map<string, { x: number; y: number }>();
+layers.forEach((list, i) => {
+  const top = (H - (list.length * NODE_H + (list.length - 1) * GAP_Y)) / 2;
+  list.forEach((c, j) => pos.set(c.data.code, { x: i * (nodeW + GAP_X), y: top + j * (NODE_H + GAP_Y) }));
+});
+
+const edges = courses.flatMap((c) =>
+  c.data.prereqs
+    .filter((p) => listed.has(p))
+    .map((p) => {
+      const a = pos.get(p)!;
+      const b = pos.get(c.data.code)!;
+      const x1 = a.x + nodeW;
+      const y1 = a.y + NODE_H / 2;
+      const x2 = b.x;
+      const y2 = b.y + NODE_H / 2;
+      const xm = (x1 + x2) / 2;
+      return { from: slug(p), to: slug(c.data.code), d: `M${x1} ${y1}C${xm} ${y1} ${xm} ${y2} ${x2} ${y2}` };
+    }),
+);
+
+const role = (i: number) => (i === 0 ? 'Input' : i === cols - 1 ? 'Output' : 'Hidden');
+const fmt = (n: number) => +n.toFixed(3);
 ---
 
 <BaseLayout title="Coursework — Ashwin Aggarwal">
-  <PageHead title="Coursework" part="GPC 3" />
+  <PageHead title="Coursework" part="GPC 3" wide />
 
-  <section class="courses">
-    {
-      groups.length ? (
-        groups.map(({ area, list }, i) => (
-          <section class="bank" aria-labelledby={`bank-${slug(area)}`}>
-            <header class="bank__head">
-              <h2 class="bank__name" id={`bank-${slug(area)}`}>
-                {area}
-              </h2>
-              <p class="bank__part" aria-hidden="true">
-                BANK {i} · {list.length} {list.length === 1 ? 'unit' : 'units'}
-              </p>
-            </header>
-            <ul class="bank__grid" role="list">
-              {list.map((c) => (
-                <li class="ic" style={`--chars: ${c.data.code.length}`}>
-                  <span class="ic__code">{c.data.code}</span>
-                  <span class="ic__title">{c.data.title}</span>
-                  {(c.data.note || c.data.term) && (
-                    <span class="ic__meta">{[c.data.note, c.data.term].filter(Boolean).join(', ')}</span>
-                  )}
-                </li>
-              ))}
+  {
+    courses.length ? (
+      <div class="net" data-net style={`--h: ${H}px`}>
+        <svg class="net__edges" viewBox={`0 0 100 ${H}`} preserveAspectRatio="none" aria-hidden="true">
+          {edges.map((e) => (
+            <path class="edge" d={e.d} data-from={e.from} data-to={e.to} vector-effect="non-scaling-stroke" />
+          ))}
+        </svg>
+
+        {layers.map((list, i) => (
+          <section class="net__layer" style={`--x: ${fmt(i * (nodeW + GAP_X))}; --w: ${fmt(nodeW)}`}>
+            <h2 class="net__head">
+              <span class="net__role">{role(i)}</span> {levels[i]}000-level
+            </h2>
+            <ul class="net__nodes" role="list">
+              {list.map((c) => {
+                const p = pos.get(c.data.code)!;
+                const pre = c.data.prereqs.filter((x) => listed.has(x));
+                return (
+                  <li
+                    class="node"
+                    data-code={slug(c.data.code)}
+                    data-pre={pre.map(slug).join(' ')}
+                    style={`--y: ${p.y}px; --chars: ${c.data.code.length}`}
+                  >
+                    <span class="node__top">
+                      <span class="node__code">{c.data.code}</span>
+                      {c.data.note && <span class="node__note">{c.data.note}</span>}
+                    </span>
+                    <span class="node__title">{c.data.title}</span>
+                    {pre.length > 0 && <span class="node__pre">Builds on {pre.join(', ')}</span>}
+                  </li>
+                );
+              })}
             </ul>
           </section>
-        ))
-      ) : (
-        <p class="empty-state">No courses listed yet.</p>
-      )
+        ))}
+      </div>
+    ) : (
+      <p class="empty-state">No courses listed yet.</p>
+    )
+  }
+
+  <script>
+    // Path tracing: hovering a course lights it, every course it builds on
+    // (recursively), and the edges between them; everything else fades.
+    const net = document.querySelector<HTMLElement>('[data-net]');
+    if (net) {
+      const nodes = new Map(
+        [...net.querySelectorAll<HTMLElement>('[data-code]')].map((n) => [n.dataset.code!, n]),
+      );
+      const edges = [...net.querySelectorAll<SVGPathElement>('.edge')];
+      const ancestors = (code: string, seen: Set<string>): Set<string> => {
+        for (const p of (nodes.get(code)?.dataset.pre ?? '').split(' ').filter(Boolean)) {
+          if (!seen.has(p)) {
+            seen.add(p);
+            ancestors(p, seen);
+          }
+        }
+        return seen;
+      };
+      const clear = () => {
+        net.classList.remove('is-tracing');
+        net.querySelectorAll('.is-lit').forEach((el) => el.classList.remove('is-lit'));
+      };
+      nodes.forEach((node, code) => {
+        node.addEventListener('pointerenter', () => {
+          clear();
+          const path = ancestors(code, new Set([code]));
+          net.classList.add('is-tracing');
+          path.forEach((c) => nodes.get(c)?.classList.add('is-lit'));
+          edges.forEach((e) => {
+            if (path.has(e.dataset.to!) && path.has(e.dataset.from!)) e.classList.add('is-lit');
+          });
+        });
+        node.addEventListener('pointerleave', clear);
+      });
     }
-  </section>
+  </script>
 </BaseLayout>

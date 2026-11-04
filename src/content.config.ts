@@ -116,8 +116,10 @@ const blog = defineCollection({
   }),
 });
 
-// Coursework, one file per course (/coursework/). Grouped by `area` on the
-// page (in the order listed in the enum), sorted by `order` within each.
+// Coursework, one file per course (/coursework/), drawn as a feed-forward
+// network: the layer is the course level (first digit of the number), the
+// edges are `prereqs`. Within a layer, sorted by `area` (enum order) then
+// `order`.
 export const COURSE_AREAS = ['Computer science', 'Mathematics', 'Science and engineering'] as const;
 const coursework = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/coursework' }),
@@ -128,14 +130,15 @@ const coursework = defineCollection({
     note: z.string().optional(), // e.g. the language: "OCaml"
     term: z.string().optional(), // "Fall 2025" — display string
     order: z.number(), // ascending within its area
+    prereqs: z.array(z.string()).default([]), // codes of listed courses it builds on: ["CS 2110"]
     draft: z.boolean().default(false),
   }),
 });
 
 // Readings, one file per book (/readings/, the cover wheel). Optional
 // markdown body = a short note shown under the selected book. No cover
-// image → a plain typeset cover. `progress` (percent) drives the bar on a
-// book you're reading; finished books read as 100%.
+// image → a plain typeset cover. `progress` (percent) lights the progress
+// squares on a book you're reading; finished books light all four.
 const readings = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/readings' }),
   schema: ({ image }) =>
