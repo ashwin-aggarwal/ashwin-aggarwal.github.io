@@ -8,7 +8,7 @@ const projects = await getProjects();
 ---
 
 <BaseLayout title="Projects — Ashwin Aggarwal">
-  <PageHead title="Projects" part="GPC 0" wide />
+  <PageHead title="Projects" wide />
 
   <div class="project-list">
     {projects.map((project) => <ProjectRow project={project} />)}

@@ -20,7 +20,7 @@ Fonts: IBM Plex Sans (reading) and IBM Plex Mono (labels, part names).
   stack below. Hover/focus lighting is CSS `:has()`, no JS.
 - Experience (`components/stack/`): layers on a residual stream; header is a
   button with `aria-expanded`.
-- Every routed page starts with `PageHead` (page name + its die block).
+- Every routed page starts with `PageHead` (page name over an ink rule).
 - Blog posts: reading column stays plain — no grid behind text, no motion.
 - Motion responds to the user only, never loops, and is fully off under
   `prefers-reduced-motion` (`--dur` drops to 0).
