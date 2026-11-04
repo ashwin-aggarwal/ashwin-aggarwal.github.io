@@ -25,8 +25,6 @@ My first instinct was to say a model has no experience, so it shouldn't get to m
 
 ## The best objections
 
-That argument is too simple, and it's worth saying why.
-
 First, models do learn from something like experience. Reinforcement learning, a training method where a model tries actions and is rewarded or penalized based on results, is trial and error. That is, in a way, a compressed version of what Siddhartha did.
 
 Second, people learn secondhand constantly. Most of us never try hard drugs to find out they're harmful. We trust what we've been told. If secondhand wisdom is good enough for us, why not for a model?
