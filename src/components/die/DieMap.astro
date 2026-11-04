@@ -111,6 +111,15 @@ const stackBlocks = [
       <pattern id="die-l2" width="6" height="10" patternUnits="userSpaceOnUse">
         <path d="M3 0V10" class="die__l2-line" />
       </pattern>
+      <!-- Glow for the orbiting particle: a blurred copy of its own stroke
+           under the sharp one, so it inherits the theme's green. -->
+      <filter id="die-glow" x="-10%" y="-40%" width="120%" height="180%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="halo" />
+        <feMerge>
+          <feMergeNode in="halo" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
     </defs>
 
     <!-- Substrate: die outline, grid, pin-1 notch, edge pads. -->
@@ -168,6 +177,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="104" y="64" width="496" height="202" />
         <rect class="blk__frame" x="112" y="72" width="480" height="186" />
+        <path class="blk__orbit" d="M112 72h480v186h-480z" pathLength="100" />
         <text class="blk__name" x="128" y="102">Projects</text>
         <text class="blk__part" x="576" y="102" text-anchor="end">GPC 0</text>
         {
@@ -190,6 +200,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="604" y="64" width="292" height="202" />
         <rect class="blk__frame" x="612" y="72" width="276" height="186" />
+        <path class="blk__orbit" d="M612 72h276v186h-276z" pathLength="100" />
         <text class="blk__name" x="628" y="102">Experience</text>
         <text class="blk__part" x="872" y="102" text-anchor="end">GPC 1</text>
         <!-- Transformer stack: layers bottom-up, residual stream on the right. -->
@@ -214,6 +225,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="104" y="270" width="792" height="80" />
         <rect class="blk__frame" x="112" y="278" width="776" height="64" />
+        <path class="blk__orbit" d="M112 278h776v64h-776z" pathLength="100" />
         <text class="blk__name" x="128" y="316">Blog</text>
         <text class="blk__part" x="872" y="316" text-anchor="end">L2 cache</text>
         <rect class="blk__bank" x="220" y="290" width="264" height="40" fill="url(#die-l2)" />
@@ -225,6 +237,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="104" y="354" width="204" height="162" />
         <rect class="blk__frame" x="112" y="362" width="188" height="146" />
+        <path class="blk__orbit" d="M112 362h188v146h-188z" pathLength="100" />
         <text class="blk__name" x="128" y="392">About</text>
         <text class="blk__part" x="128" y="412">GigaThread</text>
         {[0, 1, 2].map((i) => <path class="blk__sched" d={`M128 ${448 + i * 14}H284`} />)}
@@ -235,6 +248,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="332" y="354" width="286" height="162" />
         <rect class="blk__frame" x="340" y="362" width="270" height="146" />
+        <path class="blk__orbit" d="M340 362h270v146h-270z" pathLength="100" />
         <text class="blk__name" x="356" y="392">Readings</text>
         <text class="blk__part" x="594" y="392" text-anchor="end">GPC 2</text>
         <!-- A shelf of spines: varied widths and heights on one baseline. -->
@@ -255,6 +269,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="622" y="354" width="274" height="162" />
         <rect class="blk__frame" x="630" y="362" width="258" height="146" />
+        <path class="blk__orbit" d="M630 362h258v146h-258z" pathLength="100" />
         <text class="blk__name" x="646" y="392">Coursework</text>
         <text class="blk__part" x="872" y="392" text-anchor="end">GPC 3</text>
         <!-- A term grid: rows of course slots. -->
@@ -274,6 +289,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="452" y="528" width="436" height="64" />
         <rect class="blk__frame" x="460" y="536" width="420" height="48" />
+        <path class="blk__orbit" d="M460 536h420v48h-420z" pathLength="100" />
         <text class="blk__name" x="476" y="566">Recent news</text>
         <text class="blk__part" x="864" y="566" text-anchor="end">Display engine</text>
       </g>
@@ -283,6 +299,7 @@ const stackBlocks = [
       <g aria-hidden="true">
         <rect class="blk__focus" x="212" y="528" width="216" height="64" />
         <rect class="blk__frame" x="220" y="536" width="200" height="48" />
+        <path class="blk__orbit" d="M220 536h200v48h-200z" pathLength="100" />
         <text class="blk__name" x="236" y="566">Contact</text>
         <text class="blk__part" x="404" y="566" text-anchor="end">PCIe / I/O</text>
       </g>

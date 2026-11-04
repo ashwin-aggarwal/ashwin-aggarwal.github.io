@@ -6,8 +6,9 @@
      1.5 gpu         — compute block frames and cells
      2.5 gpu         — the hovered/focused block and its route
    Motion: live traces draw in once on load; a single signal runs along a
-   route when its block is hovered or focused, and its name types itself
-   out. Nothing loops. Under
+   route when its block is hovered or focused, its name types itself out,
+   and a glowing particle orbits its frame. The orbit is the only loop,
+   and it runs only while the block stays hovered or focused. Under
    prefers-reduced-motion every animation and transition is off.
 --------------------------------------------------------------------- */
 
@@ -213,6 +214,60 @@
   stroke: var(--color-gpu);
   stroke-width: var(--w-active);
   fill: color-mix(in srgb, var(--color-gpu) 6%, var(--color-ground));
+}
+
+/* Orbit: while a block is hovered or focused, light circles its frame.
+   It loops only while the block stays active and stops the moment the
+   cursor or focus leaves.
+     light theme — a thin white glint sliding along the green frame
+     dark theme  — a glowing green particle that pulses as it goes */
+.blk__orbit {
+  fill: none;
+  stroke: var(--color-glow);
+  stroke-width: 1;
+  stroke-opacity: 0.6;
+  stroke-linecap: round;
+  stroke-dasharray: 5 95;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.blk:is(:hover, :focus-visible) .blk__orbit {
+  opacity: 1;
+  animation: die-orbit 3s linear infinite;
+}
+
+/* Small blocks have short perimeters; slow them less than the big GPCs. */
+.blk--blog:is(:hover, :focus-visible) .blk__orbit,
+.blk--news:is(:hover, :focus-visible) .blk__orbit,
+.blk--contact:is(:hover, :focus-visible) .blk__orbit {
+  animation-duration: 2.4s;
+}
+
+:root[data-theme='dark'] .blk__orbit {
+  stroke-width: 4;
+  stroke-dasharray: 5 95;
+  filter: url(#die-glow);
+}
+
+:root[data-theme='dark'] .blk:is(:hover, :focus-visible) .blk__orbit {
+  animation:
+    die-orbit 3s linear infinite,
+    die-pulse 1.2s ease-in-out infinite alternate;
+}
+
+:root[data-theme='dark'] :is(.blk--blog, .blk--news, .blk--contact):is(:hover, :focus-visible) .blk__orbit {
+  animation-duration: 2.4s, 1.2s;
+}
+
+@keyframes die-orbit {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -100; }
+}
+
+@keyframes die-pulse {
+  from { stroke-width: 2.5; stroke-opacity: 0.45; }
+  to { stroke-width: 4; stroke-opacity: 0.75; }
 }
 
 /* Active route: lit from the I/O edge to its block. :has() keeps the
@@ -471,12 +526,14 @@
 @media (prefers-reduced-motion: reduce) {
   .route__trace,
   .route__signal,
+  .blk__orbit,
   .blk__name,
   .blk__part {
     animation: none !important;
   }
 
-  .route__signal {
+  .route__signal,
+  .blk__orbit {
     opacity: 0 !important;
   }
 }

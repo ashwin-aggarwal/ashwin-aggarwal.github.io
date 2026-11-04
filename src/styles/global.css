@@ -21,6 +21,9 @@
   --color-ink: #141414;
   --color-line: #61635f;
   --color-gpu: #46705a;
+  /* Glow: the die's orbiting hover light only. White in light mode (a
+     glint sliding along the green frame); in dark mode it equals gpu. */
+  --color-glow: #ffffff;
 
   /* Legacy aliases — older component CSS still reads these names. They
      resolve onto the four colors above; nothing new should use them. */
@@ -47,6 +50,7 @@
   --color-ink: #e8e9e4;
   --color-line: #999b96;
   --color-gpu: #76a389;
+  --color-glow: #76a389;
   color-scheme: dark;
 }
 
@@ -56,6 +60,7 @@
     --color-ink: #e8e9e4;
     --color-line: #999b96;
     --color-gpu: #76a389;
+    --color-glow: #76a389;
     color-scheme: dark;
   }
 }

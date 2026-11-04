@@ -7,8 +7,10 @@ Static output, deployed to Pages via Actions.
 A GPU die and a transformer stack. Off-white ground, black ink, one gray, one
 calm muted green — FOUR colors total, all in `src/styles/global.css` under
 `@theme`, with their dark-theme values in the `[data-theme='dark']` block
-right below it. Never hardcode a hex outside those two blocks (the favicon
-SVG is the one exception: it copies the token values). Dark mode is set
+right below it. One extra token, `--color-glow`, is reserved for the die's
+orbiting hover particle (white in light mode, equal to the green in dark
+mode); nothing else uses it. Never hardcode a hex outside those two blocks (the
+favicon SVG is the one exception: it copies the token values). Dark mode is set
 before paint in `BaseLayout` (saved choice, else system) and flipped by the
 header's slide switch. Green is only for GPU
 elements: compute blocks and lit traces/layers. Hierarchy comes from line
@@ -22,8 +24,11 @@ Fonts: IBM Plex Sans (reading) and IBM Plex Mono (labels, part names).
   button with `aria-expanded`.
 - Every routed page starts with `PageHead` (page name over an ink rule).
 - Blog posts: reading column stays plain — no grid behind text, no motion.
-- Motion responds to the user only, never loops, and is fully off under
-  `prefers-reduced-motion` (`--dur` drops to 0).
+- Motion responds to the user only and is fully off under
+  `prefers-reduced-motion` (`--dur` drops to 0; looping animations need an
+  explicit `animation: none` there too). Nothing loops on its own: a loop
+  may run only while the user holds a hover/focus (the die blocks' orbiting
+  particle), and stops when they leave.
 
 The bookshelf (below) is hidden on this branch but its code is kept.
 
