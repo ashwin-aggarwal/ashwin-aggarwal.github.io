@@ -411,7 +411,8 @@
   color: var(--color-line);
 }
 
-.about__photo {
+.about__photo,
+.home-intro__photo {
   position: relative;
   margin: 0;
   aspect-ratio: 1 / 1;
@@ -419,7 +420,8 @@
   padding: var(--space-2);
 }
 
-.about__photo::before {
+.about__photo::before,
+.home-intro__photo::before {
   content: '';
   position: absolute;
   top: 0;
@@ -429,7 +431,8 @@
   border-right: 14px solid transparent;
 }
 
-.about__photo img {
+.about__photo img,
+.home-intro__photo img {
   display: block;
   width: 100%;
   height: 100%;
@@ -536,7 +539,76 @@
   }
 }
 
-/* Home intro above the die: name and the existing tagline, nothing else. */
+/* Home intro above the die: name and tagline, headshot packaged as a chip
+   (About page frame plus pin rows on both sides). Photo sits on the right
+   from 640px up; on phones it leads, top-aligned with the name. */
+.home-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.home-intro__pkg {
+  position: relative;
+  flex: none;
+  padding-inline: 10px;
+}
+
+.home-intro__pkg::before,
+.home-intro__pkg::after {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  bottom: 1rem;
+  width: 10px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-ink) 0 3px,
+    transparent 3px 14px
+  );
+}
+
+.home-intro__pkg::before {
+  left: 0;
+}
+
+.home-intro__pkg::after {
+  right: 0;
+}
+
+.home-intro__photo {
+  width: 7rem;
+}
+
+@media (min-width: 640px) {
+  .home-intro {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .home-intro__pkg {
+    padding-inline: 12px;
+  }
+
+  .home-intro__pkg::before,
+  .home-intro__pkg::after {
+    top: 1.25rem;
+    bottom: 1.25rem;
+    width: 12px;
+    background-size: 100% 16px;
+  }
+
+  .home-intro__photo {
+    width: 12rem;
+  }
+}
+
+.home-intro__text {
+  min-width: 0;
+}
+
 .home-intro__name {
   margin: 0;
   font-size: clamp(2rem, 5vw, 2.75rem);
