@@ -1690,17 +1690,74 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   color: var(--color-line);
 }
 
-.book__status {
-  margin: var(--space-1) 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--color-gpu);
+/* No cover image: a plain typeset cover — title up top over a hairline,
+   author at the foot — inside the same ink frame. */
+.book__cover--type {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
 }
 
-.book__note {
-  margin-top: var(--space-2);
-  font-size: 0.9rem;
-  line-height: 1.55;
+.book__cover-title {
+  padding-bottom: var(--space-2);
+  border-bottom: var(--w-hair) solid var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.book__cover-author {
+  margin-top: auto;
+  font-size: 0.85rem;
+  color: var(--color-line);
+}
+
+/* Status readout, one line: LED, label, then four progress lights pushed
+   to the right edge — one square per quarter (rounded), like a game
+   controller's player lights. Reading = green LED with a soft static halo;
+   finished = hollow green LED. Lit squares are green either way (a finished
+   book shows all four); unlit ones are hairline outlines. Nothing blinks. */
+.book__status {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.book__led {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border: var(--w-trace) solid var(--color-gpu);
+  border-radius: 50%;
+}
+
+.book__status--on .book__led {
+  border-color: var(--color-gpu);
+  background: var(--color-gpu);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gpu) 22%, transparent);
+}
+
+.book__meter {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.book__seg {
+  width: 9px;
+  height: 9px;
+  border: var(--w-hair) solid var(--color-line);
+}
+
+.book__seg--lit {
+  border-color: var(--color-gpu);
+  background: var(--color-gpu);
 }
 
 /* The wheel: books shrink and fade as they leave center. Scroll-driven,

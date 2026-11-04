@@ -133,15 +133,18 @@ const coursework = defineCollection({
 });
 
 // Readings, one file per book (/readings/, the cover wheel). Optional
-// markdown body = a short note shown under the selected book.
+// markdown body = a short note shown under the selected book. No cover
+// image → a plain typeset cover. `progress` (percent) drives the bar on a
+// book you're reading; finished books read as 100%.
 const readings = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/readings' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
       author: z.string(),
-      cover: image(), // ./covers/<file>
+      cover: image().optional(), // ./covers/<file>
       status: z.enum(['reading', 'read']).default('read'),
+      progress: z.number().min(0).max(100).optional(), // percent, while reading
       order: z.number(), // ascending = first in the wheel
       draft: z.boolean().default(false),
     }),
