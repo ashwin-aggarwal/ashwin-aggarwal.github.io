@@ -111,6 +111,7 @@ const blog = defineCollection({
     description: z.string(), // one line, shown on the collapsed card
     published: z.coerce.date(),
     updated: z.coerce.date().optional(), // "Last edited"; falls back to `published`
+    version: z.number().int().positive().default(1), // bump on a real revision; card shows v2, v3…
     draft: z.boolean().default(false),
   }),
 });

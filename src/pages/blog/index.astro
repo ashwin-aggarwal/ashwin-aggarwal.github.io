@@ -6,6 +6,19 @@ import { formatDate, isoDate } from '../../lib/dates';
 
 const posts = await getBlogPosts();
 const slugs = posts.map((p) => p.id);
+
+// L2 cache dressing: each card opens with a strip like a cache line — a
+// 32-bit hex address on the left (decorative; tag bits = publish date, set =
+// post number, 64 B line offset 0, for anyone who decodes it), and on the
+// right the facts readers use: reading time and the post's version.
+const hex = (n: number, w: number) => n.toString(16).toUpperCase().padStart(w, '0');
+const address = (published: Date, set: number) => {
+  const tag = ((published.getUTCFullYear() - 2000) << 9) | ((published.getUTCMonth() + 1) << 5) | published.getUTCDate();
+  const a = hex(((tag << 12) | (set << 6)) >>> 0, 8);
+  return `0x${a.slice(0, 4)}_${a.slice(4)}`;
+};
+// ~230 words per minute, rounded up; markdown punctuation barely moves it.
+const minutes = (body = '') => Math.max(1, Math.ceil(body.split(/\s+/).filter(Boolean).length / 230));
 ---
 
 <BaseLayout
@@ -24,10 +37,22 @@ const slugs = posts.map((p) => p.id);
 
   <ol class="post-list" role="list">
     {
-      posts.map((post) => {
+      posts.map((post, i) => {
         const updated = post.data.updated ?? post.data.published;
+        const dirty = updated.valueOf() !== post.data.published.valueOf();
+        const addr = address(post.data.published, posts.length - 1 - i);
         return (
           <li class="post-item">
+            <div class="cline" style={`--chars: ${addr.length}`}>
+              <span class="cline__addr" aria-hidden="true">{addr}</span>
+              <span class="cline__fields">
+                <span class="cline__field">{minutes(post.body)} min read</span>
+                <span class="cline__field">
+                  <span aria-hidden="true">v{post.data.version}</span>
+                  <span class="sr-only">version {post.data.version}</span>
+                </span>
+              </span>
+            </div>
             <h2 class="post-item__title">
               <a href={`/blog/${post.id}/`}>{post.data.title}</a>
             </h2>
@@ -37,7 +62,7 @@ const slugs = posts.map((p) => p.id);
                 <span>
                   Published <time datetime={isoDate(post.data.published)}>{formatDate(post.data.published)}</time>
                 </span>
-                {updated.valueOf() !== post.data.published.valueOf() && (
+                {dirty && (
                   <span>
                     Last edited <time datetime={isoDate(updated)}>{formatDate(updated)}</time>
                   </span>

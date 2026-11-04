@@ -3,6 +3,7 @@ title: The American Medical Association Wants Meaningful AI Oversight. But Who I
 description: If medical AI harms a patient, responsibility should fall on those who could have prevented it. But who makes sure they're doing their jobs?
 published: 2026-11-02
 updated: 2026-11-03
+version: 2
 ---
 
 *As AI enters hospitals, we need to rethink who takes responsibility when something goes wrong.*

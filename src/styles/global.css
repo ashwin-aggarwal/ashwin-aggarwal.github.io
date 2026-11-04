@@ -1193,6 +1193,56 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   color: var(--color-line);
 }
 
+/* L2 cache dressing: each card opens with a band like a cache line — the
+   hex address on the left, reading time and version in hairline cells on
+   the right. Hover/focus is a hit: the band's rules and the address go
+   green and the address types in (shared type-in). */
+.cline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-4)) var(--space-3);
+  padding-left: var(--space-4);
+  border-bottom: var(--w-hair) solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  transition: border-color var(--dur) var(--ease);
+}
+
+.cline__addr {
+  align-self: center;
+  padding-block: var(--space-1);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color var(--dur) var(--ease);
+}
+
+.cline__fields {
+  display: flex;
+  margin-left: auto;
+}
+
+.cline__field {
+  display: flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-left: var(--w-hair) solid var(--color-line);
+  color: var(--color-line);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.post-item:is(:hover, :focus-within) .cline,
+.post-item:is(:hover, :focus-within) .cline__field {
+  border-color: var(--color-gpu);
+}
+
+.post-item:is(:hover, :focus-within) .cline__addr {
+  color: var(--color-gpu);
+  animation: type-in calc(var(--chars) * 45ms) steps(var(--chars), end) both;
+}
+
 /* Card footer: dates left, "Read article" right. The CTA (.cta, shared
    with the project "Read more" toggle) makes the card read as clickable at
    rest; hovering anywhere on the card (or focusing its title link) floods
@@ -1533,10 +1583,11 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 
 .ic:hover .ic__code {
   color: var(--color-gpu);
-  animation: ic-type calc(var(--chars) * 45ms) steps(var(--chars), end) both;
+  animation: type-in calc(var(--chars) * 45ms) steps(var(--chars), end) both;
 }
 
-@keyframes ic-type {
+/* Shared typewriter reveal (coursework chip marking, blog line address). */
+@keyframes type-in {
   from {
     clip-path: inset(0 100% 0 0);
   }
@@ -1557,7 +1608,8 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ic:hover .ic__code {
+  .ic:hover .ic__code,
+  .post-item:is(:hover, :focus-within) .cline__addr {
     animation: none;
   }
 }
