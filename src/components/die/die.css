@@ -45,10 +45,15 @@
   fill: var(--color-ink);
 }
 
+.die__pad,
 .die__finger {
-  fill: var(--color-line);
+  fill: none;
   stroke: var(--color-line);
   stroke-width: var(--w-hair);
+}
+
+.die__finger {
+  fill: var(--color-line);
 }
 
 .die__stub {
