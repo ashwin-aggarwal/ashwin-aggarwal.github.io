@@ -31,7 +31,7 @@ const layers = levels.map((lv) =>
     ),
 );
 
-const NODE_H = 108; // px — keep in sync with --node-h in global.css
+const NODE_H = 124; // px — keep in sync with --node-h in global.css
 const GAP_Y = 16;
 const GAP_X = 6; // percent of board width between columns
 const cols = layers.length;
@@ -61,6 +61,12 @@ const edges = courses.flatMap((c) =>
 );
 
 const role = (i: number) => (i === 0 ? 'Input' : i === cols - 1 ? 'Output' : 'Hidden');
+// "Fall 2026" → "FA26": the registrar-style short term for the corner tag.
+const SEASON: Record<string, string> = { Fall: 'FA', Spring: 'SP', Summer: 'SU', Winter: 'WI' };
+const shortTerm = (t: string) => {
+  const [season, year] = t.split(' ');
+  return SEASON[season] && year ? `${SEASON[season]}${year.slice(-2)}` : t;
+};
 const fmt = (n: number) => +n.toFixed(3);
 ---
 
@@ -98,6 +104,11 @@ const fmt = (n: number) => +n.toFixed(3);
                     </span>
                     <span class="node__title">{c.data.title}</span>
                     {pre.length > 0 && <span class="node__pre">Builds on {pre.join(', ')}</span>}
+                    {c.data.term && (
+                      <span class="node__term">
+                        <abbr title={c.data.term}>{shortTerm(c.data.term)}</abbr>
+                      </span>
+                    )}
                   </li>
                 );
               })}

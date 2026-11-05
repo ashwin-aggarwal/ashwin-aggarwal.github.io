@@ -1537,7 +1537,7 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
    rest fade back; the hovered node's code types in. Narrow screens: one
    plain section per layer, prereqs written out under each course. */
 .net {
-  --node-h: 108px; /* keep in sync with NODE_H in coursework.astro */
+  --node-h: 124px; /* keep in sync with NODE_H in coursework.astro */
   max-width: 64rem;
   margin: 0 auto;
   padding-inline: var(--space-4);
@@ -1627,6 +1627,27 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--color-line);
+}
+
+/* Term tag ("FA26") pinned in the bottom-right corner of each course; the
+   extra bottom padding keeps it off the title in the stacked list. */
+.node {
+  position: relative;
+  padding-bottom: calc(var(--space-2) + 0.85rem);
+}
+
+.node__term {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  color: var(--color-line);
+}
+
+.node__term abbr {
+  text-decoration: none;
 }
 
 @media (min-width: 60rem) {
