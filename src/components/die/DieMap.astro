@@ -25,12 +25,14 @@ const projects = await getProjects();
 const bio = await getBio();
 
 // Off-chip links live on memory-controller pads: the MCs are where a real
-// die talks to the outside world. Two per edge, top pads first.
+// die talks to the outside world. Two per edge, centred on the die's
+// height (y 40–610, middle 325) with a 24px gap; no empty pads around them.
+const padTop = 325 - (60 + 24 + 60) / 2;
 const padLinks = [
-  { key: 'resume', label: 'Resume', href: bio.data.resume, x: 52, y: 84 },
-  { key: 'github', label: 'GitHub', href: bio.data.github, x: 52, y: 168 },
-  { key: 'linkedin', label: 'LinkedIn', href: bio.data.linkedin, x: 912, y: 84 },
-  { key: 'x', label: 'X (Twitter)', href: bio.data.x, x: 912, y: 168 },
+  { key: 'resume', label: 'Resume', href: bio.data.resume, x: 52, y: padTop },
+  { key: 'github', label: 'GitHub', href: bio.data.github, x: 52, y: padTop + 84 },
+  { key: 'linkedin', label: 'LinkedIn', href: bio.data.linkedin, x: 912, y: padTop },
+  { key: 'x', label: 'X (Twitter)', href: bio.data.x, x: 912, y: padTop + 84 },
 ].filter((l) => l.href) as { key: 'resume' | 'github' | 'linkedin' | 'x'; label: string; href: string; x: number; y: number }[];
 const experienceCount = 5;
 
@@ -74,7 +76,6 @@ const vias: Record<string, [number, number][]> = {
 // Top stubs stay clear of the Projects/Experience lanes (x 102–352, 750–898).
 const stubsTop = [400, 470, 540, 650, 710];
 const stubsBottom = [160, 260, 400, 480, 560, 680, 760, 840];
-const mcPads = [2, 3, 4, 5].map((i) => 84 + i * 84);
 const ioFingers = Array.from({ length: 13 }, (_, i) => 228 + i * 15);
 
 // Readings GPC: book spines, fixed pattern so the die never reflows.
@@ -122,22 +123,14 @@ const stackBlocks = [
       </filter>
     </defs>
 
-    <!-- Substrate: die outline, grid, pin-1 notch, edge pads. -->
+    <!-- Substrate: die outline, grid, pin-1 notch, labels, stubs, I/O fingers. -->
     <g aria-hidden="true">
       <rect class="die__edge" x="40" y="40" width="920" height="570" />
       <rect x="41" y="41" width="918" height="568" fill="url(#die-grid)" />
       <path class="die__pin1" d="M40 40h22L40 62z" />
       <text class="die__part" x="960" y="30" text-anchor="end">AKA-102</text>
-      {
-        mcPads.map((y) => (
-          <>
-            <rect class="die__pad" x="52" y={y} width="36" height="60" />
-            <rect class="die__pad" x="912" y={y} width="36" height="60" />
-          </>
-        ))
-      }
-      <text class="die__part" x="70" y="76" text-anchor="middle">MC</text>
-      <text class="die__part" x="930" y="76" text-anchor="middle">MC</text>
+      <text class="die__part" x="70" y={padTop - 8} text-anchor="middle">MC</text>
+      <text class="die__part" x="930" y={padTop - 8} text-anchor="middle">MC</text>
       {stubsTop.map((x) => <path class="die__stub" d={`M${x} 258V278`} />)}
       {stubsBottom.map((x) => <path class="die__stub" d={`M${x} 342V362`} />)}
       {ioFingers.map((x) => <rect class="die__finger" x={x} y="590" width="8" height="12" />)}
