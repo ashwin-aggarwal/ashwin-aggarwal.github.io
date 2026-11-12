@@ -1,11 +1,47 @@
 ---
+// Experience as one multi-head block. Two heads (on campus, industry) run
+// side by side on wide screens; both read the same input bus at the
+// bottom and their streams are concatenated into one output bar at the
+// top. Below 1000px the heads stack into a single column.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import TransformerStack from '../components/stack/TransformerStack.astro';
+import { getExperience } from '../lib/content';
+
+const all = await getExperience();
+const count = (s: string) => all.filter((e) => e.data.section === s).length;
+const heads = [
+  { key: 'campus', tag: 'head.0', title: 'On campus', n: count('campus') },
+  { key: 'work', tag: 'head.1', title: 'Industry', n: count('work') },
+] as const;
 ---
 
 <BaseLayout title="Experience — Ashwin Aggarwal">
-  <PageHead title="Experience" />
+  <PageHead title="Experience" wide />
 
-  <TransformerStack />
+  <div class="mha">
+    <div class="mha__out" aria-hidden="true">
+      <span class="mha__op">concat</span>
+      <span class="mha__shape">{heads.length} heads · {all.length} layers</span>
+    </div>
+
+    <div class="tstack-cols">
+      {
+        heads.map((h) => (
+          <section class="tstack-section" aria-labelledby={`exp-${h.key}`}>
+            <h2 class="tstack-section__title" id={`exp-${h.key}`}>
+              <span class="mha__tag" aria-hidden="true">{h.tag}</span>
+              {h.title}
+              <span class="mha__count" aria-hidden="true">×{h.n}</span>
+            </h2>
+            <TransformerStack section={h.key} idPrefix={h.key} level={3} />
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="mha__in" aria-hidden="true">
+      <span class="mha__op">input</span>
+    </div>
+  </div>
 </BaseLayout>
