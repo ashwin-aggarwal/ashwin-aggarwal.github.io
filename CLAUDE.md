@@ -28,7 +28,10 @@ Fonts: IBM Plex Sans (reading) and IBM Plex Mono (labels, part names).
   `prefers-reduced-motion` (`--dur` drops to 0; looping animations need an
   explicit `animation: none` there too). Nothing loops on its own: a loop
   may run only while the user holds a hover/focus (the die blocks' orbiting
-  particle), and stops when they leave.
+  particle), and stops when they leave. One deliberate exception: the 404
+  page's chip mark bounces around the screen like a DVD logo
+  (`scripts/bounce.js`). Keep it — it pauses on hover/focus, halts in a
+  hidden tab, and is static under reduced motion.
 
 The bookshelf (below) is hidden on this branch but its code is kept.
 
