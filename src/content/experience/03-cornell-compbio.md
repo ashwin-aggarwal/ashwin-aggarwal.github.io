@@ -5,6 +5,7 @@ start: Jan 2026
 end: May 2026
 location: Ithaca, NY
 # logo: cornell.svg
+section: campus
 order: 3
 draft: false
 ---
