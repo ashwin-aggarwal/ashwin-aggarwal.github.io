@@ -10,7 +10,7 @@ order: 3
 draft: false
 ---
 
-- Trained 3D ResNet and U-Net models on brain MRI scans to classify parity
+- Trained 3D ResNet and U-Net deep learning models on brain MRI scans to classify parity
 
 <!-- Full resume bullets, kept for reference (hidden).
 - Constructed and fine-tuned 3D CNNs (ResNet and U-Net) for classifying parity of 500+ MRI
