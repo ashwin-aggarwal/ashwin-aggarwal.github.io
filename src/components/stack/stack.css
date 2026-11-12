@@ -317,55 +317,93 @@
   }
 }
 
-/* Section label above a stack, when the page splits roles into more than
-   one stack. Mono part-name label over a hairline, aligned with the
-   layers (past the rail). */
-.tstack-section + .tstack-section {
-  margin-top: var(--space-6);
-}
-
-.tstack-section__title {
-  max-width: 48rem;
-  margin: 0 auto var(--space-2);
-  padding-inline: calc(var(--space-4) + var(--rail, 2.75rem)) var(--space-4);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-line);
-}
-
-/* Side-by-side variant: two stacks in columns inside the site's 64rem
-   wide width. Each stack drops its own centring and gutter so the
-   columns share one. Below 1000px it falls back to one column. */
+/* ---------------------------------------------------------------------
+   Two columns (pages/experience.astro): on campus | industry, side by
+   side inside the site's 64rem wide frame, one column below 1000px.
+   Each column is a .tstack-section whose stream line is drawn on the
+   section itself: it starts at a node beside the label and runs the full
+   column height to a terminal square, so both columns end level. Any
+   hovered, focused or open layer lights its column's line, node and
+   terminal green — CSS :has() only, no animation beyond --dur.
+--------------------------------------------------------------------- */
 .tstack-cols {
+  --stream-x: 0.75rem;
+  --rail: 2.75rem;
+  --label-y: 0.55rem; /* centre of the label line */
+
   max-width: 64rem;
   margin-inline: auto;
   padding-inline: var(--space-4);
 }
 
+/* Columns share one gutter and one line per column, so each stack drops
+   its own centring, end caps and list-level stream. */
 .tstack-cols .tstack {
   max-width: none;
   padding-inline: 0;
 }
 
-.tstack-cols .tstack-section__title {
-  max-width: none;
-  padding-inline: var(--rail, 2.75rem) 0;
+.tstack-cols .tstack__cap,
+.tstack-cols .tstack__layers::before {
+  display: none;
 }
 
-@media (min-width: 1000px) {
-  .tstack-cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-    gap: var(--space-6);
-  }
+.tstack-section {
+  position: relative;
+  padding-bottom: var(--space-4);
+}
 
-  .tstack-cols .tstack-section + .tstack-section {
-    margin-top: 0;
-  }
+/* The column's stream: label to terminal. */
+.tstack-section::before {
+  content: '';
+  position: absolute;
+  top: var(--label-y);
+  bottom: 0;
+  left: calc(var(--stream-x) - 0.75px);
+  border-left: var(--w-trace) solid var(--color-ink);
+  transition:
+    border-color var(--dur) var(--ease),
+    border-left-width var(--dur) var(--ease);
+}
+
+/* Terminal square at the foot of the stream. */
+.tstack-section::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: calc(var(--stream-x) - 4px);
+  width: 8px;
+  height: 8px;
+  background: var(--color-ink);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.tstack-section__title {
+  margin: 0;
+  padding-left: var(--rail);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: calc(var(--label-y) * 2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+/* Node where the stream starts, level with the label. */
+.tstack-section__title::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--label-y) - 5px);
+  left: calc(var(--stream-x) - 5px);
+  width: 10px;
+  height: 10px;
+  border: var(--w-trace) solid var(--color-ink);
+  border-radius: 50%;
+  background: var(--color-ground);
+  transition:
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
 }
 
 /* Half-width columns are too narrow for company + dates on one row, so
@@ -378,189 +416,38 @@
     'dates dates';
 }
 
-/* ---------------------------------------------------------------------
-   Multi-head variant (.mha wraps .tstack-cols). The two stacks are heads
-   of one attention block: each head's residual stream runs the full
-   height of its column, from the shared input bus at the bottom up into
-   the shared concat bar at the top. The stream is drawn on the section,
-   not the list, so it reaches both bars whatever the column's height.
-   Lighting: any hovered, focused or open layer lights its head's stream
-   and the concat bar — CSS :has() only, no animation beyond --dur.
---------------------------------------------------------------------- */
-.mha {
-  --stream-x: 0.75rem;
-  --rail: 2.75rem;
-  --col-gap: var(--space-6);
-
-  max-width: 64rem;
-  margin-inline: auto;
-  padding-inline: var(--space-4);
-}
-
-.mha .tstack-cols {
-  max-width: none;
-  padding-inline: 0;
-  column-gap: var(--col-gap);
-  /* Stretch, so the shorter head's stream still reaches the bus. */
-  align-items: stretch;
-}
-
-/* Per-stack end caps give way to the shared bars. */
-.mha .tstack__cap,
-.mha .tstack__layers::before {
-  display: none;
-}
-
-.mha .tstack-section {
-  position: relative;
-  padding-top: var(--space-6);
-}
-
-.mha .tstack-section + .tstack-section {
-  margin-top: 0;
-}
-
-/* The head's stream: full column height, bar to bar. */
-.mha .tstack-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--stream-x) - 0.75px);
-  border-left: var(--w-trace) solid var(--color-ink);
-  transition:
-    border-color var(--dur) var(--ease),
-    border-left-width var(--dur) var(--ease);
-}
-
-/* Arrowhead where the stream enters the concat bar. */
-.mha .tstack-section::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: calc(var(--stream-x) - 5px);
-  border-inline: 5px solid transparent;
-  border-bottom: 8px solid var(--color-ink);
-  transition: border-bottom-color var(--dur) var(--ease);
-}
-
-.mha .tstack-section__title {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin: 0 0 var(--space-1);
-  color: var(--color-ink);
-}
-
-.mha__tag {
-  padding: 0 0.35em;
-  border: var(--w-hair) solid var(--color-line);
-  font-size: 0.7rem;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--color-line);
-  transition:
-    color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
-}
-
-.mha__count {
-  margin-left: auto;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--color-line);
-}
-
-/* Shared bars ------------------------------------------------------- */
-.mha__out {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding: var(--space-2) var(--space-4);
-  border: var(--w-trace) solid var(--color-ink);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  transition:
-    border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
-}
-
-.mha__op {
-  font-weight: 600;
-}
-
-.mha__shape {
-  color: var(--color-line);
-}
-
-/* Input bus: one rail joining both streams, with the terminal on the
-   left stream and its label beneath. */
-.mha__in {
-  position: relative;
-  height: var(--space-6);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-}
-
-.mha__in::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: calc(var(--stream-x) - 0.75px);
-  width: calc(50% + var(--col-gap) / 2);
-  border-top: var(--w-trace) solid var(--color-ink);
-}
-
-.mha__in::after {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: calc(var(--stream-x) - 4px);
-  width: 8px;
-  height: 8px;
-  background: var(--color-ink);
-}
-
-.mha__in .mha__op {
-  position: absolute;
-  top: var(--space-2);
-  left: var(--rail);
-  font-weight: 400;
-  color: var(--color-line);
-}
-
-/* Lighting ---------------------------------------------------------- */
-.mha .tstack-section:has(.layer:is(:hover, :focus-within, .is-open))::before {
+/* Lighting. */
+.tstack-section:has(.layer:is(:hover, :focus-within, .is-open))::before {
   border-left-color: var(--color-gpu);
   border-left-width: var(--w-active);
 }
 
-.mha .tstack-section:has(.layer:is(:hover, :focus-within, .is-open))::after {
-  border-bottom-color: var(--color-gpu);
+.tstack-section:has(.layer:is(:hover, :focus-within, .is-open))::after {
+  background: var(--color-gpu);
 }
 
-.mha .tstack-section:has(.layer:is(:hover, :focus-within, .is-open)) .mha__tag {
-  color: var(--color-gpu);
+.tstack-section:has(.layer:is(:hover, :focus-within, .is-open)) .tstack-section__title::before {
   border-color: var(--color-gpu);
+  background: var(--color-gpu);
 }
 
-.mha:has(.layer:is(:hover, :focus-within, .is-open)) .mha__out {
-  border-color: var(--color-gpu);
-  box-shadow: inset 0 0 0 1px var(--color-gpu);
+@media (min-width: 1000px) {
+  .tstack-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch; /* so the shorter column's line still reaches the foot */
+    gap: var(--space-6);
+  }
 }
 
-/* One column: heads stack, so the streams join end to end. The bus only
-   needs its terminal, and only the top head's arrow (into concat) stays. */
 @media (max-width: 999px) {
-  .mha__in::before,
-  .mha .tstack-section + .tstack-section::after {
-    display: none;
+  .tstack-section + .tstack-section {
+    margin-top: var(--space-8);
   }
 }
 
 @media (max-width: 560px) {
-  .mha {
+  .tstack-cols {
     --rail: 2.25rem;
   }
 }
