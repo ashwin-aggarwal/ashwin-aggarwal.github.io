@@ -13,6 +13,17 @@ export function initCoverVideos() {
     const toggle = media?.querySelector('[data-media-toggle]');
     // pinned: keep playing off-hover (autoplay, or started from the toggle)
     let pinned = video.hasAttribute('data-autoplay') && !reduced;
+
+    // The well is 4:3 and crops by default. A video whose shape is far off
+    // (e.g. a portrait phone recording) is shown whole instead, so nothing
+    // at its edges (like an on-screen counter) gets cut off.
+    const fit = () => {
+      if (!video.videoWidth) return;
+      const ratio = video.videoWidth / video.videoHeight / (4 / 3);
+      video.classList.toggle('is-contained', ratio < 0.8 || ratio > 1.25);
+    };
+    video.addEventListener('loadedmetadata', fit);
+    fit();
     if (pinned) video.play().catch(() => {});
 
     const sync = () => {

@@ -732,6 +732,12 @@ a.project-row__media-wrap:is(:hover, :focus-visible) > .media-well {
   opacity: 1;
 }
 
+/* Far-off aspect ratios (mediaWell.js) are letterboxed, not cropped. */
+.cover-well .cover-well__video.is-contained {
+  object-fit: contain;
+  background: var(--color-ground);
+}
+
 /* /projects/: rows are SM cells. Each sits under an ink rule; hovering or
    focusing inside a row lights its rule green at active weight. */
 .project-list {
