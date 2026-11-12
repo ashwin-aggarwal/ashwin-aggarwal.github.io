@@ -2,7 +2,7 @@
 title: LeaseLooker
 affiliation: Personal Project
 year: "2025"
-blurb: Using Hybrid RAG, LeaseLooker lets users ask a question about their lease and get a real answer with the right context.
+blurb: Ask a question about your lease and get an answer pulled from the right clauses, using hybrid RAG search.
 stack:
   - Python
   - LangChain
