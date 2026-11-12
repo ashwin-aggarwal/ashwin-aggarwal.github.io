@@ -2,7 +2,7 @@
 title: AI Basketball Shot Tracker
 affiliation: Personal Project
 year: "2025"
-blurb: A shot tracker that watches a pickup game from a phone on a tripod and keeps score on its own.
+blurb: A shot tracker that watches you shoot around the driveway from just your phone and keeps count of your makes.
 stack:
   - Python
   - YOLOv8
