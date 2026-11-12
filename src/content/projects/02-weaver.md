@@ -3,7 +3,7 @@ title: Weaver
 wip: true
 affiliation: Personal Project
 year: "2025"
-blurb: Four agents that read papers so you don't have to, cross-linking a corpus into a graph you can walk through.
+blurb: Four AI agents that read research papers and link them into a knowledge graph you can explore.
 stack:
   - Python
   - Claude API
