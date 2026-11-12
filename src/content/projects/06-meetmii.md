@@ -11,6 +11,7 @@ stack:
   - Docker
 # Media removed for now — add back later.
 # logoMark: meetmii.svg
+logoMark: meetmii-mark.svg
 links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/meetmii
