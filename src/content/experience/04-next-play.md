@@ -9,9 +9,9 @@ order: 4
 draft: false
 ---
 
-Shipped both a computer-vision feature and backend game infrastructure at a fast-moving startup.
+- Worked on computer vision for exercise detection.
 
-<!-- Bullets hidden for now; only the one-liner above displays.
+<!-- Full resume bullets, kept for reference (hidden).
 - Architected a real-time computer vision pipeline in TypeScript and React using MediaPipe pose
   detection, supporting rep counting and live feedback across 20+ fitness challenges at 90%
   pose classification accuracy.
