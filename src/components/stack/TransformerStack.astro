@@ -15,7 +15,21 @@ import './stack.css';
 import { getExperience } from '../../lib/content';
 import TypeText from '../TypeText.astro';
 
-const experience = await getExperience();
+interface Props {
+  // Only render entries from this section; omit to render every entry.
+  section?: 'work' | 'campus';
+  // Prefix for the toggle/panel ids, so two stacks on one page don't clash.
+  idPrefix?: string;
+  // Heading level for each layer: h2 when the stack is the page's only
+  // list, h3 when it sits under a section heading.
+  level?: 2 | 3;
+}
+
+const { section, idPrefix = 'layer', level = 2 } = Astro.props;
+const Heading = `h${level}`;
+const experience = (await getExperience()).filter(
+  (item) => !section || item.data.section === section,
+);
 const rendered = await Promise.all(experience.map((item) => render(item)));
 const total = experience.length;
 ---
@@ -28,8 +42,8 @@ const total = experience.length;
       experience.map((item, i) => {
         const { Content } = rendered[i];
         const n = total - i;
-        const btnId = `layer-${n}-btn`;
-        const panelId = `layer-${n}-panel`;
+        const btnId = `${idPrefix}-${n}-btn`;
+        const panelId = `${idPrefix}-${n}-panel`;
         return (
           <li class="layer is-open" data-layer>
             <span class="layer__fork" aria-hidden="true" />
@@ -37,7 +51,7 @@ const total = experience.length;
             <span class="layer__add" aria-hidden="true" />
 
             <div class="layer__block">
-              <h2 class="layer__heading">
+              <Heading class="layer__heading">
                 <button
                   type="button"
                   class="layer__toggle"
@@ -54,7 +68,7 @@ const total = experience.length;
                   </span>
                   <span class="layer__sign" aria-hidden="true" />
                 </button>
-              </h2>
+              </Heading>
 
               <div class="layer__panel" id={panelId} role="region" aria-labelledby={btnId}>
                 <div class="layer__body">
