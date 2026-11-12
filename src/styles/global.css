@@ -755,6 +755,27 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   height: auto;
 }
 
+/* Wider schematic marks (data-size="wide" in the SVG) fill more of the
+   well. Their .mark-lit parts light green while the row is hovered or
+   focused, like a die block lighting up. */
+.media-well__logo-svg[data-size='wide'] {
+  width: 62%;
+}
+
+.media-well__logo-svg .mark-lit {
+  transition:
+    stroke var(--dur) var(--ease),
+    fill var(--dur) var(--ease);
+}
+
+.project-row:is(:hover, :focus-within) .media-well__logo-svg .mark-lit {
+  stroke: var(--color-gpu);
+}
+
+.project-row:is(:hover, :focus-within) .media-well__logo-svg .mark-lit--fill {
+  fill: var(--color-gpu);
+}
+
 /* /projects/: rows are SM cells. Each sits under an ink rule; hovering or
    focusing inside a row lights its rule green at active weight. */
 .project-list {
