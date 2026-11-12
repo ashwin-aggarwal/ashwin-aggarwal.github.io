@@ -260,6 +260,22 @@
   margin-bottom: 0;
 }
 
+/* Bullets under the one-liner: small square markers in the gray, like
+   pads on the die, so the list reads as detail rather than new headings. */
+.layer__body ul {
+  margin: var(--space-2) 0 0;
+  padding-left: 1.1rem;
+  list-style: square;
+}
+
+.layer__body li + li {
+  margin-top: var(--space-1);
+}
+
+.layer__body li::marker {
+  color: var(--color-line);
+}
+
 /* Active layer: hovered, focused within, or open. Frame goes green at
    active weight (inset shadow, so nothing shifts); its fork, merge and ⊕
    light with it. */
