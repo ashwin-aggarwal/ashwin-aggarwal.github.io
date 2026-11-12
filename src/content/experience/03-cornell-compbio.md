@@ -10,10 +10,9 @@ order: 3
 draft: false
 ---
 
-Trained 3D CNNs to classify parity from MRI scans, iterating on architecture and preprocessing
-to push accuracy up from a weak baseline.
+- Trained 3D ResNet and U-Net models on brain MRI scans to classify parity.
 
-<!-- Bullets hidden for now; only the one-liner above displays.
+<!-- Full resume bullets, kept for reference (hidden).
 - Constructed and fine-tuned 3D CNNs (ResNet and U-Net) for classifying parity of 500+ MRI
   scans, improving F1 score from 0.54 to 0.61 using data augmentation, dropout, and early
   stopping.
