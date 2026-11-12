@@ -249,34 +249,6 @@
   }
 }
 
-/* Browser chrome for mediaFrame: 'browser' — an ink hairline frame and a
-   flat title bar. The "dots" are square pads, not traffic lights. */
-.browser-frame {
-  border: var(--w-trace) solid var(--color-ink);
-}
-
-.browser-frame__bar {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  height: 26px;
-  padding-inline: 0.6rem;
-  border-bottom: var(--w-hair) solid var(--color-ink);
-}
-
-.browser-frame__dot {
-  width: 6px;
-  height: 6px;
-  background: var(--color-line);
-}
-
-.browser-frame__url {
-  flex: 1;
-  height: 10px;
-  margin-inline-start: 0.4rem;
-  border: var(--w-hair) solid var(--color-line);
-}
-
 /* Outlined mono button: blog "Read article" and project "Read more".
    Ink hairline at rest, floods ink on hover/focus (each user decides what
    triggers that). Weight and fill, not color, carry the state. */
@@ -668,22 +640,18 @@
 }
 
 /* When a project has a demoUrl, .project-row__media-wrap renders as <a>:
-   the frame itself is the link. Hover/focus thickens the frame to green. */
+   the cover itself is the link. Hover/focus rings it in green. */
 a.project-row__media-wrap {
   display: block;
   text-decoration: none;
 }
 
-a.project-row__media-wrap .browser-frame,
 a.project-row__media-wrap > .media-well {
-  transition:
-    border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+  transition: box-shadow var(--dur) var(--ease);
 }
 
-a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
-  border-color: var(--color-gpu);
-  box-shadow: 0 0 0 1px var(--color-gpu);
+a.project-row__media-wrap:is(:hover, :focus-visible) > .media-well {
+  box-shadow: 0 0 0 2px var(--color-gpu);
 }
 
 /* Pause/play toggle under a project video, so the loop can be stopped.
@@ -740,40 +708,34 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   display: block;
 }
 
-/* Brand-mark media slot: a single-color inline SVG logo, centered, in an
-   ink frame (no browser chrome — it isn't a screenshot). */
-.media-well--logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: var(--w-trace) solid var(--color-ink);
-  color: var(--color-ink);
+/* Generated project cover (components/ProjectCover.astro). Fills the
+   4:3 well; a project video sits on top, hidden until it plays (hover or
+   the toggle), then fades in over the cover. */
+.cover-well {
+  position: relative;
 }
 
-.media-well__logo-svg {
-  width: 35%;
-  height: auto;
+.cover-well .cover {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-/* Wider schematic marks (data-size="wide" in the SVG) fill more of the
-   well. Their .mark-lit parts light green while the row is hovered or
-   focused, like a die block lighting up. */
-.media-well__logo-svg[data-size='wide'] {
-  width: 62%;
+.cover-well .cover-well__video {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
 }
 
-.media-well__logo-svg .mark-lit {
-  transition:
-    stroke var(--dur) var(--ease),
-    fill var(--dur) var(--ease);
+.cover-well.is-playing .cover-well__video {
+  opacity: 1;
 }
 
-.project-row:is(:hover, :focus-within) .media-well__logo-svg .mark-lit {
-  stroke: var(--color-gpu);
-}
-
-.project-row:is(:hover, :focus-within) .media-well__logo-svg .mark-lit--fill {
-  fill: var(--color-gpu);
+/* Far-off aspect ratios (mediaWell.js) are letterboxed, not cropped. */
+.cover-well .cover-well__video.is-contained {
+  object-fit: contain;
+  background: var(--color-ground);
 }
 
 /* /projects/: rows are SM cells. Each sits under an ink rule; hovering or

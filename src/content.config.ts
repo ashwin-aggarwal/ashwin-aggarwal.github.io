@@ -62,6 +62,9 @@ const projects = defineCollection({
         // than co-located under src/content/projects/media/. Takes
         // precedence over `cover` when both are set.
         video: z.string().optional(),
+        // With a generated cover: play the video from page load (it's the
+        // cover) instead of only on hover. Still off under reduced motion.
+        videoAutoplay: z.boolean().default(false),
         // A single-color brand mark (public/logos/<file>.svg, inlined with
         // currentColor) rendered in the media slot instead of a screenshot.
         // Takes precedence over `cover`/`video`; always renders with no

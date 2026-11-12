@@ -1,0 +1,218 @@
+---
+// A generated project cover, one shared format for every project: a
+// chip-style frame on a faint grid, index + year on top, a schematic motif
+// of what the project does in the middle, title + stack along the bottom.
+// Drawn only in the site's tokens (ground / ink / line / gpu); green is
+// the "lit" part of each motif. A new project needs a motif branch below
+// keyed by its slug (filename minus the NN- prefix), or it gets the frame,
+// title and stack with an empty middle.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const slug = project.id.replace(/^\d+[a-z]?-/, '');
+const uid = `cover-${slug}`;
+
+// Token roles the motifs use: ink (main lines/text), dim (secondary),
+// hi / hi2 (the lit parts; both green), bg0 (fills that mask lines).
+const vars =
+  '--c-bg0: var(--color-ground); --c-ink: var(--color-ink); --c-dim: var(--color-line); --c-hi: var(--color-gpu); --c-hi2: var(--color-gpu); --c-grid: 0.14;';
+
+const index = String(data.order).padStart(2, '0');
+const title = data.title;
+const titleSize = Math.min(24, 352 / (title.length * 0.6));
+const stack = data.stack.slice(0, 3).join(' · ');
+// Some years are still "PLACEHOLDER — \"2025\"" strings; show just the year.
+const year = data.year.replace(/^PLACEHOLDER — /, '').replaceAll('\u0022', '');
+
+const F = 'font-family: var(--font-mono)';
+const ink = 'stroke: var(--c-ink)';
+const dim = 'stroke: var(--c-dim)';
+const hi = 'stroke: var(--c-hi)';
+const hi2 = 'stroke: var(--c-hi2)';
+const fInk = 'fill: var(--c-ink)';
+const fDim = 'fill: var(--c-dim)';
+const fHi = 'fill: var(--c-hi)';
+const fHi2 = 'fill: var(--c-hi2)';
+const fBg = 'fill: var(--c-bg0)';
+
+// Weaver: a small knowledge graph with one lit path through it.
+const wNodes = [
+  [80, 95], [130, 150], [70, 190], [180, 105], [205, 172], [250, 82],
+  [268, 145], [322, 108], [312, 192], [235, 212], [150, 62], [350, 160],
+];
+const wEdges = [
+  [0, 1], [1, 2], [0, 3], [1, 3], [3, 4], [4, 1], [3, 5], [5, 6], [6, 4],
+  [6, 7], [7, 11], [6, 8], [8, 11], [4, 9], [9, 8], [10, 0], [10, 3], [10, 5],
+];
+const wLitPath = [[10, 3], [3, 6], [6, 8]];
+const wLit = new Set([10, 3, 6, 8]);
+const isLitEdge = (a: number, b: number) =>
+  wLitPath.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+// Some lit edges aren't in wEdges; draw the path separately.
+---
+
+<svg
+  class="cover"
+  viewBox="0 0 400 300"
+  role="img"
+  aria-label={`${title} cover`}
+  style={vars}
+>
+  <defs>
+    <pattern id={`${uid}-grid`} width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" style={`${dim}; stroke-opacity: var(--c-grid)`} stroke-width="1" />
+    </pattern>
+    <clipPath id={`${uid}-lens`}><circle cx="215" cy="148" r="46" /></clipPath>
+  </defs>
+
+  <rect width="400" height="300" style="fill: var(--c-bg0)" />
+  <rect width="400" height="300" fill={`url(#${uid}-grid)`} />
+
+  {/* Chip package frame with a pin-1 notch. */}
+  <rect x="8" y="8" width="384" height="284" fill="none" style={ink} stroke-width="1.5" />
+  <path d="M8 8h18L8 26z" style={fInk} />
+  <text x="34" y="30" style={`${F}; ${fDim}`} font-size="11">{index} / PROJECT</text>
+  <text x="372" y="30" text-anchor="end" style={`${F}; ${fDim}`} font-size="11">{year}</text>
+
+  {/* Motif ------------------------------------------------------------ */}
+  {slug === 'detective-jev' && (
+    <g>
+      <path d="M50 212H350" style={ink} stroke-width="1.5" />
+      <polyline points="85,190 133,178 181,196 229,150 277,186 325,200" fill="none" style={dim} stroke-width="1.5" stroke-dasharray="3 4" />
+      {[40, 70, 34, 140, 55, 24].map((h, i) => (
+        <rect
+          x={70 + i * 48}
+          y={212 - h}
+          width="30"
+          height={h}
+          style={i === 3 ? fHi : `fill: none; ${ink}`}
+          stroke-width="1.5"
+         
+        />
+      ))}
+      {['A', 'B', 'C', 'D', 'E', 'F'].map((l, i) => (
+        <text x={85 + i * 48} y="228" text-anchor="middle" style={`${F}; ${i === 3 ? fHi : fDim}`} font-size="10">{l}</text>
+      ))}
+      <text x="229" y="62" text-anchor="middle" style={`${F}; ${fHi2}`} font-size="12" font-weight="600">p = 0.71</text>
+    </g>
+  )}
+
+  {slug === 'weaver' && (
+    <g>
+      {wEdges.filter(([a, b]) => !isLitEdge(a, b)).map(([a, b]) => (
+        <line x1={wNodes[a][0]} y1={wNodes[a][1]} x2={wNodes[b][0]} y2={wNodes[b][1]} style={dim} stroke-width="1.2" />
+      ))}
+      <g>
+        {wLitPath.map(([a, b]) => (
+          <line x1={wNodes[a][0]} y1={wNodes[a][1]} x2={wNodes[b][0]} y2={wNodes[b][1]} style={hi} stroke-width="2.5" />
+        ))}
+      </g>
+      {wNodes.map(([x, y], i) => (
+        <circle cx={x} cy={y} r={wLit.has(i) ? 7 : 5} style={wLit.has(i) ? fHi : `${fBg}; ${ink}`} stroke-width="1.5" />
+      ))}
+      <circle cx="322" cy="108" r="5" style={fHi2} />
+    </g>
+  )}
+
+  {slug === 'leaselooker' && (
+    <g>
+      <path d="M100 55H172L192 75V218H100Z M172 55V75H192" fill="none" style={ink} stroke-width="2" stroke-linejoin="round" />
+      <path d="M114 92H160 M114 108H176 M114 124H168 M114 140H176 M114 156H150 M114 172H170 M114 188H162" style={ink} stroke-width="2.5" stroke-linecap="round" />
+      {[0, 1, 2].map((r) => [0, 1, 2].map((c) => (
+        <circle cx={278 + c * 22} cy={70 + r * 22} r={r === 1 && c === 1 ? 6 : 3.5} style={r === 1 && c === 1 ? fHi2 : fDim} />
+      )))}
+      <circle cx="215" cy="148" r="46" style={`${fBg}; ${ink}`} stroke-width="2.5" />
+      <g clip-path={`url(#${uid}-lens)`} stroke-linecap="round">
+        <path d="M160 128H270" style={ink} stroke-width="6" />
+        <path d="M160 150H256" style={hi} stroke-width="6" />
+        <path d="M160 172H244" style={ink} stroke-width="6" />
+      </g>
+      <path d="M248 182L284 218" style={ink} stroke-width="8" stroke-linecap="round" />
+    </g>
+  )}
+
+  {slug === 'ai-basketball-shot-tracker' && (
+    <g>
+      <path d="M60 214Q170 0 288 122" fill="none" style={dim} stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" />
+      <rect x="312" y="62" width="6" height="84" style={fInk} />
+      <path d="M272 122H312" style={hi2} stroke-width="3" />
+      <path d="M276 122L282 146M286 122L288 146M298 122L294 146M308 122L300 146" style={dim} stroke-width="1.2" />
+      <rect x="262" y="104" width="62" height="50" fill="none" style={hi} stroke-width="1.5" />
+      <rect x="262" y="92" width="52" height="12" style={fHi} />
+      <text x="266" y="101" style={`${F}; ${fBg}`} font-size="8.5" font-weight="600">rim 0.88</text>
+      <g>
+        <circle cx="156" cy="74" r="15" style={fHi2} />
+      </g>
+      <path d="M141 74H171M156 59V89M145 63Q156 74 145 85M167 63Q156 74 167 85" fill="none" style="stroke: var(--c-bg0)" stroke-width="1.3" />
+      <rect x="134" y="52" width="44" height="44" fill="none" style={hi} stroke-width="1.5" />
+      <rect x="134" y="40" width="58" height="12" style={fHi} />
+      <text x="138" y="49" style={`${F}; ${fBg}`} font-size="8.5" font-weight="600">ball 0.94</text>
+      <path d="M44 214H356" style={ink} stroke-width="1.5" />
+    </g>
+  )}
+
+  {slug === 'ball-knowledge' && (
+    <g>
+      <text x="200" y="66" text-anchor="middle" style={`${F}; ${fDim}`} font-size="11" letter-spacing="2">WHO AM I?</text>
+      {[
+        { x: 50, k: 'PPG', v: '30.1' },
+        { x: 155, k: '', v: '?' },
+        { x: 260, k: 'AST', v: '8.2' },
+      ].map((t, i) => (
+        <g>
+          <rect x={t.x} y="84" width="90" height="86" style={i === 1 ? fHi : `fill: none; ${ink}`} stroke-width="1.5" />
+          {t.k && <text x={t.x + 45} y="108" text-anchor="middle" style={`${F}; ${fDim}`} font-size="10">{t.k}</text>}
+          <text x={t.x + 45} y={i === 1 ? 145 : 146} text-anchor="middle" style={`${F}; ${i === 1 ? fBg : fInk}`} font-size={i === 1 ? 48 : 24} font-weight="600">{t.v}</text>
+        </g>
+      ))}
+      <path d="M50 198H350" style={dim} stroke-width="4" stroke-linecap="round" />
+      <path d="M50 198H236" style="stroke: var(--c-hi2)" stroke-width="4" stroke-linecap="round" />
+      <text x="350" y="216" text-anchor="end" style={`${F}; ${fDim}`} font-size="10">0:07</text>
+    </g>
+  )}
+
+  {slug === 'meetmii' && (
+    <g>
+      <path d="M90 84V62H112 M288 62H310V84 M310 196V218H288 M112 218H90V196" fill="none" style={ink} stroke-width="3" stroke-linecap="round" />
+      <rect x="110" y="82" width="180" height="116" rx="10" fill="none" style={ink} stroke-width="2.5" />
+      {[[128, 100], [168, 100], [128, 152]].map(([x, y]) => (
+        <g>
+          <rect x={x} y={y} width="26" height="26" fill="none" style={ink} stroke-width="2.5" />
+          <rect x={x + 8} y={y + 8} width="10" height="10" style={fInk} />
+        </g>
+      ))}
+      {[[164, 136], [176, 146], [186, 160], [166, 166], [180, 172]].map(([x, y]) => (
+        <rect x={x} y={y} width="7" height="7" style={fInk} />
+      ))}
+      <path d="M214 108H272" style={ink} stroke-width="5" stroke-linecap="round" />
+      <path d="M214 124H258" style={dim} stroke-width="3" stroke-linecap="round" />
+      <path d="M220 176L242 160L268 172M242 160L252 184" fill="none" style={dim} stroke-width="1.8" />
+      {[[220, 176, 4], [242, 160, 5], [268, 172, 4], [252, 184, 3.5]].map(([x, y, r]) => (
+        <circle cx={x} cy={y} r={r} style={fHi2} />
+      ))}
+      <path d="M96 140H304" style={hi} stroke-width="2.5" stroke-linecap="round" />
+    </g>
+  )}
+
+  {slug === 'blackjack' && (
+    <g>
+      <rect x="50" y="52" width="300" height="168" fill="none" style={ink} stroke-width="1.5" />
+      <path d="M50 72H350" style={ink} stroke-width="1.5" />
+      {[62, 74, 86].map((x) => <circle cx={x} cy="62" r="3" style={fDim} />)}
+      <text x="64" y="94" style={`${F}; ${fDim}`} font-size="11">$ dune exec ./blackjack</text>
+      <text x="64" y="122" style={`${F}; ${fInk}`} font-size="13">dealer  [K♠] [▒▒]</text>
+      <text x="64" y="146" style={`${F}; ${fInk}`} font-size="13">you     [A<tspan style={fHi2}>♥</tspan>] [10<tspan style={fHi2}>♦</tspan>]</text>
+      <text x="64" y="174" style={`${F}; ${fHi}`} font-size="14" font-weight="600">&gt; 21 — blackjack</text>
+      <text x="64" y="202" style={`${F}; ${fDim}`} font-size="10">players at table: 3 · lwt server</text>
+    </g>
+  )}
+
+  {/* Title + stack ----------------------------------------------------- */}
+  <text x="24" y="262" style={`${F}; ${fInk}`} font-size={titleSize} font-weight="600">{title}</text>
+  <text x="24" y="282" style={`${F}; ${fDim}`} font-size="10">{stack}</text>
+</svg>
