@@ -14,6 +14,7 @@ stack:
   - pytest
 accent: "#6E2A2A"
 video: /media/projects/detective-jev-demo.mp4
+videoAutoplay: true
 links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/Detective-Jev
