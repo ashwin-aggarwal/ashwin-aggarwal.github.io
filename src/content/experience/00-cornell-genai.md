@@ -9,8 +9,5 @@ order: 0
 draft: false
 ---
 
-Leading the club's reinforcement learning work and building agentic AI tools with campus partners.
-
-- Lead the Reinforcement Learning subteam, training and evaluating RL policies for Microduck.
-- Building an agentic AI meeting assistant with the Marketing + Media Alliance (MMA) as an
-  engineer and open-source contributor.
+- Leading the Reinforcement Learning subteam, training and evaluating RL policies for Microduck.
+- Engineering an agentic AI meeting assistant for the Marketing + Media Alliance (MMA).
