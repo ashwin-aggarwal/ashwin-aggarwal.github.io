@@ -2,10 +2,9 @@
 // One row per project on /projects/, numbered 01, 02, … in the margin.
 import type { CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
-import { Image } from 'astro:assets';
 import { anchorId } from '../lib/content';
-import InlineSvg from './InlineSvg.astro';
 import TypeText from './TypeText.astro';
+import ProjectCover from './ProjectCover.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -19,12 +18,6 @@ const displayIndex = String(data.order).padStart(2, '0');
 // Hovering the row types the number, then the title (TypeText).
 const indexLabel = displayIndex;
 const mediaLeft = data.order % 2 === 1;
-const isBrowserFrame = data.mediaFrame === 'browser';
-// No fallback block when media is absent — some rows are text-only for now
-// (see the project's own frontmatter) rather than showing a numbered
-// placeholder. Set cover/video/logoMark to bring the media side back.
-const hasMedia = Boolean(data.logoMark || data.video || data.cover);
-
 // When a live demo URL is set, the media well itself becomes a link to it
 // (in addition to any GitHub link rendered below) — otherwise it's a plain
 // wrapper div. Astro supports dynamic tag names via a capitalized variable.
@@ -44,50 +37,18 @@ const mediaWrapProps = data.demoUrl
     </div>
 
     <div class="marginal__content">
-      <div class={hasMedia ? 'project-row__grid' : ''} data-media-side={hasMedia ? (mediaLeft ? 'left' : 'right') : undefined}>
-        {
-          hasMedia && (
-            <div class="project-row__media">
+      <div class="project-row__grid" data-media-side={mediaLeft ? 'left' : 'right'}>
+        <div class="project-row__media">
             <MediaWrap class="project-row__media-wrap" {...mediaWrapProps}>
-              {data.logoMark ? (
-                <div class="media-well media-well--logo">
-                  <InlineSvg path={`logos/${data.logoMark}`} class="media-well__logo-svg" />
-                </div>
-              ) : data.video ? (
-                isBrowserFrame ? (
-                  <div class="browser-frame">
-                    <div class="browser-frame__bar" aria-hidden="true">
-                      <span class="browser-frame__dot" />
-                      <span class="browser-frame__dot" />
-                      <span class="browser-frame__dot" />
-                      <span class="browser-frame__url" />
-                    </div>
-                    <div class="media-well" data-media-well>
-                      <video data-media muted loop playsinline preload="metadata" src={data.video} />
-                    </div>
-                  </div>
-                ) : (
-                  <div class="media-well" data-media-well>
-                    <video data-media muted loop playsinline preload="metadata" src={data.video} />
-                  </div>
-                )
-              ) : isBrowserFrame ? (
-                <div class="browser-frame">
-                  <div class="browser-frame__bar" aria-hidden="true">
-                    <span class="browser-frame__dot" />
-                    <span class="browser-frame__dot" />
-                    <span class="browser-frame__dot" />
-                    <span class="browser-frame__url" />
-                  </div>
-                  <div class="media-well">
-                    <Image src={data.cover!} alt={data.coverAlt ?? ''} />
-                  </div>
-                </div>
-              ) : (
-                <div class="media-well">
-                  <Image src={data.cover!} alt={data.coverAlt ?? ''} />
-                </div>
-              )}
+              {/* Every project gets a generated cover (ProjectCover). A
+                  video sits on top of it: it plays on hover, or from load
+                  when videoAutoplay is set (mediaWell.js). */}
+              <div class="media-well cover-well" data-cover-well>
+                <ProjectCover project={project} />
+                {data.video && (
+                  <video class="cover-well__video" data-cover-video data-autoplay={data.videoAutoplay ? '' : undefined} muted loop playsinline preload="metadata" src={data.video} aria-label={`${data.title} demo video`} />
+                )}
+              </div>
             </MediaWrap>
             {/* Outside MediaWrap so it's never nested in the demo link. Its
                 label and icon are kept in sync by mediaWell.js. */}
@@ -102,9 +63,7 @@ const mediaWrapProps = data.demoUrl
                 </svg>
               </button>
             )}
-            </div>
-          )
-        }
+        </div>
 
         <div class="project-row__text">
           <h2 class="title-mono">

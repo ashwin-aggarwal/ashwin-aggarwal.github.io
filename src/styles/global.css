@@ -668,22 +668,18 @@
 }
 
 /* When a project has a demoUrl, .project-row__media-wrap renders as <a>:
-   the frame itself is the link. Hover/focus thickens the frame to green. */
+   the cover itself is the link. Hover/focus rings it in green. */
 a.project-row__media-wrap {
   display: block;
   text-decoration: none;
 }
 
-a.project-row__media-wrap .browser-frame,
 a.project-row__media-wrap > .media-well {
-  transition:
-    border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+  transition: box-shadow var(--dur) var(--ease);
 }
 
-a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
-  border-color: var(--color-gpu);
-  box-shadow: 0 0 0 1px var(--color-gpu);
+a.project-row__media-wrap:is(:hover, :focus-visible) > .media-well {
+  box-shadow: 0 0 0 2px var(--color-gpu);
 }
 
 /* Pause/play toggle under a project video, so the loop can be stopped.
@@ -738,6 +734,30 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* Generated project cover (components/ProjectCover.astro). Fills the
+   4:3 well; a project video sits on top, hidden until it plays (hover or
+   the toggle), then fades in over the cover. */
+.cover-well {
+  position: relative;
+}
+
+.cover-well .cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cover-well .cover-well__video {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.cover-well.is-playing .cover-well__video {
+  opacity: 1;
 }
 
 /* Brand-mark media slot: a single-color inline SVG logo, centered, in an

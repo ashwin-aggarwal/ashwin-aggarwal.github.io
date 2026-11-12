@@ -1,47 +1,41 @@
-// Behaviors media wells need that pure CSS can't do:
-// - reduced-motion-aware video autoplay (autoplay when motion is fine,
-//   otherwise a paused frame; the toggle below is the way to opt in)
-// - a pause/play toggle under each project video, so the loop can be stopped
-// - graceful fallback to an empty well if a referenced file 404s, so a
-//   present-but-missing `media` value reads as an empty well rather than
-//   a broken image/video icon
-export function initMediaWells() {
+// Project media (components/ProjectRow.astro). Each video sits under its
+// generated cover
+// and plays only while the media is hovered, or after the play toggle is
+// pressed (touch/keyboard). The cover fades out while it plays. A video
+// marked data-autoplay (videoAutoplay in frontmatter) plays from load
+// instead, unless the viewer prefers reduced motion.
+export function initCoverVideos() {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  document.querySelectorAll('[data-media]').forEach((el) => {
-    const toggle = el.closest('.project-row__media')?.querySelector('[data-media-toggle]');
+  document.querySelectorAll('[data-cover-video]').forEach((video) => {
+    const well = video.closest('[data-cover-well]');
+    const media = video.closest('.project-row__media');
+    const toggle = media?.querySelector('[data-media-toggle]');
+    // pinned: keep playing off-hover (autoplay, or started from the toggle)
+    let pinned = video.hasAttribute('data-autoplay') && !reduced;
+    if (pinned) video.play().catch(() => {});
 
-    el.addEventListener('error', () => {
-      el.closest('[data-media-well]')?.classList.add('is-empty');
-      el.remove();
-      toggle?.remove();
+    const sync = () => {
+      well.classList.toggle('is-playing', !video.paused);
+      toggle?.classList.toggle('is-paused', video.paused);
+      toggle?.setAttribute('aria-label', video.paused ? 'Play video' : 'Pause video');
+    };
+
+    media.addEventListener('mouseenter', () => video.play().catch(() => {}));
+    media.addEventListener('mouseleave', () => {
+      if (!pinned) video.pause();
     });
-
-    if (el.tagName === 'VIDEO') {
-      if (toggle) initToggle(el, toggle);
-
-      if (reduced) {
-        el.removeAttribute('autoplay');
-        el.pause();
+    toggle?.addEventListener('click', () => {
+      if (video.paused) {
+        pinned = true;
+        video.play().catch(() => {});
       } else {
-        el.setAttribute('autoplay', '');
-        el.play?.().catch(() => {});
+        pinned = false;
+        video.pause();
       }
-    }
+    });
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    sync();
   });
-}
-
-function initToggle(video, toggle) {
-  const sync = () => {
-    toggle.classList.toggle('is-paused', video.paused);
-    toggle.setAttribute('aria-label', video.paused ? 'Play video' : 'Pause video');
-  };
-
-  toggle.addEventListener('click', () => {
-    if (video.paused) video.play().catch(() => {});
-    else video.pause();
-  });
-  video.addEventListener('play', sync);
-  video.addEventListener('pause', sync);
-  sync();
 }
