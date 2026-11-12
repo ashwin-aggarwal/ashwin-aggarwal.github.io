@@ -9,10 +9,9 @@ order: 2
 draft: false
 ---
 
-Built a data pipeline for sensitive clinical text, optimized to feed downstream retrieval for
-medical queries.
+- Optimized a Databricks pipeline for clinical text to feed downstream RAG.
 
-<!-- Bullets hidden for now; only the one-liner above displays.
+<!-- Full resume bullets, kept for reference (hidden).
 - Designed a Databricks pipeline for unstructured, sensitive clinical text from an Epic
   database, sorted by medallion architecture to optimize RAG performance downstream.
 - Used OCR models to extract 100+ fields from clinical notes for an agent that categorizes
