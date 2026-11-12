@@ -807,8 +807,11 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 }
 
 /* 404 page (src/pages/404.astro): standalone, centered — the chip mark
-   is the link home. Static; nothing moves. */
+   is the link home. With JS (and motion allowed) it bounces around the
+   viewport like a DVD logo; see scripts/bounce.js. */
 .notfound {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -833,6 +836,46 @@ a.project-row__media-wrap:is(:hover, :focus-visible) .browser-frame {
 
 .notfound__mark:is(:hover, :focus-visible) {
   color: var(--color-gpu);
+}
+
+/* Bouncing: bounce.js adds .is-bouncing to the page and drives the mark's
+   transform. Each wall hit sets .is-lit — green at once, then a slow fade
+   back to ink. */
+.notfound.is-bouncing {
+  position: fixed;
+  inset: 0;
+}
+
+.notfound.is-bouncing .notfound__mark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  transition: color 700ms var(--ease);
+}
+
+.notfound.is-bouncing .notfound__mark.is-lit {
+  color: var(--color-gpu);
+  transition-duration: 0s;
+}
+
+.notfound__egg {
+  position: absolute;
+  bottom: var(--space-6);
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-line);
+  opacity: 0;
+  transition: opacity 400ms var(--ease);
+  pointer-events: none;
+}
+
+.notfound__egg.is-visible {
+  opacity: 1;
 }
 
 .notfound__mark-svg {
