@@ -98,6 +98,9 @@ const experience = defineCollection({
     logoScale: z.number().default(1),
     url: z.string().url().optional(),
     order: z.number(), // ascending = left to right = oldest to newest
+    // 'work' = internships and research roles; 'campus' = clubs and
+    // student orgs. Lets the page split them into separate stacks.
+    section: z.enum(['work', 'campus']).default('work'),
     draft: z.boolean().default(false),
   }),
 });
