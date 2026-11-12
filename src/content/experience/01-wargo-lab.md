@@ -10,10 +10,11 @@ order: 1
 draft: false
 ---
 
-Automated a medical imaging lab's data collection and extended its GPU-accelerated Monte Carlo
-simulation pipeline from 2D to 3D volumetric output on an HPC cluster.
+- Extended a GPU-accelerated Monte Carlo simulation pipeline from 2D to 3D volumetric output
+  on an HPC cluster
+- Automated the medical imaging lab's data collection
 
-<!-- Bullets hidden for now; only the one-liner above displays.
+<!-- Full resume bullets, kept for reference (hidden).
 - Built ETL pipelines ingesting data from networked devices, automating Power BI dashboard
   generation; scheduled concurrent workflows to populate a SQL Server database, replacing manual
   data collection across 5+ client sites.

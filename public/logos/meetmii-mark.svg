@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" fill="none" role="img" aria-label="MeetMii" data-size="wide">
+  <!-- A business card in a scanner's viewfinder: QR on the left, name
+       lines and a small contact graph on the right. The scan line is
+       .mark-lit and lights green when the project row is hovered. -->
+  <g stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 30 V16 H28 M132 16 H146 V30 M146 90 V104 H132 M28 104 H14 V90"/>
+    <rect x="28" y="30" width="104" height="60" rx="6"/>
+  </g>
+  <!-- QR: three finder patterns plus a few modules. -->
+  <g stroke="currentColor" stroke-width="2.5">
+    <rect x="38" y="40" width="12" height="12"/>
+    <rect x="62" y="40" width="12" height="12"/>
+    <rect x="38" y="68" width="12" height="12"/>
+  </g>
+  <g fill="currentColor">
+    <rect x="42" y="44" width="4" height="4"/>
+    <rect x="66" y="44" width="4" height="4"/>
+    <rect x="42" y="72" width="4" height="4"/>
+    <rect x="56" y="58" width="4" height="4"/>
+    <rect x="64" y="62" width="4" height="4"/>
+    <rect x="70" y="70" width="4" height="4"/>
+    <rect x="58" y="74" width="4" height="4"/>
+    <rect x="64" y="76" width="4" height="4"/>
+  </g>
+  <!-- Name and title lines. -->
+  <g stroke="currentColor" stroke-linecap="round">
+    <path d="M86 44 H120" stroke-width="4"/>
+    <path d="M86 54 H112" stroke-width="2.5"/>
+  </g>
+  <!-- Contact graph: who you've been meeting. -->
+  <g stroke="currentColor" stroke-width="2">
+    <path d="M90 78 L104 68 L120 76 M104 68 L110 82"/>
+  </g>
+  <g fill="currentColor">
+    <circle cx="90" cy="78" r="3"/><circle cx="104" cy="68" r="3.5"/>
+    <circle cx="120" cy="76" r="3"/><circle cx="110" cy="82" r="2.5"/>
+  </g>
+  <path class="mark-lit" d="M20 60 H140" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 5"/>
+</svg>

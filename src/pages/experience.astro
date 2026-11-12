@@ -1,11 +1,28 @@
 ---
+// Experience in two columns: on campus | industry. Each column is a
+// transformer stack (components/stack/) with its own stream line, side by
+// side on wide screens and stacked below 1000px.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
 import TransformerStack from '../components/stack/TransformerStack.astro';
+
+const columns = [
+  { key: 'campus', title: 'On campus' },
+  { key: 'work', title: 'Industry' },
+] as const;
 ---
 
 <BaseLayout title="Experience — Ashwin Aggarwal">
-  <PageHead title="Experience" />
+  <PageHead title="Experience" wide />
 
-  <TransformerStack />
+  <div class="tstack-cols">
+    {
+      columns.map((c) => (
+        <section class="tstack-section" aria-labelledby={`exp-${c.key}`}>
+          <h2 class="tstack-section__title" id={`exp-${c.key}`}>{c.title}</h2>
+          <TransformerStack section={c.key} idPrefix={c.key} level={3} />
+        </section>
+      ))
+    }
+  </div>
 </BaseLayout>

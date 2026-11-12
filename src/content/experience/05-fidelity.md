@@ -9,10 +9,10 @@ order: 5
 draft: false
 ---
 
-Built and improved client-facing tools on the Digital Solutions team, working across the
-frontend and the legacy systems.
+- Built a prototype Vue.js web page and connected it to a SQL Server database through REST
+  APIs
 
-<!-- Bullets hidden for now; only the one-liner above displays.
+<!-- Full resume bullets, kept for reference (hidden).
 - Prototyped client-facing web pages using Vue.js and Tailwind CSS supporting internal tools
   used by 20k+ clients.
 - Integrated 10+ RESTful APIs into the frontend and refactored legacy code against Microsoft

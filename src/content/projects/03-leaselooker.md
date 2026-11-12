@@ -12,6 +12,7 @@ stack:
 accent: "#3B4E8C"
 # Media removed for now — add back later.
 # logoMark: leaselooker.svg
+logoMark: leaselooker-mark.svg
 links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/LeaseLooker
