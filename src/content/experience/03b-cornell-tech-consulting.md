@@ -9,4 +9,4 @@ order: 3.5
 draft: false
 ---
 
-- Helping local Ithaca businesses with technology solutions, including Bet the Farm Winery.
+- Helping local Ithaca businesses with technology solutions, including Bet the Farm Winery

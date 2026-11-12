@@ -10,7 +10,7 @@ draft: false
 ---
 
 - Built a prototype Vue.js web page and connected it to a SQL Server database through REST
-  APIs.
+  APIs
 
 <!-- Full resume bullets, kept for reference (hidden).
 - Prototyped client-facing web pages using Vue.js and Tailwind CSS supporting internal tools

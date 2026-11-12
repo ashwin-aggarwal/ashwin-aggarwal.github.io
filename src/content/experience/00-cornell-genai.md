@@ -9,5 +9,5 @@ order: 0
 draft: false
 ---
 
-- Leading the Reinforcement Learning subteam, training and evaluating RL policies for Microduck.
-- Engineering an agentic AI meeting assistant for the Marketing + Media Alliance (MMA).
+- Leading the Reinforcement Learning subteam, training and evaluating RL policies for Microduck
+- Engineering an agentic AI meeting assistant for the Marketing + Media Alliance (MMA)

@@ -9,7 +9,7 @@ order: 4
 draft: false
 ---
 
-- Worked on computer vision for exercise detection.
+- Worked on computer vision for exercise detection
 
 <!-- Full resume bullets, kept for reference (hidden).
 - Architected a real-time computer vision pipeline in TypeScript and React using MediaPipe pose

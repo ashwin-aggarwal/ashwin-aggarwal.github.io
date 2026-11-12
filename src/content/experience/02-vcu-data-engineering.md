@@ -9,7 +9,7 @@ order: 2
 draft: false
 ---
 
-- Optimized a Databricks pipeline for clinical text to feed downstream RAG.
+- Optimized a Databricks pipeline for clinical text to feed downstream RAG
 
 <!-- Full resume bullets, kept for reference (hidden).
 - Designed a Databricks pipeline for unstructured, sensitive clinical text from an Epic
