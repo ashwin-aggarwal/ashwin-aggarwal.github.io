@@ -72,10 +72,12 @@ const total = experience.length;
 </div>
 
 {/* Runs inline, straight after the list is parsed, so layers start
-    collapsed with no flash of open panels. */}
+    collapsed with no flash of open panels. Scoped to the stack right
+    before it, so a page with two stacks doesn't bind each toggle twice. */}
 <script is:inline>
   (function () {
-    var layers = document.querySelectorAll('[data-layer]');
+    var stack = document.currentScript.previousElementSibling;
+    var layers = stack.querySelectorAll('[data-layer]');
     function set(layer, open) {
       var btn = layer.querySelector('[data-layer-toggle]');
       var panel = document.getElementById(btn.getAttribute('aria-controls'));
