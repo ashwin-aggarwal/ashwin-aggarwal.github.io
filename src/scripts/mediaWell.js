@@ -2,8 +2,9 @@
 // generated cover
 // and plays only while the media is hovered, or after the play toggle is
 // pressed (touch/keyboard). The cover fades out while it plays. A video
-// marked data-autoplay (videoAutoplay in frontmatter) plays from load
-// instead, unless the viewer prefers reduced motion.
+// marked data-autoplay (videoAutoplay in frontmatter) plays once from load
+// instead, unless the viewer prefers reduced motion, then the cover returns
+// (hover or the toggle replays it).
 export function initCoverVideos() {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -24,6 +25,9 @@ export function initCoverVideos() {
     };
     video.addEventListener('loadedmetadata', fit);
     fit();
+    // Autoplay videos play through once; the pause the browser fires at the
+    // end hands the well back to the cover (sync below).
+    if (video.hasAttribute('data-autoplay')) video.loop = false;
     if (pinned) video.play().catch(() => {});
 
     const sync = () => {
