@@ -10,6 +10,7 @@ stack:
   - RoboFlow
 accent: "#8C3B2E"
 video: /media/projects/ai-basketball-shot-tracker-demo.mp4
+videoAutoplay: true
 links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/ai-basketball-shot-tracker
