@@ -1,6 +1,6 @@
 ---
 company: Virginia Commonwealth University
-role: Machine Learning Research Assistant, Wargo Lab
+role: Machine Learning Intern
 start: May 2026
 end: Aug 2026
 location: Richmond, VA
@@ -12,7 +12,7 @@ draft: false
 
 - Extended a GPU-accelerated Monte Carlo simulation pipeline from 2D to 3D volumetric output
   on an HPC cluster
-- Automated the medical imaging lab's data collection
+- Optimized a Databricks pipeline for clinical text to feed downstream RAG
 
 <!-- Full resume bullets, kept for reference (hidden).
 - Built ETL pipelines ingesting data from networked devices, automating Power BI dashboard
