@@ -15,7 +15,7 @@ links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/RewardLens
   - label: Blog
-    url: /blog/rewardlens-learning-to-cheat/
+    url: /blog/rewardlens/
 order: 1
 draft: false
 ---
