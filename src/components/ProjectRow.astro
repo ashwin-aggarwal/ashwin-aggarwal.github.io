@@ -50,6 +50,16 @@ const mediaWrapProps = data.demoUrl
                 )}
               </div>
             </MediaWrap>
+            {/* A labelled arrow pointing up at a cover that is a demo link,
+                so it reads as clickable. Same target as the cover. */}
+            {data.demoUrl && data.demoLabel && (
+              <a class="cta media-hint" href={data.demoUrl} target="_blank" rel="noopener noreferrer">
+                <svg class="cta__arrow" viewBox="0 0 12 12" aria-hidden="true">
+                  <path d="M6 10V2M3 5l3-3 3 3" />
+                </svg>
+                {data.demoLabel}
+              </a>
+            )}
             {/* Outside MediaWrap so it's never nested in the demo link. Its
                 label and icon are kept in sync by mediaWell.js. */}
             {data.video && (

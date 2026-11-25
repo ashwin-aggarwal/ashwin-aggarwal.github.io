@@ -57,6 +57,9 @@ const projects = defineCollection({
         // the live app/demo (e.g. a hosted Streamlit app), in addition to
         // any GitHub link in `links`.
         demoUrl: z.string().url().optional(),
+        // Optional. With demoUrl: a small labelled arrow under the media that
+        // points up at it (e.g. "Click to play"), so the cover reads as a link.
+        demoLabel: z.string().optional(),
         // Video can't go through astro:assets' image() (not an image), so
         // it's a plain path served from public/media/projects/<file> rather
         // than co-located under src/content/projects/media/. Takes
@@ -118,6 +121,10 @@ const blog = defineCollection({
     published: z.coerce.date(),
     updated: z.coerce.date().optional(), // "Last edited"; falls back to `published`
     version: z.number().int().positive().default(1), // bump on a real revision; card shows v2, v3…
+    // Optional override for the card's "N min read". Without it the index
+    // estimates from the whole body, which overcounts posts with long
+    // figure captions or collapsed technical notes.
+    readingMinutes: z.number().int().positive().optional(),
     draft: z.boolean().default(false),
   }),
 });

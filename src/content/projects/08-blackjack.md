@@ -14,7 +14,7 @@ video: /media/projects/blackjack-demo-web.mp4
 links:
   - label: GitHub
     url: https://github.coecis.cornell.edu/aka96/3110GroupProject
-order: 7
+order: 8
 draft: false
 ---
 

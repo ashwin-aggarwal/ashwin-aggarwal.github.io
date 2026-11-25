@@ -6,6 +6,8 @@ import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getBlogPosts } from '../../lib/content';
 import { formatDate, isoDate } from '../../lib/dates';
+// Figure styles for posts that use <post-figure> (see lib/remarkPostFigures.mjs).
+import '../../components/rewardlens/rewardlens.css';
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
@@ -45,4 +47,10 @@ const updated = post.data.updated ?? post.data.published;
       </footer>
     </article>
   </div>
+
+  {/* Wires up any interactive figures in the post; does nothing on posts
+      without them. */}
+  <script>
+    import '../../scripts/rewardlens.js';
+  </script>
 </BaseLayout>

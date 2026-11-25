@@ -54,6 +54,17 @@ const wLit = new Set([10, 3, 6, 8]);
 const isLitEdge = (a: number, b: number) =>
   wLitPath.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
 // Some lit edges aren't in wEdges; draw the path separately.
+
+// RewardLens: the 8×8 board's grid lines, and the network seen in the lens.
+const rlGrid = Array.from({ length: 7 }, (_, i) => `M${58 + (i + 1) * 21} 52V220M58 ${52 + (i + 1) * 21}H226`).join('');
+const rlCols = [[150, 3], [196, 4], [242, 3]].map(([x, n]) => ({
+  x,
+  ys: Array.from({ length: n }, (_, i) => 136 + (i - (n - 1) / 2) * 24),
+}));
+const rlWires = rlCols
+  .slice(0, -1)
+  .map((c, i) => c.ys.map((a) => rlCols[i + 1].ys.map((b) => `M${c.x} ${a}L${rlCols[i + 1].x} ${b}`).join('')).join(''))
+  .join('');
 ---
 
 <svg
@@ -68,6 +79,7 @@ const isLitEdge = (a: number, b: number) =>
       <path d="M20 0H0V20" fill="none" style={`${dim}; stroke-opacity: var(--c-grid)`} stroke-width="1" />
     </pattern>
     <clipPath id={`${uid}-lens`}><circle cx="215" cy="148" r="46" /></clipPath>
+    <clipPath id={`${uid}-xray`}><circle cx="196" cy="136" r="62" /></clipPath>
   </defs>
 
   <rect width="400" height="300" style="fill: var(--c-bg0)" />
@@ -209,6 +221,29 @@ const isLitEdge = (a: number, b: number) =>
       <text x="64" y="146" style={`${F}; ${fInk}`} font-size="13">you     [A<tspan style={fHi2}>♥</tspan>] [10<tspan style={fHi2}>♦</tspan>]</text>
       <text x="64" y="174" style={`${F}; ${fHi}`} font-size="14" font-weight="600">&gt; 21 — blackjack</text>
       <text x="64" y="202" style={`${F}; ${fDim}`} font-size="10">players at table: 3 · lwt server</text>
+    </g>
+  )}
+
+  {/* RewardLens: a lens over the gridworld that shows the network under
+      the behaviour. The board is the real seed-42 episode from the blog
+      post (start, goal, reward tile and the farmer's route to the tile);
+      inside the lens, a few units per layer with layer 2 lit. */}
+  {slug === 'rewardlens' && (
+    <g>
+      <rect x="58" y="52" width="168" height="168" style={`${fBg}; ${ink}`} stroke-width="1.5" />
+      <path d={rlGrid} fill="none" style={`${dim}; stroke-opacity: 0.3`} stroke-width="1" />
+      <rect x="61" y="97" width="15" height="15" fill="none" style={dim} stroke-width="1" stroke-dasharray="3 2" />
+      <rect x="187" y="76" width="15" height="15" style={fInk} />
+      <path d="M131.5 167.5V146.5H89.5V104.5H68.5" fill="none" style={ink} stroke-width="2" stroke-linejoin="round" opacity="0.6" />
+      <circle cx="196" cy="136" r="62" style={fBg} />
+      <g clip-path={`url(#${uid}-xray)`}>
+        <path d={rlWires} fill="none" style={`${dim}; stroke-opacity: 0.6`} stroke-width="1" />
+        {rlCols.map((c, i) => c.ys.map((y) => (
+          <circle cx={c.x} cy={y} r="7" style={i === 1 ? `${fHi}; ${hi}` : `${fBg}; ${ink}`} stroke-width="1.5" />
+        )))}
+      </g>
+      <circle cx="196" cy="136" r="62" fill="none" style={ink} stroke-width="3.5" />
+      <path d="M241 181L286 226" fill="none" style={ink} stroke-width="8" stroke-linecap="round" />
     </g>
   )}
 
