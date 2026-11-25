@@ -18,7 +18,7 @@ videoAutoplay: true
 links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/Detective-Jev
-order: 1
+order: 2
 draft: false
 ---
 

@@ -654,6 +654,23 @@ a.project-row__media-wrap:is(:hover, :focus-visible) > .media-well {
   box-shadow: 0 0 0 2px var(--color-gpu);
 }
 
+/* "Click to play" pointer under a cover that links to a live demo: a .cta
+   whose arrow points up at the cover. Hover/focus floods it and nudges the
+   arrow toward the picture. */
+.media-hint {
+  margin-top: var(--space-2);
+  text-decoration: none;
+}
+
+.media-hint:is(:hover, :focus-visible) {
+  background: var(--color-ink);
+  color: var(--color-ground);
+}
+
+.media-hint:is(:hover, :focus-visible) .cta__arrow {
+  translate: 0 -3px;
+}
+
 /* Pause/play toggle under a project video, so the loop can be stopped.
    mediaWell.js flips .is-paused and the aria-label to match the video. */
 .media-toggle {
@@ -1511,6 +1528,65 @@ a.project-row__media-wrap:is(:hover, :focus-visible) > .media-well {
   padding: 0.05em 0.3em;
   border: var(--w-hair) solid var(--color-line);
   font-size: 0.9em;
+}
+
+/* Optional technical notes inside a post: a native <details>, framed like
+   a die block. The summary is a mono label with a +/− sign; the opened
+   panel is plain reading text under a dashed hairline. */
+.post-body details {
+  border: var(--w-hair) solid var(--color-ink);
+}
+
+.post-body details + details {
+  margin-top: -1px;
+}
+
+.post-body summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.post-body summary::-webkit-details-marker {
+  display: none;
+}
+
+.post-body summary::before {
+  content: '+';
+  flex: none;
+  width: 1ch;
+}
+
+.post-body details[open] > summary::before {
+  content: '\2212';
+}
+
+.post-body summary:is(:hover, :focus-visible) {
+  background: var(--color-ink);
+  color: var(--color-ground);
+}
+
+.post-body details[open] > summary {
+  border-bottom: var(--w-hair) dashed var(--color-line);
+}
+
+.post-body details > :not(summary) {
+  margin-inline: var(--space-3);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.post-body details > :last-child:not(summary) {
+  margin-bottom: var(--space-3);
 }
 
 /* Recent news (/news/) ------------------------------------------------ */

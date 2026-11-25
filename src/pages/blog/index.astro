@@ -46,7 +46,7 @@ const minutes = (body = '') => Math.max(1, Math.ceil(body.split(/\s+/).filter(Bo
             <div class="cline" style={`--chars: ${addr.length}`}>
               <span class="cline__addr" aria-hidden="true">{addr}</span>
               <span class="cline__fields">
-                <span class="cline__field">{minutes(post.body)} min read</span>
+                <span class="cline__field">{post.data.readingMinutes ?? minutes(post.body)} min read</span>
                 <span class="cline__field">
                   <span aria-hidden="true">v{post.data.version}</span>
                   <span class="sr-only">version {post.data.version}</span>

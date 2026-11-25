@@ -14,7 +14,7 @@ videoAutoplay: true
 links:
   - label: GitHub
     url: https://github.com/ashwin-aggarwal/ai-basketball-shot-tracker
-order: 4
+order: 3
 draft: false
 ---
 
